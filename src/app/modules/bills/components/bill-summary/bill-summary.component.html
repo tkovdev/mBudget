@@ -1,0 +1,27 @@
+<div class="flex flex-column">
+  <ng-container *ngFor="let bill of bills | async">
+    <ng-container *ngIf="bill | paid: false">
+      <div class="flex align-items-center">
+        <span class="material-symbols-outlined">
+          radio_button_unchecked
+        </span>
+        <span>{{bill.payee.name}}</span>
+        <span>{{bill.amount}}</span>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="bills | async">
+    <hr />
+  </ng-container>
+  <ng-container *ngFor="let bill of bills | async">
+    <ng-container *ngIf="bill | paid: true">
+      <div class="flex align-items-center">
+        <span class="material-symbols-outlined text-green-500">
+          check_circle
+        </span>
+        <span>{{bill.payee.name}}</span>
+        <span>{{bill.amount}}</span>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
