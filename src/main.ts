@@ -5,8 +5,8 @@ import {environment} from "./environments/environment";
 export interface AppConfig {
   [key: string]: any;
 }
-
-fetch('.info')
+const configFile = environment.production? '.info': '.info.local'
+fetch(`assets/${configFile}`)
   .then((res) => res.json())
   .then((config: AppConfig) => {
     environment.gapi.clientId = config['gapi']['clientId'];
