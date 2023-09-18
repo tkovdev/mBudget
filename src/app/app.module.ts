@@ -4,13 +4,14 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./authentication/services/auth.service";
 import {environment} from "../environments/environment";
 import {MessageService} from "primeng/api";
 import {getAuth, provideAuth} from "@angular/fire/auth";
 import {initializeApp, provideFirebaseApp} from "@angular/fire/app";
 import {FIREBASE_OPTIONS} from "@angular/fire/compat";
+import {AccessTokenInterceptor} from "./authentication/interceptors/access-token.interceptor";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import {FIREBASE_OPTIONS} from "@angular/fire/compat";
   providers: [
     MessageService,
     AuthService,
-    { provide: FIREBASE_OPTIONS, useValue: environment.firebase }
+    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
+    { provide: HTTP_INTERCEPTORS, useClass: AccessTokenInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })
