@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AuthService} from "../authentication/services/auth.service";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {IDriveSchema, IFileSearch, SchemaType} from "../models/driveSchema.model";
+import FileResource = gapi.client.drive.FileResource;
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +11,162 @@ export class FilesService {
 
   constructor(private authService: AuthService, private http: HttpClient) { }
 
-  listFiles(): Observable<any> {
-    let query: HttpParams = new HttpParams();
-    let uri = `https://www.googleapis.com/drive/v2/files`;
-    return this.http.get<any>(uri, {params: query});
+  private getOrCreateSchemaFolder(): Promise<FileResource> {
+    return new Promise<FileResource>((resolve) => {
+      this.findFolder('.mBudget').then((rootFolder: FileResource | undefined) => {
+        if(!rootFolder) {
+          this.createFolder('.mBudget').then((res: FileResource) => resolve(res))
+        }else{
+          resolve(rootFolder);
+        }
+      });
+    });
   }
 
-  createFile(): Observable<any> {
-    let query: HttpParams = new HttpParams();
-    query = query.append('uploadType', 'media');
-    let uri = `https://www.googleapis.com/upload/drive/v3/files`;
-    return this.http.post<any>(uri, {}, {params: query});
+  getOrCreateSchemaFile(name: string, schemas: [{id: string, type: SchemaType}]): Promise<FileResource> {
+    return new Promise<FileResource>((resolve) => {
+      this.getOrCreateSchemaFolder().then((res: FileResource) => {
+        let schemaContents: IDriveSchema = {name: name, date: new Date(), schemaIds: schemas}
+        this.findFile('.schema').then((res2: FileResource | undefined) => {
+          if(res2) resolve(res2);
+          else {
+            this.createFile('.schema', schemaContents, [res.id]).then((res3: FileResource) => {
+              resolve(res3);
+            })
+          }
+        })
+      })
+    });
   }
+
+  private createFolder(name: string, parents: string[] = []): Promise<FileResource> {
+    let query: HttpParams = new HttpParams();
+    let schema = {
+      name: name,
+      mimeType: "application/vnd.google-apps.folder",
+      parents: [...parents, 'appDataFolder']
+    }
+    let uri = `https://www.googleapis.com/drive/v3/files`;
+    return new Promise<FileResource>((resolve) => {
+      this.http.post<FileResource>(uri, schema, {params: query}).subscribe((newFolder) => {
+        resolve(newFolder);
+      });
+    });
+  }
+
+  createFile(name: string, content: any, parents: string[] = []): Promise<FileResource> {
+    return new Promise<FileResource>((resolve) => {
+      let query: HttpParams = new HttpParams();
+      query = query.append('uploadType', 'multipart');
+      let headers: HttpHeaders = new HttpHeaders();
+      headers = headers.append('Content-Type', 'multipart/related; boundary="ax100"');
+      parents = [...parents, 'appDataFolder'];
+
+      let body = '';
+      body = body + '--ax100\n';
+      body = body + 'Content-Type: application/json; charset=UTF-8';
+      body = body + '\n\n';
+      body = body + JSON.stringify({name: name, parents: parents});
+      body = body + '\n\n';
+      body = body + '--ax100\n';
+      body = body + 'Content-Type: application/json';
+      body = body + '\n\n';
+      body = body + JSON.stringify(content);
+      body = body + '\n\n';
+      body = body + '--ax100--';
+
+      let uri = `https://www.googleapis.com/upload/drive/v3/files`;
+      this.http.post<FileResource>(uri, body,{params: query, headers: headers}).subscribe((res) => {
+        resolve(res);
+      });
+    });
+  }
+
+  updateFile(id: string, contents: any): Promise<any> {
+    return new Promise<any>((resolve) => {
+      let query: HttpParams = new HttpParams();
+      query = query.append('uploadType', 'media');
+
+      let body = contents;
+
+      let uri = `https://www.googleapis.com/upload/drive/v3/files/${id}`;
+      this.http.patch<FileResource>(uri, body,{params: query}).subscribe((res) => {
+        resolve(res);
+      });
+    });
+  }
+
+  deleteFile(id: string): Promise<boolean> {
+    let query: HttpParams = new HttpParams();
+    query = query.append('spaces', 'appDataFolder')
+
+    let uri = `https://www.googleapis.com/drive/v3/files/${id}`
+    return new Promise<boolean>((resolve) => {
+      this.http.delete<any>(uri, {params: query}).subscribe((res: any) => {
+        if(res) resolve(false);
+        else resolve(true);
+      })
+    });
+  }
+
+  findFolder(name: string): Promise<FileResource | undefined> {
+    return new Promise<FileResource | undefined>((resolver) => {
+      let query: HttpParams = new HttpParams();
+      let search = "mimeType='application/vnd.google-apps.folder'"
+      search = search + " and "
+      search = search + `name='${name}'`
+      query = query.append('q', search)
+      query = query.append('spaces', 'appDataFolder')
+      let uri = `https://www.googleapis.com/drive/v3/files`;
+      this.http.get<IFileSearch>(uri,{params: query}).subscribe((res) => {
+        if(res && res.files.length > 0){
+          resolver(res.files[0]);
+        }else resolver(undefined);
+      })
+    });
+  }
+
+  findFile(name: string): Promise<FileResource | undefined> {
+    return new Promise<FileResource | undefined>((resolver) => {
+      let query: HttpParams = new HttpParams();
+      let search = "mimeType='application/json'"
+      search = search + " and "
+      search = search + `name='${name}'`
+      query = query.append('q', search)
+      query = query.append('spaces', 'appDataFolder')
+      let uri = `https://www.googleapis.com/drive/v3/files`;
+      this.http.get<IFileSearch>(uri,{params: query}).subscribe((res) => {
+        if(res && res.files.length > 0){
+          resolver(res.files[0]);
+        }else resolver(undefined);
+      })
+    });
+  }
+
+  getFile<T>(id: string): Promise<T | undefined> {
+    let query: HttpParams = new HttpParams();
+    query = query.append('alt', 'media')
+    query = query.append('spaces', 'appDataFolder')
+
+    let uri = `https://www.googleapis.com/drive/v3/files/${id}`
+    return new Promise<T | undefined>((resolve) => {
+      this.http.get<any>(uri, {params: query}).subscribe((res: any) => {
+        if(res) resolve(JSON.parse(res) as T);
+        else resolve(undefined);
+      })
+    });
+  }
+
+  listAppDataFiles(): Promise<IFileSearch> {
+    let query: HttpParams = new HttpParams();
+    query = query.append('spaces', 'appDataFolder')
+
+    let uri = `https://www.googleapis.com/drive/v3/files`
+    return new Promise<IFileSearch>((resolve) => {
+      this.http.get<IFileSearch>(uri, {params: query}).subscribe((res: any) => {
+        resolve(res);
+      })
+    });
+  }
+
 }

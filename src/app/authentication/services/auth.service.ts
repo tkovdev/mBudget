@@ -74,6 +74,7 @@ export class AuthService {
   // Sign in with Google
   SignInGoogle() {
     this._provider.addScope('https://www.googleapis.com/auth/drive.file');
+    this._provider.addScope('https://www.googleapis.com/auth/drive.appdata');
     return this.afAuth.signInWithRedirect(this._provider);
   }
 

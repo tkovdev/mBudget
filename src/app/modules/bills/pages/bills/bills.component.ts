@@ -19,5 +19,4 @@ export class BillsComponent implements OnInit{
 
   ngOnInit(): void {
   }
-
 }
