@@ -1,5 +1,6 @@
-<div class="flex flex-column">
-  <ng-container *ngFor="let bill of bills | async">
+<div class="flex flex-column" *ngIf="bills$ | async as bills">
+  <p *ngIf="bills.length == 0">No bills!</p>
+  <ng-container *ngFor="let bill of bills">
     <ng-container *ngIf="bill | paid: false">
       <div class="flex align-items-center">
         <span class="material-symbols-outlined">
@@ -10,10 +11,10 @@
       </div>
     </ng-container>
   </ng-container>
-  <ng-container *ngIf="bills | async">
-    <hr />
+  <ng-container>
+    <hr *ngIf="bills.length > 0" />
   </ng-container>
-  <ng-container *ngFor="let bill of bills | async">
+  <ng-container *ngFor="let bill of bills">
     <ng-container *ngIf="bill | paid: true">
       <div class="flex align-items-center">
         <span class="material-symbols-outlined text-green-500">

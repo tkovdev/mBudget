@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./authentication/services/auth.service";
+import {FilesService} from "./services/files.service";
+import {SchemaType} from "./models/driveSchema.model";
 
 @Component({
   selector: 'app-root',
@@ -9,9 +11,13 @@ import {AuthService} from "./authentication/services/auth.service";
 export class AppComponent implements OnInit{
   title = 'mBudget-app';
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private fileService: FilesService) {
   }
   ngOnInit(): void {
-    this.authService.tokens.subscribe();
+    this.authService.tokens.subscribe((token) => {
+      this.fileService.loadSchema().then((file) => {
+        this.fileService.loadFiles(SchemaType.Bill).then(() => {});
+      });
+    });
   }
 }

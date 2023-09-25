@@ -3,6 +3,8 @@ import {IBill, IPayee} from "../../../../models/bill.model";
 import {Observable} from "rxjs";
 import {BillsService} from "../../../../services/bills.service";
 import {SharedService} from "../../../../services/shared.service";
+import {FilesService} from "../../../../services/files.service";
+import {IBillSchema, IFileSearch} from "../../../../models/driveSchema.model";
 
 @Component({
   selector: 'app-bills',
@@ -11,10 +13,9 @@ import {SharedService} from "../../../../services/shared.service";
 })
 export class BillsComponent implements OnInit{
   payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
-  bills$: Observable<IBill[]> = this.billsService.getCurrentMonthBills();
+  bills$: Observable<IBill[]> = this.billsService.getMonthBills();
   currentMonthYear: string = this.sharedService.currentMonthYear();
-
-  constructor(private billsService: BillsService, private sharedService: SharedService) {
+  constructor(private billsService: BillsService, private fileService: FilesService, private sharedService: SharedService) {
   }
 
   ngOnInit(): void {

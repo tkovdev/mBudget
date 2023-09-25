@@ -1,29 +1,59 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
+import {filter, map, Observable} from "rxjs";
 import {IBill, IPayee} from "../models/bill.model";
 import {Month} from "../models/shared.model";
+import {DriveConfig, FilesService} from "./files.service";
+import {IBillSchema, IDriveSchema, SchemaType} from "../models/driveSchema.model";
+import {SharedService} from "./shared.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BillsService {
 
-  constructor() { }
+  constructor(private filesService: FilesService, private sharedService: SharedService) { }
 
-  public getCurrentMonthBills(): Observable<IBill[]> {
+  private getBillsFromFile(): Observable<IBill[]>{
     return new Observable<IBill[]>((subscriber) => {
-      setTimeout(() => {
-        subscriber.next(this.tempBills);
-      }, 2000)
+      let schema = this.filesService.retrieveSessionFile<IDriveSchema>(DriveConfig.SCHEMA_FILE_NAME);
+      if(schema) {
+        let billFile = schema.schemaIds.find(x => x.type == SchemaType.Bill);
+        if(billFile){
+          let file = this.filesService.retrieveSessionFile<IBillSchema>(billFile.id);
+          if(file) subscriber.next(file.bills);
+          else subscriber.next(undefined);
+        }else subscriber.next(undefined)
+      }else subscriber.next(undefined)
     });
   }
 
-  public getAllPayees(): Observable<IPayee[]> {
+  private getPayeesFromFile(): Observable<IPayee[]>{
     return new Observable<IPayee[]>((subscriber) => {
-      setTimeout(() => {
-        subscriber.next(this.tempPayees);
-      }, 2000)
+      let schema = this.filesService.retrieveSessionFile<IDriveSchema>('.schema');
+      if(schema) {
+        let billFile = schema.schemaIds.find(x => x.type == SchemaType.Bill);
+        if(billFile){
+          let file = this.filesService.retrieveSessionFile<IBillSchema>(billFile.id);
+          if(file) subscriber.next(file.payees);
+          else subscriber.next(undefined);
+        }else subscriber.next(undefined)
+      }else subscriber.next(undefined)
     });
+  }
+
+  public getMonthBills(monthYear: string = this.sharedService.currentMonthYear()): Observable<IBill[]> {
+    return this.getBillsFromFile().pipe(
+      map((bills) => {
+        let currentBills = bills.filter(x => x.month == this.sharedService.currentMonth() && x.year == this.sharedService.currentYear())
+        return currentBills;
+    }));
+  }
+
+  public getAllPayees(): Observable<IPayee[]> {
+    return this.getPayeesFromFile().pipe(
+      map((payees) => {
+        return payees;
+      }));
   }
 
   private tempPayees: IPayee[] = [

@@ -8,5 +8,5 @@ import {IBill} from "../../../../models/bill.model";
   styleUrls: ['./bill-summary.component.scss']
 })
 export class BillSummaryComponent {
-  @Input() bills: Observable<IBill[]> = new Observable<IBill[]>();
+  @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
 }

@@ -1,18 +1,25 @@
-import {IBill} from "./bill.model";
+import {IBill, IPayee} from "./bill.model";
 import FileResource = gapi.client.drive.FileResource;
 
 export interface IDriveSchema {
   name: string;
   date: Date;
-  schemaIds: [{
-    id: string;
-    type: SchemaType
-  }]
+  schemaIds: ISchemaItem[]
+}
+
+export interface ISchemaItem {
+  id: string
+  type: SchemaType
 }
 
 export enum SchemaType {
   Bill = 'Bill',
   Budget = 'Budget'
+}
+
+export interface IBillSchema {
+  payees: IPayee[]
+  bills: IBill[];
 }
 
 export interface IFileSearch {
