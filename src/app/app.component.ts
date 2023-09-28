@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from "./authentication/services/auth.service";
 import {FilesService} from "./services/files.service";
 import {SchemaType} from "./models/driveSchema.model";
+import {IBill, IPayee} from "./models/bill.model";
+import {Month} from "./models/shared.model";
 
 @Component({
   selector: 'app-root',
@@ -14,10 +16,5 @@ export class AppComponent implements OnInit{
   constructor(private authService: AuthService, private fileService: FilesService) {
   }
   ngOnInit(): void {
-    this.authService.tokens.subscribe((token) => {
-      this.fileService.loadSchema().then((file) => {
-        this.fileService.loadFiles(SchemaType.Bill).then(() => {});
-      });
-    });
   }
 }

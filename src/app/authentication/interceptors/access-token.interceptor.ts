@@ -21,7 +21,7 @@ export class AccessTokenInterceptor implements HttpInterceptor {
       first(),
       mergeMap((token: Token) => {
         if(token){
-          if(token.exp <= new Date()) {
+          if(new Date(token.exp) <= new Date()) {
             this.authService.SignInGoogle();
           }
           request = request.clone({

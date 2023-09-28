@@ -6,8 +6,7 @@
         <span class="material-symbols-outlined">
           radio_button_unchecked
         </span>
-        <span>{{bill.payee.name}}</span>
-        <span>{{bill.amount}}</span>
+        <a (click)="pay(bill)" href="javascript:void(0);">{{bill.payee.name}}</a>
       </div>
     </ng-container>
   </ng-container>
@@ -20,8 +19,12 @@
         <span class="material-symbols-outlined text-green-500">
           check_circle
         </span>
-        <span>{{bill.payee.name}}</span>
-        <span>{{bill.amount}}</span>
+        <div class="flex">
+          <a (click)="pay(bill)" href="javascript:void(0);">{{bill.payee.name}}</a>
+<!--          <span class="mr-1">{{bill.payee.name}}</span>-->
+          <span>-</span>
+          <span class="ml-1">{{bill.amount | currency}}</span>
+        </div>
       </div>
     </ng-container>
   </ng-container>

@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {BillsService} from "../../../../services/bills.service";
 import {SharedService} from "../../../../services/shared.service";
 import {FilesService} from "../../../../services/files.service";
-import {IBillSchema, IFileSearch} from "../../../../models/driveSchema.model";
+import {Month} from "../../../../models/shared.model";
 
 @Component({
   selector: 'app-bills',
@@ -19,5 +19,11 @@ export class BillsComponent implements OnInit{
   }
 
   ngOnInit(): void {
+  }
+
+  updateBill(bill: IBill): void {
+    this.billsService.updateBill(bill).subscribe((res) => {
+      this.bills$ = this.billsService.getMonthBills();
+    })
   }
 }

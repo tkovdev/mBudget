@@ -1,90 +1,105 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {filter, map, Observable} from "rxjs";
 import {IBill, IPayee} from "../models/bill.model";
-import {Month} from "../models/shared.model";
 import {DriveConfig, FilesService} from "./files.service";
-import {IBillSchema, IDriveSchema, SchemaType} from "../models/driveSchema.model";
+import {IBillSchema, IDriveSchema, ISchemaItem, SchemaType} from "../models/driveSchema.model";
 import {SharedService} from "./shared.service";
+import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot} from "@angular/router";
+import {AuthService} from "../authentication/services/auth.service";
+import {ConfirmationService, ConfirmEventType} from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
 })
 export class BillsService {
+  billFileId: string = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME) || '';
+  constructor(private filesService: FilesService, private sharedService: SharedService, private confirmationService: ConfirmationService) {
+  }
 
-  constructor(private filesService: FilesService, private sharedService: SharedService) { }
-
-  private getBillsFromFile(): Observable<IBill[]>{
-    return new Observable<IBill[]>((subscriber) => {
-      let schema = this.filesService.retrieveSessionFile<IDriveSchema>(DriveConfig.SCHEMA_FILE_NAME);
-      if(schema) {
-        let billFile = schema.schemaIds.find(x => x.type == SchemaType.Bill);
-        if(billFile){
-          let file = this.filesService.retrieveSessionFile<IBillSchema>(billFile.id);
-          if(file) subscriber.next(file.bills);
-          else subscriber.next(undefined);
-        }else subscriber.next(undefined)
-      }else subscriber.next(undefined)
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.listAppDataFiles().then((files) => {
+        let hasFiles = false;
+        if(files && files.files.length >= 1) {
+          files.files.forEach((v) => {
+            //@ts-ignore
+            if(v.name == DriveConfig.BILL_FILE_NAME) {
+              hasFiles = true;
+              sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, v.id);
+              this.billFileId = v.id;
+            }
+          });
+        }
+        if(!hasFiles) {
+          this.confirmationService.confirm({
+            message: 'To continue, we will create several files in your personal Google Drive. Create files?',
+            header: 'Files required',
+            icon: 'pi pi-exclamation-triangle',
+            key: 'noBillsConfirmation',
+            accept: () => {
+              let newFile: IBillSchema = {bills: [], payees: []};
+              this.filesService.createFile(DriveConfig.BILL_FILE_NAME, newFile).then((file) => {
+                location.reload();
+              });
+            },
+            reject: (type: ConfirmEventType) => {
+              switch (type) {
+                case ConfirmEventType.REJECT:
+                  subscriber.next(false);
+                  break;
+                case ConfirmEventType.CANCEL:
+                  subscriber.next(false);
+                  break;
+              }
+            }
+          });
+        }
+        else subscriber.next(true);
+      });
     });
   }
 
-  private getPayeesFromFile(): Observable<IPayee[]>{
+  private getPayees(): Observable<IPayee[]>{
     return new Observable<IPayee[]>((subscriber) => {
-      let schema = this.filesService.retrieveSessionFile<IDriveSchema>('.schema');
-      if(schema) {
-        let billFile = schema.schemaIds.find(x => x.type == SchemaType.Bill);
-        if(billFile){
-          let file = this.filesService.retrieveSessionFile<IBillSchema>(billFile.id);
-          if(file) subscriber.next(file.payees);
-          else subscriber.next(undefined);
-        }else subscriber.next(undefined)
-      }else subscriber.next(undefined)
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        let payees = billFile?.payees;
+        if(payees) subscriber.next(payees);
+        else subscriber.next([])
+      })
+    });
+  }
+
+  private getBills(): Observable<IBill[]> {
+    return new Observable<IBill[]>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        let bills = billFile?.bills;
+        if(bills) subscriber.next(bills);
+        else subscriber.next([])
+      })
     });
   }
 
   public getMonthBills(monthYear: string = this.sharedService.currentMonthYear()): Observable<IBill[]> {
-    return this.getBillsFromFile().pipe(
-      map((bills) => {
-        let currentBills = bills.filter(x => x.month == this.sharedService.currentMonth() && x.year == this.sharedService.currentYear())
-        return currentBills;
-    }));
+    return this.getBills().pipe(
+      map((bills) => bills.filter(x => `${x.month} ${x.year}` == monthYear))
+    );
   }
 
   public getAllPayees(): Observable<IPayee[]> {
-    return this.getPayeesFromFile().pipe(
+    return this.getPayees().pipe(
       map((payees) => {
         return payees;
       }));
   }
 
-  private tempPayees: IPayee[] = [
-    {
-      name: 'Gas'
-    },
-    {
-      name: 'Electric'
-    },
-    {
-      name: 'Water'
-    }
-  ]
-  private tempBills: IBill[] = [
-    {
-      payee: this.tempPayees[0],
-      amount: null,
-      year: 2023,
-      month: Month.September
-    },
-    {
-      payee: this.tempPayees[1],
-      amount: 100,
-      year: 2023,
-      month: Month.September
-    },
-    {
-      payee: this.tempPayees[2],
-      amount: null,
-      year: 2023,
-      month: Month.September
-    }
-  ]
+  public updateBill(bill: IBill): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+
+    });
+  }
+
+}
+
+export const BillGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> => {
+  return inject(BillsService).canActivate(next, state);
 }

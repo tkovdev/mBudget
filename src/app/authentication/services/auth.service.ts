@@ -30,12 +30,20 @@ export class AuthService {
         this.router.navigate(['', 'auth', 'login'], {skipLocationChange: true});
         return false;
       }
-    }))
+    }));
   }
 
   // Returns true when user is logged in and email is verified
   get isLoggedIn(): Observable<boolean> {
-    return this.afAuth.authState.pipe(map(user => user != null))
+    return new Observable<boolean>((subscriber) => {
+      this.afAuth.authState.subscribe((user) => {
+        if(user != null){
+          let currentSessionTokens = sessionStorage.getItem('tokens')
+          if(currentSessionTokens) subscriber.next(true);
+          else subscriber.next(false);
+        }else subscriber.next(false);
+      });
+    });
   }
 
   // Returns user profile info
@@ -46,28 +54,10 @@ export class AuthService {
 
   get tokens(): Observable<Token> {
     return new Observable<Token>((subscriber) => {
-        this.afAuth.getRedirectResult().then((redirectResult => {
-            let credential = redirectResult.credential;
-            if(credential){
-              var tokenResult$ = this.afAuth.idTokenResult.subscribe((idTokenResult) => {
-                //@ts-ignore
-                let exp = new Date(Date.parse(idTokenResult.expirationTime));
-                //@ts-ignore
-                let tokens = {idToken: credential.idToken, accessToken: credential.accessToken, exp: exp};
-                subscriber.next(tokens)
-                sessionStorage.setItem('tokens', JSON.stringify(tokens))
-                tokenResult$.unsubscribe();
-              })
-            }else{
-              let tokens: Token;
-              let sessionTokens = sessionStorage.getItem('tokens');
-              if(sessionTokens) {
-                let parsed = JSON.parse(sessionTokens);
-                tokens = {idToken: parsed.idToken, accessToken: parsed.accessToken, exp: new Date(Date.parse(parsed.exp))}
-                subscriber.next(tokens);
-              }
-            }
-        }))
+      let tokens = sessionStorage.getItem('tokens');
+      if(tokens){
+        subscriber.next(JSON.parse(tokens) as Token);
+      }
     })
   }
 
