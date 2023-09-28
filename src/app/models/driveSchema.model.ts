@@ -26,5 +26,15 @@ export interface IFileSearch {
   "nextPageToken": string,
   "kind": string,
   "incompleteSearch": boolean,
-  "files": FileResource[]
+  "files": FileResourceExt[]
+}
+
+export interface IFileSearchDetails {
+  "files": FileResourceExt[]
+}
+
+export interface FileResourceExt extends FileResource {
+  name: string;
+  modifiedTime: string;
+  createdTime: string;
 }

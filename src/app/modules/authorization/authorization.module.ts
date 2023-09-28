@@ -5,7 +5,9 @@ import {AuthorizationRoutingModule} from "./authorization-routing.module";
 import {CardModule} from "primeng/card";
 import { ProfileComponent } from './pages/profile/profile.component';
 import {ButtonModule} from "primeng/button";
-
+import { DialogModule } from 'primeng/dialog';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -15,10 +17,13 @@ import {ButtonModule} from "primeng/button";
   ],
   imports: [
     CommonModule,
+    FormsModule,
     AuthorizationRoutingModule,
 
     CardModule,
-    ButtonModule
+    ButtonModule,
+    DialogModule,
+    InputTextareaModule
   ]
 })
 export class AuthorizationModule { }

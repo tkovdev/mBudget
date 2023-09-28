@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AuthService} from "../authentication/services/auth.service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {IFileSearch} from "../models/driveSchema.model";
+import {IFileSearch, IFileSearchDetails} from "../models/driveSchema.model";
 import FileResource = gapi.client.drive.FileResource;
 import {Observable} from "rxjs";
 
@@ -19,10 +19,6 @@ export class FilesService {
   get files(): Observable<IFileSearch>{
     return new Observable<IFileSearch>((subscriber) => {
       this.listAppDataFiles().then((files) => {
-        files.files.forEach((file) => {
-          //@ts-ignore
-          sessionStorage.setItem(file.name, file.id);
-        });
         subscriber.next(files);
       })
     });
@@ -107,6 +103,15 @@ export class FilesService {
         resolve(res);
       })
     });
+  }
+
+  listAppDataFilesDetails(): Observable<IFileSearchDetails> {
+    let query: HttpParams = new HttpParams();
+    query = query.append('spaces', 'appDataFolder')
+    query = query.append('fields', 'files(id,name,kind,mimeType,size,createdTime,modifiedTime)')
+
+    let uri = `https://www.googleapis.com/drive/v3/files`
+    return this.http.get<IFileSearchDetails>(uri, {params: query})
   }
 
   private findFolder(name: string): Promise<FileResource | undefined> {

@@ -22,7 +22,6 @@ export class BillsService {
         let hasFiles = false;
         if(files && files.files.length >= 1) {
           files.files.forEach((v) => {
-            //@ts-ignore
             if(v.name == DriveConfig.BILL_FILE_NAME) {
               hasFiles = true;
               sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, v.id);
@@ -32,7 +31,7 @@ export class BillsService {
         }
         if(!hasFiles) {
           this.confirmationService.confirm({
-            message: 'To continue, we will create several files in your personal Google Drive. Create files?',
+            message: 'To continue, we will create any necessary files in your personal Google Drive. Create files?',
             header: 'Files required',
             icon: 'pi pi-exclamation-triangle',
             key: 'noBillsConfirmation',
