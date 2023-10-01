@@ -14,6 +14,7 @@ import {Month} from "../../../../models/shared.model";
 export class BillsComponent implements OnInit{
   payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
   bills$: Observable<IBill[]> = this.billsService.getMonthBills();
+  billMonthYears$: Observable<string[]> = this.billsService.getAllBillMonthYears();
   currentMonthYear: string = this.sharedService.currentMonthYear();
   constructor(private billsService: BillsService, private fileService: FilesService, private sharedService: SharedService) {
   }
@@ -25,5 +26,9 @@ export class BillsComponent implements OnInit{
     this.billsService.updateBill(bill).subscribe((res) => {
       this.bills$ = this.billsService.getMonthBills();
     })
+  }
+
+  refreshBills(): void {
+    this.bills$ = this.billsService.getMonthBills();
   }
 }

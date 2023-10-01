@@ -7,6 +7,7 @@ import {SharedService} from "./shared.service";
 import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot} from "@angular/router";
 import {AuthService} from "../authentication/services/auth.service";
 import {ConfirmationService, ConfirmEventType} from "primeng/api";
+import {Month} from "../models/shared.model";
 
 @Injectable({
   providedIn: 'root'
@@ -91,9 +92,78 @@ export class BillsService {
       }));
   }
 
-  public updateBill(bill: IBill): Observable<boolean> {
-    return new Observable<boolean>((subscriber) => {
+  public getAllBillMonthYears(): Observable<string[]> {
+    return this.getBills().pipe(
+      map((bills) =>{
+          let billMap = bills.map((bill: IBill) => `${bill.month} ${bill.year}`);
+          billMap.push(`${this.sharedService.currentMonthYear()}`);
+          billMap = [...new Set(billMap)];
+          let months = Object.keys(Month);
+          billMap = billMap.sort((a, b) => {
+            let monthYearSplitA = a.split(' ');
+            let monthYearSplitB = b.split(' ');
+            return parseInt(`${monthYearSplitA[1]}${months.indexOf(monthYearSplitA[0])}`) - parseInt(`${monthYearSplitB[1]}${months.indexOf(monthYearSplitB[0])}`)
+          });
+          return billMap;
+        }
+      )
+    );
+  }
 
+  public updateBill(bills: IBill | IBill[]): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        if(billFile){
+          if(Array.isArray(bills)) {
+            bills.forEach(bill => {
+              let toUpdateIdx = billFile.bills.findIndex(x => `${x.month} ${x.year}` == `${bill.month} ${bill.year}` && x.payee.name == bill.payee.name)
+              if(toUpdateIdx > -1) {
+                billFile.bills[toUpdateIdx] = bill;
+              }
+            })
+          }else{
+            let toUpdateIdx = billFile.bills.findIndex(x => `${x.month} ${x.year}` == `${bills.month} ${bills.year}` && x.payee.name == bills.payee.name)
+            if(toUpdateIdx > -1) {
+              billFile.bills[toUpdateIdx] = bills;
+            }
+          }
+          this.filesService.updateFile(this.billFileId, billFile).then((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
+  public addBill(bills: IBill | IBill[]): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        if(billFile){
+          if(Array.isArray(bills)) {
+            bills.forEach(bill => {
+              billFile.bills.push(bill);
+            })
+          }else{
+            billFile.bills.push(bills);
+          }
+          this.filesService.updateFile(this.billFileId, billFile).then((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
+  public addPayee(payee: IPayee): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        if(billFile){
+          billFile.payees.push(payee);
+          this.filesService.updateFile(this.billFileId, billFile).then((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
     });
   }
 
