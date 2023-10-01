@@ -3,21 +3,25 @@ import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from
 import {AngularFireAuth} from "@angular/fire/compat/auth";
 import firebase from "firebase/compat/app";
 import {MessageService} from "primeng/api";
-import {GoogleAuthProvider} from "@angular/fire/auth";
+import {GoogleAuthProvider, idToken} from "@angular/fire/auth";
 import User = firebase.User;
-import {map, Observable} from "rxjs";
+import {map, Observable, take} from "rxjs";
+import UserCredential = firebase.auth.UserCredential;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  readonly _provider = new GoogleAuthProvider();
+
   constructor(
     private afAuth: AngularFireAuth, // Inject Firebase auth service
     private router: Router,
     private ngZone: NgZone,
     private messageService: MessageService,
-  ) {  }
+  ) {
+  }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.isLoggedIn.pipe(map(loggedIn => {
@@ -26,12 +30,20 @@ export class AuthService {
         this.router.navigate(['', 'auth', 'login'], {skipLocationChange: true});
         return false;
       }
-    }))
+    }));
   }
 
   // Returns true when user is logged in and email is verified
   get isLoggedIn(): Observable<boolean> {
-    return this.afAuth.authState.pipe(map(user => user != null))
+    return new Observable<boolean>((subscriber) => {
+      this.afAuth.authState.subscribe((user) => {
+        if(user != null){
+          let currentSessionTokens = sessionStorage.getItem('tokens')
+          if(currentSessionTokens) subscriber.next(true);
+          else subscriber.next(false);
+        }else subscriber.next(false);
+      });
+    });
   }
 
   // Returns user profile info
@@ -40,10 +52,20 @@ export class AuthService {
       map(user => UserProfile.parseFromAuth(user)))
   }
 
+  get tokens(): Observable<Token> {
+    return new Observable<Token>((subscriber) => {
+      let tokens = sessionStorage.getItem('tokens');
+      if(tokens){
+        subscriber.next(JSON.parse(tokens) as Token);
+      }
+    })
+  }
+
   // Sign in with Google
   SignInGoogle() {
-    const provider = new GoogleAuthProvider();
-    return this.afAuth.signInWithRedirect(provider);
+    this._provider.addScope('https://www.googleapis.com/auth/drive.file');
+    this._provider.addScope('https://www.googleapis.com/auth/drive.appdata');
+    return this.afAuth.signInWithRedirect(this._provider);
   }
 
   // Sign out
@@ -101,4 +123,10 @@ export class UserProfile {
     }catch{}
     return user;
   }
+}
+
+export class Token {
+  idToken: string = '';
+  accessToken: string = '';
+  exp: Date = new Date(0);
 }

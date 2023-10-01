@@ -1,0 +1,13 @@
+<form [formGroup]="billForm" class="grid mt-2">
+  <ng-container *ngFor="let payee of payees$ | async">
+    <div class="col-12" formGroupName="bills">
+      <span class="p-float-label">
+        <p-inputNumber inputId="{{payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" [formControlName]="payee.name"></p-inputNumber>
+        <label for="{{payee.name}}">{{payee.name}}</label>
+      </span>
+    </div>
+  </ng-container>
+    <div class="col-3">
+      <button [disabled]="!billForm.valid" pButton (click)="saveBill()" label="Save"></button>
+    </div>
+</form>

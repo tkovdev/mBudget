@@ -1,3 +1,6 @@
-<p-card header="Monthly Bills" subheader="{{currentMonthYear}}">
-  <app-bill-summary [bills]="bills$"></app-bill-summary>
+<p-card id="action-bar">
+    <app-bill-action-bar (billChanged)="refreshBills()" [billMonthYears]="billMonthYears$" [selectedMonthYear]="currentMonthYear"></app-bill-action-bar>
+</p-card>
+<p-card styleClass="mt-3" header="Monthly Bills" subheader="{{currentMonthYear}}">
+  <app-bill-summary [bills]="bills$" (updateBill)="updateBill($event)"></app-bill-summary>
 </p-card>
