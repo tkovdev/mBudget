@@ -23,6 +23,7 @@ export class PayeeDialogComponent {
 
   savePayee(): void {
     this.billsService.addPayee(this.payeeForm.value).subscribe((res) => {
+      this.payeeForm = this.initPayeeForm();
       this.close.emit();
     });
   }

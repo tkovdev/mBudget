@@ -31,4 +31,8 @@ export class BillsComponent implements OnInit{
   refreshBills(): void {
     this.bills$ = this.billsService.getMonthBills();
   }
+
+  refreshPayees(): void {
+    this.payees$ = this.billsService.getAllPayees();
+  }
 }
