@@ -6,12 +6,12 @@
         <span class="material-symbols-outlined">
           radio_button_unchecked
         </span>
-        <a (click)="pay(bill)" href="javascript:void(0);">{{bill.payee.name}}</a>
+        <span>{{bill.payee.name}}</span>
       </div>
     </ng-container>
   </ng-container>
-  <ng-container>
-    <hr *ngIf="bills.length > 0" />
+  <ng-container *ngIf="bills | paid: true">
+    <div class="flex align-items-center"><hr class="mr-1"/><span>Paid</span><hr class="ml-1"/></div>
   </ng-container>
   <ng-container *ngFor="let bill of bills">
     <ng-container *ngIf="bill | paid: true">
@@ -20,10 +20,9 @@
           check_circle
         </span>
         <div class="flex">
-          <a (click)="pay(bill)" href="javascript:void(0);">{{bill.payee.name}}</a>
-<!--          <span class="mr-1">{{bill.payee.name}}</span>-->
-          <span>-</span>
-          <span class="ml-1">{{bill.amount | currency}}</span>
+          <span>{{bill.payee.name}}</span>
+          <span class="mr-1 ml-1">-</span>
+          <span>{{bill.amount | currency}}</span>
         </div>
       </div>
     </ng-container>

@@ -9,10 +9,10 @@
     <button pButton (click)="billPayPanel.show($event)" label="Pay Bills"></button>
   </div>
 </div>
-<p-overlayPanel #billPayPanel>
-  <app-bill-pay-dialog (close)="billPayPanel.hide(); billChangedEvent()" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
+<p-overlayPanel #billPayPanel [style]="{width: '90vw'}">
+  <app-bill-pay-dialog (close)="billPayPanel.hide(); billChangedEvent()" [payees]="payees$" [bills]="bills$" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
 </p-overlayPanel>
 
 <p-overlayPanel #payeePanel>
-  <app-payee-dialog (close)="payeePanel.hide()"></app-payee-dialog>
+  <app-payee-dialog (close)="payeePanel.hide(); payeeChangedEvent()"></app-payee-dialog>
 </p-overlayPanel>

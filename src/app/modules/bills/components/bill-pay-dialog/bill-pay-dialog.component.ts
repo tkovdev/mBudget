@@ -13,35 +13,33 @@ import {Month} from "../../../../models/shared.model";
 })
 export class BillPayDialogComponent {
   @Input() selectedMonthYear!: string;
+  @Input('payees') payees$: Observable<IPayee[]> = new Observable<IPayee[]>();
+  @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
+
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
-  payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
-  billFormGroup: FormGroup = new FormGroup<any>([]);
-  billForm: FormGroup = new FormGroup<any>({bills: this.billFormGroup});
+
+  billForm: FormGroup = new FormGroup<any>({bills: new FormGroup([])});
   currentBills: IBill[] = [];
-  constructor(private billsService: BillsService) {
-    this.initBillForm();
+
+  hiddenPayees: IPayee[] = [];
+  constructor(private billsService: BillsService) {}
+
+  initBillFormControl(payee: IPayee, bills: IBill[]): boolean {
+    let currentBill: IBill | undefined = bills.find(x => x.payee.name == payee.name);
+    let currentBillAmount: number | null = null;
+    if(currentBill) currentBillAmount = currentBill.amount;
+    (this.billForm.controls['bills'] as FormGroup).addControl(payee.name, new FormControl({value: currentBillAmount, disabled: false}));
+    this.currentBills = bills;
+    return true;
   }
 
-  initBillForm(): void {
-    this.payees$.subscribe((payees) => {
-        payees.map((payee) => {
-          this.billFormGroup.addControl(payee.name, new FormControl({value: null, disabled: false}));
-      })
-      this.loadBills(payees);
-    });
+  hidePayee(payee: IPayee): void {
+    this.hiddenPayees.push(payee);
   }
 
-  loadBills(payees: IPayee[]): void {
-    this.billsService.getMonthBills(this.selectedMonthYear).subscribe((currentBills) => {
-      this.currentBills = currentBills;
-        payees.forEach((payee) => {
-          let currentBill: IBill | undefined = currentBills.find(x => x.payee.name == payee.name);
-          let currentAmount: number | null = null;
-          if(currentBill) currentAmount = currentBill.amount;
-          this.billFormGroup.controls[payee.name].setValue(currentAmount)
-        })
-    })
+  payeeHidden(payee: IPayee): boolean {
+    return this.hiddenPayees.findIndex(x => x.name == payee.name) > -1;
   }
 
   saveBill(): void {
