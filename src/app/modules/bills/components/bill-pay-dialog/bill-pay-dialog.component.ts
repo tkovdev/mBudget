@@ -23,14 +23,14 @@ export class BillPayDialogComponent {
   currentBills: IBill[] = [];
 
   hiddenPayees: IPayee[] = [];
-  constructor(private billsService: BillsService) {
-  }
+  constructor(private billsService: BillsService) {}
 
   initBillFormControl(payee: IPayee, bills: IBill[]): boolean {
     let currentBill: IBill | undefined = bills.find(x => x.payee.name == payee.name);
     let currentBillAmount: number | null = null;
     if(currentBill) currentBillAmount = currentBill.amount;
     (this.billForm.controls['bills'] as FormGroup).addControl(payee.name, new FormControl({value: currentBillAmount, disabled: false}));
+    this.currentBills = bills;
     return true;
   }
 
