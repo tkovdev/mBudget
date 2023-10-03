@@ -10,8 +10,8 @@
       </div>
     </ng-container>
   </ng-container>
-  <ng-container>
-    <hr *ngIf="bills.length > 0" />
+  <ng-container *ngIf="bills | paid: true">
+    <div class="flex align-items-center"><hr class="mr-1"/><span>Paid</span><hr class="ml-1"/></div>
   </ng-container>
   <ng-container *ngFor="let bill of bills">
     <ng-container *ngIf="bill | paid: true">
