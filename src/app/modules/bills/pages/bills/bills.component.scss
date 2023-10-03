@@ -1,4 +1,7 @@
-::ng-deep #action-bar .p-card-body, ::ng-deep #action-bar .p-card-content{
-  padding-top: .15rem;
-  padding-bottom: .15rem;
+::ng-deep #action-bar .p-card-body{
+  padding: 0 1rem 0 1rem;
+}
+
+::ng-deep #action-bar .p-card-content {
+  padding: 0;
 }
