@@ -1,14 +1,19 @@
-<form [formGroup]="billForm" class="grid mt-2" *ngIf="bills$ | async as bills">
+<form [formGroup]="billForm" class="grid" *ngIf="bills$ | async as bills">
   <ng-container *ngFor="let payee of payees$ | async">
-    <ng-container *ngIf="initBillFormControl(payee, bills)"></ng-container>
-    <div class="col-12" formGroupName="bills" >
-      <span class="p-float-label">
-        <p-inputNumber inputId="{{payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" [formControlName]="payee.name"></p-inputNumber>
-        <label for="{{payee.name}}">{{payee.name}}</label>
-      </span>
-    </div>
+    <ng-container *ngIf="!payeeHidden(payee)">
+      <ng-container *ngIf="initBillFormControl(payee, bills)"></ng-container>
+      <div class="col-11" formGroupName="bills" >
+        <span class="p-float-label">
+          <p-inputNumber inputId="{{payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" [formControlName]="payee.name"></p-inputNumber>
+          <label for="{{payee.name}}">{{payee.name}}</label>
+        </span>
+      </div>
+      <div class="col-1">
+        <button pButton (click)="hidePayee(payee)" class="p-button-text p-button-info" icon="pi pi-times"></button>
+      </div>
+    </ng-container>
   </ng-container>
-    <div class="col-3">
-      <button [disabled]="!billForm.valid" pButton (click)="saveBill()" label="Save"></button>
-    </div>
+  <div class="col-3">
+    <button [disabled]="!billForm.valid" pButton (click)="saveBill()" label="Save"></button>
+  </div>
 </form>

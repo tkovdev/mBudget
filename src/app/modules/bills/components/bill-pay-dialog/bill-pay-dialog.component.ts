@@ -21,6 +21,8 @@ export class BillPayDialogComponent {
 
   billForm: FormGroup = new FormGroup<any>({bills: new FormGroup([])});
   currentBills: IBill[] = [];
+
+  hiddenPayees: IPayee[] = [];
   constructor(private billsService: BillsService) {
   }
 
@@ -30,6 +32,14 @@ export class BillPayDialogComponent {
     if(currentBill) currentBillAmount = currentBill.amount;
     (this.billForm.controls['bills'] as FormGroup).addControl(payee.name, new FormControl({value: currentBillAmount, disabled: false}));
     return true;
+  }
+
+  hidePayee(payee: IPayee): void {
+    this.hiddenPayees.push(payee);
+  }
+
+  payeeHidden(payee: IPayee): boolean {
+    return this.hiddenPayees.findIndex(x => x.name == payee.name) > -1;
   }
 
   saveBill(): void {

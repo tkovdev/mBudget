@@ -9,7 +9,7 @@
     <button pButton (click)="billPayPanel.show($event)" label="Pay Bills"></button>
   </div>
 </div>
-<p-overlayPanel #billPayPanel>
+<p-overlayPanel #billPayPanel [style]="{width: '90vw'}">
   <app-bill-pay-dialog (close)="billPayPanel.hide(); billChangedEvent()" [payees]="payees$" [bills]="bills$" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
 </p-overlayPanel>
 
