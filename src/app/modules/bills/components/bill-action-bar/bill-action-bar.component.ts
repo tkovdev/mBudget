@@ -1,10 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {SharedService} from "../../../../services/shared.service";
-import {Month} from "../../../../models/shared.model";
 import {IBill, IPayee} from "../../../../models/bill.model";
 import {Observable} from "rxjs";
-import {DialogService} from "primeng/dynamicdialog";
-import {BillPayDialogComponent} from "../bill-pay-dialog/bill-pay-dialog.component";
+import {MenuItem} from "primeng/api";
 
 @Component({
   selector: 'app-bill-action-bar',
@@ -21,6 +18,7 @@ export class BillActionBarComponent {
   @Input('payees') payees$: Observable<IPayee[]> = new Observable<IPayee[]>();
   @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
 
+  payeeSplitButtonMenu: MenuItem[] = [{label: 'View Payees'}];
   constructor() {
   }
 
