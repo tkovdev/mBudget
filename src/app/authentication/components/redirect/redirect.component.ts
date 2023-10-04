@@ -10,8 +10,12 @@ import {AngularFireAuth} from "@angular/fire/compat/auth";
 export class RedirectComponent {
 
   constructor(private afAuth: AngularFireAuth) {
-    this.afAuth.getRedirectResult().then((redirectResult => {
-      let credential = redirectResult.credential;
+    //@ts-ignore
+    // this.afAuth.credential.subscribe((userCredential) => console.log(userCredential?.credential.accessToken))
+    this.afAuth.credential.subscribe((userCredential) => {
+      let credential: any = null;
+      //@ts-ignore
+      if(userCredential) credential = userCredential.credential;
       if(credential){
         var tokenResult$ = this.afAuth.idTokenResult.subscribe((idTokenResult) => {
           //@ts-ignore
@@ -23,6 +27,6 @@ export class RedirectComponent {
           location.reload();
         })
       }
-    }))
+    })
   }
 }

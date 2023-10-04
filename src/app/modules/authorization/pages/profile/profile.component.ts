@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit{
 
   signOut(): void {
     this.authService.SignOut().then(() => {
-      this.router.navigate([''])
+      location.reload();
     });
   }
 
