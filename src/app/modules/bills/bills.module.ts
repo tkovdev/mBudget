@@ -17,6 +17,7 @@ import {TooltipModule} from "primeng/tooltip";
 import {InputTextModule} from "primeng/inputtext";
 import {InputNumberModule} from "primeng/inputnumber";
 import { PayeeDialogComponent } from './components/payee-dialog/payee-dialog.component';
+import {SplitButtonModule} from "primeng/splitbutton";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { PayeeDialogComponent } from './components/payee-dialog/payee-dialog.com
     OverlayPanelModule,
     InputTextModule,
     TooltipModule,
-    InputNumberModule
+    InputNumberModule,
+    SplitButtonModule
   ],
   providers: [DialogService]
 })

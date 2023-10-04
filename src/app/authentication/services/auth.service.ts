@@ -7,6 +7,7 @@ import {GoogleAuthProvider, idToken} from "@angular/fire/auth";
 import User = firebase.User;
 import {map, Observable, take} from "rxjs";
 import UserCredential = firebase.auth.UserCredential;
+import {DriveConfig} from "../../services/files.service";
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,8 @@ export class AuthService {
   // Sign out
   SignOut() {
     return this.afAuth.signOut().then(() => {
+      sessionStorage.removeItem('tokens');
+      sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
       this.messageService.add({key: 'global', severity: 'success', summary: 'Sign Out Successful', detail: 'You have been signed out.'})
     });
   }

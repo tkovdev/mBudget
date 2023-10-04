@@ -15,6 +15,7 @@ import {AccessTokenInterceptor} from "./authentication/interceptors/access-token
 import {RedirectComponent} from "./authentication/components/redirect/redirect.component";
 import {AuthenticationModule} from "./authentication/authentication.module";
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {MenubarModule} from "primeng/menubar";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
 
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    MenubarModule
   ],
   providers: [
     MessageService,

@@ -1,2 +1,13 @@
 <p-confirmDialog key="noBillsConfirmation"></p-confirmDialog>
-<router-outlet></router-outlet>
+<p-menubar [model]="menu">
+  <ng-template pTemplate="start">
+  </ng-template>
+  <ng-template pTemplate="end">
+    <p-button [routerLink]="['', 'auth', 'profile']" styleClass="p-button-text p-button-rounded" icon="true">
+      <img style="border-radius: 50%;" src="{{profileImage}}" width="32" referrerpolicy="no-referrer">
+    </p-button>
+  </ng-template>
+</p-menubar>
+<div class="flex flex-column mt-3">
+  <router-outlet></router-outlet>
+</div>
