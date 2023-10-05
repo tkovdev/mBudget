@@ -3,9 +3,16 @@
   <ng-template pTemplate="start">
   </ng-template>
   <ng-template pTemplate="end">
-    <p-button [routerLink]="['', 'auth', 'profile']" styleClass="p-button-text p-button-rounded" icon="true">
-      <img style="border-radius: 50%;" src="{{profileImage}}" width="32" referrerpolicy="no-referrer">
-    </p-button>
+    <div class="flex align-items-center">
+      <div class="relative">
+        <p-button [routerLink]="['', 'auth', 'profile']" styleClass="p-button-text p-button-rounded" icon="true">
+            <img style="border-radius: 50%;" src="{{profileImage}}" width="32" referrerpolicy="no-referrer">
+        </p-button>
+        <ng-container *ngIf="loading$ | async as loading">
+          <p-progressSpinner *ngIf="loading" [style]="{position: 'absolute', top:0, left: 0}" styleClass="w-3rem h-3rem" strokeWidth="4" animationDuration="3s"></p-progressSpinner>
+        </ng-container>
+      </div>
+    </div>
   </ng-template>
 </p-menubar>
 <div class="flex flex-column mt-3">
