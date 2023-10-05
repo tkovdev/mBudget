@@ -18,6 +18,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {InputNumberModule} from "primeng/inputnumber";
 import { PayeeDialogComponent } from './components/payee-dialog/payee-dialog.component';
 import {SplitButtonModule} from "primeng/splitbutton";
+import { MonthYearDialogComponent } from './components/month-year-dialog/month-year-dialog.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {SplitButtonModule} from "primeng/splitbutton";
     PaidPipe,
     BillActionBarComponent,
     BillPayDialogComponent,
-    PayeeDialogComponent
+    PayeeDialogComponent,
+    MonthYearDialogComponent
   ],
   imports: [
     CommonModule,

@@ -11,6 +11,7 @@ import {MenuItem} from "primeng/api";
 export class BillActionBarComponent {
   @Output() billChanged: EventEmitter<void> = new EventEmitter<void>();
   @Output() payeeChanged: EventEmitter<void> = new EventEmitter<void>();
+  @Output() monthYearChanged: EventEmitter<void> = new EventEmitter<void>();
   monthYears: string[] = [];
   @Input() selectedMonthYear!: string;
   @Input('billMonthYears') billsMonthYears$!: Observable<string[]>;
@@ -28,5 +29,9 @@ export class BillActionBarComponent {
 
   payeeChangedEvent(): void {
     this.payeeChanged.emit();
+  }
+
+  monthYearChangedEvent(): void {
+    this.monthYearChanged.emit();
   }
 }

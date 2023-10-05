@@ -141,10 +141,14 @@ export class BillsService {
         if(billFile){
           if(Array.isArray(bills)) {
             bills.forEach(bill => {
-              billFile.bills.push(bill);
+              if(!billFile.bills.some(x => `${x.month} ${x.year}` == `${bill.month} ${bill.year}` && x.payee.name == bill.payee.name)){
+                billFile.bills.push(bill);
+              }
             })
           }else{
-            billFile.bills.push(bills);
+            if(!billFile.bills.some(x => `${x.month} ${x.year}` == `${bills.month} ${bills.year}` && x.payee.name == bills.payee.name)) {
+              billFile.bills.push(bills);
+            }
           }
           this.filesService.updateFile(this.billFileId, billFile).then((res) => {
             subscriber.next(true);

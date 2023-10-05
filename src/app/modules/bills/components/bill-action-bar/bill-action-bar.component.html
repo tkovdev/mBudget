@@ -2,6 +2,7 @@
   <div class="col-6">
     <ng-container *ngIf="billsMonthYears$ | async as billMonthYears">
       <p-dropdown [options]="billMonthYears" [(ngModel)]="selectedMonthYear"></p-dropdown>
+      <button (click)="monthYearPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Month Year"></button>
     </ng-container>
   </div>
   <div class="col-6 flex justify-content-end">
@@ -15,4 +16,8 @@
 
 <p-overlayPanel #payeePanel>
   <app-payee-dialog (close)="payeePanel.hide(); payeeChangedEvent()"></app-payee-dialog>
+</p-overlayPanel>
+
+<p-overlayPanel #monthYearPanel>
+  <app-month-year-dialog (close)="monthYearPanel.hide(); monthYearChangedEvent()"></app-month-year-dialog>
 </p-overlayPanel>
