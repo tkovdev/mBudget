@@ -167,6 +167,20 @@ export class BillsService {
     });
   }
 
+  public deletePayee(payee: IPayee): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        if(billFile){
+          billFile.bills = billFile.bills.filter(x => x.payee.name != payee.name || x.amount != null);
+          billFile.payees = billFile.payees.filter(x => x.name != payee.name);
+          this.filesService.updateFile(this.billFileId, billFile).then((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
 }
 
 export const BillGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> => {
