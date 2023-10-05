@@ -6,6 +6,8 @@ import {IBill, IPayee} from "./models/bill.model";
 import {Month} from "./models/shared.model";
 import {MenuItem} from "primeng/api";
 import {AngularFireAuth} from "@angular/fire/compat/auth";
+import {Observable} from "rxjs";
+import {SharedService} from "./services/shared.service";
 
 @Component({
   selector: 'app-root',
@@ -17,7 +19,9 @@ export class AppComponent implements OnInit{
 
   menu: MenuItem[] = [];
   profileImage: string = 'assets/default-account-icon.svg';
-  constructor(private authService: AuthService, private fileService: FilesService, private afAuth: AngularFireAuth) {
+  loading$: Observable<boolean> = this.sharedService.isLoadingEmit;
+
+  constructor(private authService: AuthService, private fileService: FilesService, private afAuth: AngularFireAuth, private sharedService: SharedService) {
     this.afAuth.user.subscribe((res) => {
       if(res && res.photoURL) this.profileImage = res?.photoURL;
     });

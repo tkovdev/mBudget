@@ -16,6 +16,8 @@ import {RedirectComponent} from "./authentication/components/redirect/redirect.c
 import {AuthenticationModule} from "./authentication/authentication.module";
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import {MenubarModule} from "primeng/menubar";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {LoadingInterceptor} from "./interceptors/loading.interceptor";
 
 @NgModule({
   declarations: [
@@ -31,13 +33,26 @@ import {MenubarModule} from "primeng/menubar";
     provideAuth(() => getAuth()),
 
     ConfirmDialogModule,
-    MenubarModule
+    MenubarModule,
+    ProgressSpinnerModule
   ],
   providers: [
     MessageService,
     AuthService,
-    { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
-    { provide: HTTP_INTERCEPTORS, useClass: AccessTokenInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingInterceptor,
+      multi: true
+    },
+    {
+      provide: FIREBASE_OPTIONS,
+      useValue: environment.firebase
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AccessTokenInterceptor,
+      multi: true
+    },
     ConfirmationService
   ],
   bootstrap: [AppComponent, RedirectComponent]
