@@ -1,0 +1,8 @@
+<form [formGroup]="payeeForm" class="grid">
+  <div class="col-9">
+    <input pInputText formControlName="name"/>
+  </div>
+  <div class="col-3">
+    <button [disabled]="!payeeForm.valid" pButton (click)="savePayee();" icon="pi pi-save"></button>
+  </div>
+</form>
