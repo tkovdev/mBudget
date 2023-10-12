@@ -1,7 +1,7 @@
 <div class="grid">
   <div class="col-6">
     <ng-container *ngIf="billsMonthYears$ | async as billMonthYears">
-      <p-dropdown [options]="billMonthYears" [(ngModel)]="selectedMonthYear"></p-dropdown>
+      <p-dropdown [options]="billMonthYears" [(ngModel)]="selectedMonthYear" (onChange)="monthYearSelectedEvent(selectedMonthYear)"></p-dropdown>
       <button (click)="monthYearPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Month Year"></button>
     </ng-container>
   </div>

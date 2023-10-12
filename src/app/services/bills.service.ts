@@ -158,6 +158,25 @@ export class BillsService {
     });
   }
 
+  public deleteBill(monthYear: string, payees: IPayee | IPayee[]): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        if(billFile){
+          if(Array.isArray(payees)){
+            payees.forEach((payee, i) => {
+              billFile.bills = billFile.bills.filter(x => !(`${x.month} ${x.year}` == monthYear && x.payee.name == payee.name));
+            });
+          }else {
+            billFile.bills = billFile.bills.filter(x => !(`${x.month} ${x.year}` == monthYear && x.payee.name == payees.name))
+          }
+          this.filesService.updateFile(this.billFileId, billFile).then((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
   public addPayee(payee: IPayee): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
       this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
