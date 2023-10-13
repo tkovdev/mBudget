@@ -1,0 +1,11 @@
+<form [formGroup]="monthYearForm" class="grid">
+  <div class="col-5">
+    <p-dropdown [style]="{width: '100%'}" styleClass="w-full" [options]="months" formControlName="month"></p-dropdown>
+  </div>
+  <div class="col-5">
+    <p-inputNumber [style]="{width: '100%'}" inputStyleClass="w-full" styleClass="w-full" formControlName="year" [useGrouping]="false"/>
+  </div>
+  <div class="col-2">
+    <button [disabled]="!monthYearForm.valid" pButton (click)="saveMonthYear();" icon="pi pi-save"></button>
+  </div>
+</form>

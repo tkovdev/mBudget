@@ -12,10 +12,10 @@ import {Month} from "../../../../models/shared.model";
   styleUrls: ['./bills.component.scss']
 })
 export class BillsComponent implements OnInit{
-  payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
-  bills$: Observable<IBill[]> = this.billsService.getMonthBills();
-  billMonthYears$: Observable<string[]> = this.billsService.getAllBillMonthYears();
   currentMonthYear: string = this.sharedService.currentMonthYear();
+  payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
+  bills$: Observable<IBill[]> = this.billsService.getMonthBills(this.currentMonthYear);
+  billMonthYears$: Observable<string[]> = this.billsService.getAllBillMonthYears();
   constructor(private billsService: BillsService, private fileService: FilesService, private sharedService: SharedService) {
   }
 
@@ -24,15 +24,24 @@ export class BillsComponent implements OnInit{
 
   updateBill(bill: IBill): void {
     this.billsService.updateBill(bill).subscribe((res) => {
-      this.bills$ = this.billsService.getMonthBills();
+      this.bills$ = this.billsService.getMonthBills(this.currentMonthYear);
     })
   }
 
   refreshBills(): void {
-    this.bills$ = this.billsService.getMonthBills();
+    this.bills$ = this.billsService.getMonthBills(this.currentMonthYear);
   }
 
   refreshPayees(): void {
     this.payees$ = this.billsService.getAllPayees();
+  }
+
+  refreshMonthYears(): void {
+    this.billMonthYears$ = this.billsService.getAllBillMonthYears();
+  }
+
+  monthYearSelected(monthYear: string): void {
+    this.currentMonthYear = monthYear;
+    this.bills$ = this.billsService.getMonthBills(this.currentMonthYear)
   }
 }

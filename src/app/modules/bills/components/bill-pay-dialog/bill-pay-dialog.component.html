@@ -1,19 +1,35 @@
 <form [formGroup]="billForm" class="grid" *ngIf="bills$ | async as bills">
-  <ng-container *ngFor="let payee of payees$ | async">
-    <ng-container *ngIf="!payeeHidden(payee)">
-      <ng-container *ngIf="initBillFormControl(payee, bills)"></ng-container>
+  <ng-container *ngIf="initBillFormControls(bills)"></ng-container>
+  <ng-container *ngFor="let bill of bills$ | async">
+    <ng-container *ngIf="!payeeHidden(bill.payee)">
       <div class="col-11" formGroupName="bills" >
         <span class="p-float-label">
-          <p-inputNumber inputId="{{payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" [formControlName]="payee.name"></p-inputNumber>
-          <label for="{{payee.name}}">{{payee.name}}</label>
+          <p-inputNumber inputId="{{bill.payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" [formControlName]="bill.payee.name"></p-inputNumber>
+          <label for="{{bill.payee.name}}">{{bill.payee.name}}</label>
         </span>
       </div>
       <div class="col-1">
-        <button pButton (click)="hidePayee(payee)" class="p-button-text p-button-info" icon="pi pi-times"></button>
+        <button pButton (click)="hidePayee(bill.payee)" class="p-button-text p-button-info" icon="pi pi-times"></button>
       </div>
     </ng-container>
   </ng-container>
   <div class="col-3">
     <button [disabled]="!billForm.valid" pButton (click)="saveBill()" label="Save"></button>
   </div>
+  <ng-container *ngIf="payees$ | async as allPayees">
+    <div *ngIf="missingPayees(allPayees, bills).length > 0" class="col-offset-6 col-3 text-right">
+      <button pButton class="p-button-text" (click)="morePayeesPanel.show($event)" label="More Payees"></button>
+    </div>
+    <p-overlayPanel #morePayeesPanel>
+      <ng-container *ngIf="missingPayees(allPayees, bills) as missingPayees">
+          <ng-container *ngFor="let payee of missingPayees">
+            <div class="flex">
+              <p class="mr-1">{{payee.name}}</p>
+              <button pButton class="p-button-text ml-1" label="Add" (click)="showPayee(payee)"></button>
+            </div>
+          </ng-container>
+      </ng-container>
+    </p-overlayPanel>
+  </ng-container>
 </form>
+
