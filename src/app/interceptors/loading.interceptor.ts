@@ -18,9 +18,7 @@ export class LoadingInterceptor implements HttpInterceptor {
     this.sharedService.queueLoading(request.url);
     return next.handle(request).pipe(
       finalize(() => {
-        setTimeout(() => {
-          this.sharedService.dequeueLoading(request.url);
-        }, 1500)
+        this.sharedService.dequeueLoading(request.url);
       })
     );
   }
