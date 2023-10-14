@@ -4,3 +4,6 @@
 <p-card styleClass="mt-3" header="Monthly Bills" subheader="{{currentMonthYear}}">
   <app-bill-summary [bills]="bills$" (updateBill)="updateBill($event)"></app-bill-summary>
 </p-card>
+<p-card styleClass="mt-3" header="Monthly Income" subheader="{{currentMonthYear}}">
+  <app-income-summary [income]="income$"></app-income-summary>
+</p-card>
