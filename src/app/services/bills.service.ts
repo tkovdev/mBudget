@@ -239,6 +239,9 @@ export class BillsService {
         if(billFile){
           if(!billFile.income.some(x => `${x.month} ${x.year}` == `${income.month} ${income.year}` && x.payer.name == income.payer.name)) {
             billFile.income.push(income);
+          }else{
+            let existingIncome = billFile.income.findIndex(x => `${x.month} ${x.year}` == `${income.month} ${income.year}` && x.payer.name == income.payer.name)
+            if(existingIncome > -1) billFile.income[existingIncome] = income;
           }
           this.filesService.updateFile(this.billFileId, billFile).then((res) => {
             subscriber.next(true);

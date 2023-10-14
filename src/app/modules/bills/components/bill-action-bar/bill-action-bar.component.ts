@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {IBill, IPayee} from "../../../../models/bill.model";
+import {IBill, IIncome, IPayee} from "../../../../models/bill.model";
 import {Observable} from "rxjs";
 import {MenuItem} from "primeng/api";
 
@@ -21,6 +21,7 @@ export class BillActionBarComponent{
 
   @Input('payees') payees$: Observable<IPayee[]> = new Observable<IPayee[]>();
   @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
+  @Input('income') income$: Observable<IIncome[]> = new Observable<IIncome[]>();
 
   payeeSplitButtonMenu: MenuItem[] = [{label: 'View Payees', routerLink: ['','payees']}];
   constructor() {

@@ -37,6 +37,10 @@ export class BillsComponent implements OnInit{
     this.payees$ = this.billsService.getAllPayees();
   }
 
+  refreshIncome(): void {
+    this.income$ = this.billsService.getMonthIncome(this.currentMonthYear);
+  }
+
   refreshMonthYears(): void {
     this.billMonthYears$ = this.billsService.getAllBillMonthYears();
   }
