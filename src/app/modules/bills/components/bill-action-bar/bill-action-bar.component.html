@@ -1,11 +1,11 @@
 <div class="grid">
-  <div class="col-6">
+  <div class="md:col-6 col-12">
     <ng-container *ngIf="billsMonthYears$ | async as billMonthYears">
       <p-dropdown [options]="billMonthYears" [(ngModel)]="selectedMonthYear" (onChange)="monthYearSelectedEvent(selectedMonthYear)"></p-dropdown>
       <button (click)="monthYearPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Month Year"></button>
     </ng-container>
   </div>
-  <div class="col-6 flex justify-content-end">
+  <div class="md:col-6 col-12 flex md:justify-content-end">
     <p-splitButton class="mr-1" label="New Payee" (onClick)="payeePanel.show($event)" [model]="payeeSplitButtonMenu"></p-splitButton>
     <button class="ml-1" pButton (click)="billPayPanel.show($event)" label="Pay Bills"></button>
   </div>
