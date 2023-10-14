@@ -1,5 +1,5 @@
 <ng-container *ngIf="bills$ | async as bills">
-  <form [formGroup]="billForm" class="grid" style="max-height: 60vh; padding-top: 1rem;" class="overflow-y-auto">
+  <form [formGroup]="billForm" [ngClass]="{'grid': true}" style="max-height: 60vh; padding-top: 1rem;" class="overflow-y-auto">
     <ng-container *ngIf="initBillFormControls(bills)"></ng-container>
     <ng-container *ngFor="let bill of bills$ | async">
       <ng-container *ngIf="!payeeHidden(bill.payee)">
@@ -17,7 +17,7 @@
       </ng-container>
     </ng-container>
   </form>
-  <div class="flex justify-content-between col-12">
+  <div class="flex justify-content-between mt-1">
     <div class="w-full">
       <button [disabled]="!billForm.valid || currentBills.length <= 0" pButton (click)="saveBill()" label="Save"></button>
     </div>

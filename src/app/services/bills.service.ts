@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {filter, map, Observable} from "rxjs";
-import {IBill, IPayee} from "../models/bill.model";
+import {IBill, IIncome, IPayee, IPayer} from "../models/bill.model";
 import {DriveConfig, FilesService} from "./files.service";
 import {IBillSchema, IDriveSchema, ISchemaItem, SchemaType} from "../models/driveSchema.model";
 import {SharedService} from "./shared.service";
@@ -37,7 +37,7 @@ export class BillsService {
             icon: 'pi pi-exclamation-triangle',
             key: 'noBillsConfirmation',
             accept: () => {
-              let newFile: IBillSchema = {bills: [], payees: []};
+              let newFile: IBillSchema = {bills: [], payees: [], income: []};
               this.filesService.createFile(DriveConfig.BILL_FILE_NAME, newFile).then((file) => {
                 location.reload();
               });
@@ -196,6 +196,50 @@ export class BillsService {
         if(billFile){
           billFile.bills = billFile.bills.filter(x => x.payee.name != payee.name || x.amount != null);
           billFile.payees = billFile.payees.filter(x => x.name != payee.name);
+          this.filesService.updateFile(this.billFileId, billFile).then((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
+  private getIncome(): Observable<IIncome[]> {
+    return new Observable<IIncome[]>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        let income = billFile?.income;
+        if(income) subscriber.next(income);
+        else subscriber.next([])
+      })
+    });
+  }
+  public getMonthIncome(monthYear: string = this.sharedService.currentMonthYear()): Observable<IIncome[]> {
+    return this.getIncome().pipe(
+      map((income) => income.filter(x => `${x.month} ${x.year}` == monthYear))
+    );
+  }
+
+  public getIncomePayers(): Observable<string[]> {
+    return this.getIncome().pipe(
+      map((incomes) =>{
+          let incomeMap = incomes.map((income: IIncome) => `${income.payer.name}`);
+          incomeMap = [...new Set(incomeMap)];
+          let months = Object.keys(Month);
+          incomeMap = incomeMap.sort((a, b) => {
+            return parseInt(`${a}`) - parseInt(`${b}`)
+          });
+          return incomeMap;
+        }
+      )
+    );
+  }
+  public addIncome(income: IIncome): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        if(billFile){
+          if(!billFile.income.some(x => `${x.month} ${x.year}` == `${income.month} ${income.year}` && x.payer.name == income.payer.name)) {
+            billFile.income.push(income);
+          }
           this.filesService.updateFile(this.billFileId, billFile).then((res) => {
             subscriber.next(true);
           })

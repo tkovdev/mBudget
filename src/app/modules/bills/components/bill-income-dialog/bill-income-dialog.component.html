@@ -1,0 +1,23 @@
+<form [formGroup]="incomeForm" *ngIf="payers$ | async as payers" class="grid">
+  <div class="col-12 flex">
+    <div class="w-full">
+      <span class="p-float-label">
+        <p-dropdown formControlName="payer" id="payer" inputId="payer" [options]="payers" [editable]="true" class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-dropdown>
+        <label for="payer">Payer</label>
+      </span>
+    </div>
+  </div>
+  <div class="col-12 flex">
+    <div class="w-full">
+      <span class="p-float-label">
+        <p-inputNumber id="amount" inputId="amount" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
+        <label for="amount">Amount</label>
+      </span>
+    </div>
+  </div>
+</form>
+<div class="flex justify-content-between mt-1">
+  <div class="w-full">
+    <button [disabled]="!incomeForm.valid" pButton (click)="saveIncome()" label="Save"></button>
+  </div>
+</div>
