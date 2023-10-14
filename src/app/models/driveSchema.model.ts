@@ -1,4 +1,4 @@
-import {IBill, IPayee} from "./bill.model";
+import {IBill, IIncome, IPayee} from "./bill.model";
 import FileResource = gapi.client.drive.FileResource;
 
 export interface IDriveSchema {
@@ -18,8 +18,9 @@ export enum SchemaType {
 }
 
 export interface IBillSchema {
-  payees: IPayee[]
+  payees: IPayee[];
   bills: IBill[];
+  income: IIncome[];
 }
 
 export interface IFileSearch {
