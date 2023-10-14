@@ -4,6 +4,10 @@ import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 import {FilesService} from "../../../../services/files.service";
 import {IBillSchema, IFileSearch, IFileSearchDetails} from "../../../../models/driveSchema.model";
+import {DialogService} from "primeng/dynamicdialog";
+import {
+  ProfileAdvancedOptionsComponent
+} from "../../components/profile-advanced-options/profile-advanced-options.component";
 
 @Component({
   selector: 'app-profile',
@@ -16,7 +20,7 @@ export class ProfileComponent implements OnInit{
 
   showFileContent: boolean = false;
   fileContent: string | undefined;
-  constructor(private authService: AuthService, private fileService: FilesService, private router: Router) {
+  constructor(private authService: AuthService, private fileService: FilesService, private router: Router, private dialogService: DialogService) {
   }
   ngOnInit(): void {
     this.user$ = this.authService.userProfile;
@@ -40,5 +44,17 @@ export class ProfileComponent implements OnInit{
     this.fileService.deleteFile(id).then((res) => {
       location.reload();
     });
+  }
+
+  viewAdvancedOptions(id: string): void {
+    this.fileService.getFile<IBillSchema>(id).then((file) => {
+      ;
+      this.dialogService.open(ProfileAdvancedOptionsComponent, {
+        header: 'Advanced Options',
+        width: '80%',
+        height: '80%',
+        data: {fileContent: JSON.stringify(file), fileId: id}
+      })
+    })
   }
 }

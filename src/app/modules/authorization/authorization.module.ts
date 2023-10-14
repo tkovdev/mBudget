@@ -8,12 +8,15 @@ import {ButtonModule} from "primeng/button";
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import {FormsModule} from "@angular/forms";
+import { ProfileAdvancedOptionsComponent } from './components/profile-advanced-options/profile-advanced-options.component';
+import {DialogService, DynamicDialogModule} from "primeng/dynamicdialog";
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProfileAdvancedOptionsComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +26,9 @@ import {FormsModule} from "@angular/forms";
     CardModule,
     ButtonModule,
     DialogModule,
-    InputTextareaModule
-  ]
+    InputTextareaModule,
+    DynamicDialogModule
+  ],
+  providers: [DialogService]
 })
 export class AuthorizationModule { }
