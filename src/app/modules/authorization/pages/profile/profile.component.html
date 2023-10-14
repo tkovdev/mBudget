@@ -24,10 +24,10 @@
 <p-card header="My Stored Data" styleClass="mt-3">
   <ng-container *ngIf="storedFiles$ | async as files">
     <div class="grid" *ngFor="let file of files.files">
-      <div class="col flex flex-column">
+      <div class="col flex flex-column w-full" style="overflow-wrap: break-word">
         <strong>{{file.name}}</strong>
         <small>{{file.id}}</small>
-        <small>{{file.createdTime}} / {{file.modifiedTime}}</small>
+        <small class="mt-2">{{file.createdTime | date: 'short'}} / {{file.modifiedTime | date: 'short'}}</small>
       </div>
       <div class="col text-right">
         <div class="flex justify-content-end">
