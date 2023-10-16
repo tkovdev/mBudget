@@ -1,0 +1,8 @@
+<ng-container *ngIf="loading">
+  <div class="flex justify-content-around mb-2">
+    <p-skeleton width="5rem"></p-skeleton>
+    <p-skeleton width="5rem"></p-skeleton>
+  </div>
+  <p-skeleton class="flex justify-content-center" shape="circle" size="15rem"></p-skeleton>
+</ng-container>
+<p-chart *ngIf="!loading" type="doughnut" [data]="data" [options]="options"></p-chart>
