@@ -23,6 +23,8 @@ export class BillActionBarComponent{
   @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
   @Input('income') income$: Observable<IIncome[]> = new Observable<IIncome[]>();
 
+  billPayDialog: boolean = false
+
   payeeSplitButtonMenu: MenuItem[] = [{label: 'View Payees', routerLink: ['','payees']}];
   constructor() {
   }
