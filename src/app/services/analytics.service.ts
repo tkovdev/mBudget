@@ -3,15 +3,16 @@ import {BillsService} from "./bills.service";
 import {combineLatest, forkJoin, map, mergeMap, Observable} from "rxjs";
 import {KeyValue} from "@angular/common";
 import {Month} from "../models/shared.model";
+import {SharedService} from "./shared.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnalyticsService {
 
-  constructor(private billsService: BillsService) { }
+  constructor(private billsService: BillsService, private sharedService: SharedService) { }
 
-  public yearOverYearSpend(): Observable<IYearOverYearSpend>{
+  public yearOverYearSpend(year: number = this.sharedService.currentYear()): Observable<IYearOverYearSpend>{
     let spend: IYearOverYearSpend = { unaccounted: [], total: [], outgoing: [], remaining: []};
     return combineLatest({
       bills: this.billsService.getYearToDateBills(),

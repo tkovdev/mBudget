@@ -6,3 +6,6 @@
   <p-skeleton class="flex justify-content-center" shape="circle" size="15rem"></p-skeleton>
 </ng-container>
 <p-chart *ngIf="!loading" type="doughnut" [data]="data" [options]="options"></p-chart>
+<div class="flex justify-content-center mt-1">
+  <p-dropdown [(ngModel)]="selectedMonthYear" [options]="monthYearOptions" (onChange)="monthYearChanged()"></p-dropdown>
+</div>

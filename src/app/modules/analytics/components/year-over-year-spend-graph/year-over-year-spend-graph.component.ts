@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Month} from "../../../../models/shared.model";
-import {AnalyticsService} from "../../../../services/analytics.service";
+import {AnalyticsService, IYearOverYearSpend} from "../../../../services/analytics.service";
+import {SharedService} from "../../../../services/shared.service";
+import {BillsService} from "../../../../services/bills.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-year-over-year-spend-graph',
@@ -8,14 +11,25 @@ import {AnalyticsService} from "../../../../services/analytics.service";
   styleUrls: ['./year-over-year-spend-graph.component.scss']
 })
 export class YearOverYearSpendGraphComponent implements OnInit {
+  spend$: Observable<IYearOverYearSpend> = this.analyticsService.yearOverYearSpend();
   data: any;
   options: any;
 
-  constructor(private analyticsService: AnalyticsService) {
+  yearOptions: number[] = [];
+  selectedYear: number = this.sharedService.currentYear();
+
+  constructor(private analyticsService: AnalyticsService, private sharedService: SharedService, private billsService: BillsService) {
   }
 
   ngOnInit(): void {
-    this.analyticsService.yearOverYearSpend().subscribe((spend) => {
+    this.billsService.getAvailableYears().subscribe((years) => {
+      this.yearOptions = years;
+    });
+    this.loadGraph();
+  }
+
+  loadGraph(): void {
+    this.spend$.subscribe((spend) => {
       this.data = {
         labels: Object.keys(Month),
         datasets: [
@@ -83,5 +97,9 @@ export class YearOverYearSpendGraphComponent implements OnInit {
     });
   }
 
+  yearChanged(): void {
+    this.spend$ = this.analyticsService.yearOverYearSpend(this.selectedYear);
+    this.loadGraph();
+  }
 
 }

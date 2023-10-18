@@ -8,6 +8,8 @@ import {CardModule} from "primeng/card";
 import {ChartModule} from "primeng/chart";
 import {SkeletonModule} from "primeng/skeleton";
 import { YearOverYearSpendGraphComponent } from './components/year-over-year-spend-graph/year-over-year-spend-graph.component';
+import {DropdownModule} from "primeng/dropdown";
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { YearOverYearSpendGraphComponent } from './components/year-over-year-spe
     ChartModule,
     SkeletonModule,
 
-    CardModule
+    CardModule,
+    DropdownModule,
+    FormsModule
   ]
 })
 export class AnalyticsModule { }

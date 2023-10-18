@@ -107,6 +107,21 @@ export class BillsService {
     );
   }
 
+  getAvailableYears(): Observable<number[]> {
+    return this.getBills().pipe(
+      map((bills) =>{
+          let billMap = bills.map((bill: IBill) => bill.year);
+          billMap.push(this.sharedService.currentYear());
+          billMap = [...new Set(billMap)];
+          billMap = billMap.sort((a, b) => {
+            return a - b;
+          });
+          return billMap;
+        }
+      )
+    );
+  }
+
   public getMonthBills(monthYear: string = this.sharedService.currentMonthYear()): Observable<IBill[]> {
     return this.getBills().pipe(
       map((bills) => bills.filter(x => `${x.month} ${x.year}` == monthYear))
