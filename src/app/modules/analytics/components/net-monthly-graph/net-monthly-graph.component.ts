@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {IBill, IIncome} from "../../../../models/bill.model";
 import {BillsService} from "../../../../services/bills.service";
 import {SharedService} from "../../../../services/shared.service";
+import {AnalyticsService, IMonthlyIncomeExpenses} from "../../../../services/analytics.service";
 
 @Component({
   selector: 'app-net-monthly-graph',
@@ -11,16 +12,16 @@ import {SharedService} from "../../../../services/shared.service";
 })
 export class NetMonthlyGraphComponent implements OnInit{
   loading: boolean = false;
-  income$: Observable<IIncome[]> = this.billsService.getMonthIncome();
-  bills$: Observable<IBill[]> = this.billsService.getMonthBills();
+  incomeExpenses$: Observable<IMonthlyIncomeExpenses> = this.analyticsService.monthlyIncomeVsExpenses();
   data: any;
 
   selectedMonthYear: string = this.sharedService.currentMonthYear();
   monthYearOptions: string[] = [];
+  noData: boolean = false;
 
   options: any;
 
-  constructor(private billsService: BillsService, private sharedService: SharedService) {
+  constructor(private analyticsService: AnalyticsService, private billsService: BillsService, private sharedService: SharedService) {
   }
 
   ngOnInit(): void {
@@ -31,24 +32,19 @@ export class NetMonthlyGraphComponent implements OnInit{
   }
 
   loadGraph(): void {
-    let incomeTotal = 0;
-    let billTotal = 0;
     this.loading = true;
-    this.income$.subscribe((incomes) => {
-      this.bills$.subscribe((bills) => {
-        incomeTotal = incomes.map(x => x.amount).reduce((acc, currentValue) => acc + currentValue, incomeTotal)
-        billTotal = bills.filter(x => x.amount != null).map(x => x.amount as number).reduce((acc, currentValue) => acc + currentValue, billTotal)
-        this.data = {
-          labels: ['Incoming', 'Outgoing'],
-          datasets: [
-            {
-              data: [incomeTotal, billTotal],
-              backgroundColor: ['#A8FFC7', '#ffa4a4'],
-            }
-          ]
-        };
-        this.loading = false;
-      });
+    this.analyticsService.monthlyIncomeVsExpenses().subscribe((incomeExpenses) => {
+      if(incomeExpenses.income == 0 && incomeExpenses.expenses == 0) this.noData = true;
+      this.data = {
+        labels: ['Incoming', 'Outgoing'],
+        datasets: [
+          {
+            data: [incomeExpenses.income, incomeExpenses.expenses],
+            backgroundColor: ['#A8FFC7', '#ffa4a4'],
+          }
+        ]
+      };
+      this.loading = false;
     });
 
     this.options = {
@@ -64,8 +60,7 @@ export class NetMonthlyGraphComponent implements OnInit{
   }
 
   monthYearChanged(): void {
-    this.income$ = this.billsService.getMonthIncome(this.selectedMonthYear);
-    this.bills$ = this.billsService.getMonthBills(this.selectedMonthYear);
+    this.incomeExpenses$ = this.analyticsService.monthlyIncomeVsExpenses(this.selectedMonthYear);
     this.loadGraph();
   }
 

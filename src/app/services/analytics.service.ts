@@ -12,6 +12,19 @@ export class AnalyticsService {
 
   constructor(private billsService: BillsService, private sharedService: SharedService) { }
 
+  public monthlyIncomeVsExpenses(monthYear: string = this.sharedService.currentMonthYear()): Observable<IMonthlyIncomeExpenses> {
+    let incomeExpenses: IMonthlyIncomeExpenses = { expenses: 0, income: 0};
+    return combineLatest({
+      income: this.billsService.getMonthIncome(monthYear),
+      expenses: this.billsService.getMonthBills(monthYear)
+    }).pipe(
+      map((combine) => {
+        incomeExpenses.income = combine.income.map(x => x.amount).reduce((acc, currentValue) => acc + currentValue, incomeExpenses.income)
+        incomeExpenses.expenses = combine.expenses.filter(x => x.amount != null).map(x => x.amount as number).reduce((acc, currentValue) => acc + currentValue, incomeExpenses.expenses)
+        return incomeExpenses;
+      }));
+  }
+
   public yearOverYearSpend(year: number = this.sharedService.currentYear()): Observable<IYearOverYearSpend>{
     let spend: IYearOverYearSpend = { unaccounted: [], total: [], outgoing: [], remaining: []};
     return combineLatest({
@@ -50,4 +63,9 @@ export interface IYearOverYearSpend {
   total: KeyValue<Month, number>[];
   unaccounted: KeyValue<Month, number>[];
   remaining: KeyValue<Month, number>[];
+}
+
+export interface IMonthlyIncomeExpenses {
+  income: number;
+  expenses: number;
 }

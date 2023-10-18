@@ -11,6 +11,7 @@ import {Observable} from "rxjs";
   styleUrls: ['./year-over-year-spend-graph.component.scss']
 })
 export class YearOverYearSpendGraphComponent implements OnInit {
+  loading: boolean = false;
   spend$: Observable<IYearOverYearSpend> = this.analyticsService.yearOverYearSpend();
   data: any;
   options: any;
@@ -29,6 +30,7 @@ export class YearOverYearSpendGraphComponent implements OnInit {
   }
 
   loadGraph(): void {
+    this.loading = true;
     this.spend$.subscribe((spend) => {
       this.data = {
         labels: Object.keys(Month),
@@ -94,6 +96,7 @@ export class YearOverYearSpendGraphComponent implements OnInit {
           }
         }
       };
+      this.loading = false;
     });
   }
 

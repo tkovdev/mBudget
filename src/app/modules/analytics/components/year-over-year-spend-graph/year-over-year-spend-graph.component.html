@@ -1,4 +1,13 @@
-<p-chart type="line" [data]="data" [options]="options" height="16rem"></p-chart>
+<ng-container *ngIf="loading">
+  <div class="flex justify-content-center mb-2">
+    <p-skeleton class="mx-2" width="8rem"></p-skeleton>
+    <p-skeleton class="mx-2" width="8rem"></p-skeleton>
+    <p-skeleton class="mx-2" width="8rem"></p-skeleton>
+    <p-skeleton class="mx-2" width="8rem"></p-skeleton>
+  </div>
+  <p-skeleton class="flex justify-content-center" width="60rem" height="15rem"></p-skeleton>
+</ng-container>
+<p-chart *ngIf="!loading" type="line" [data]="data" [options]="options" height="16rem"></p-chart>
 <div class="flex justify-content-center mt-1">
-  <p-dropdown [(ngModel)]="selectedYear" [options]="yearOptions"></p-dropdown>
+  <p-dropdown [(ngModel)]="selectedYear" [options]="yearOptions" (onChange)="yearChanged()"></p-dropdown>
 </div>
