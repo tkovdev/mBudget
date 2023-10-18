@@ -7,12 +7,14 @@ import { NetMonthlyGraphComponent } from './components/net-monthly-graph/net-mon
 import {CardModule} from "primeng/card";
 import {ChartModule} from "primeng/chart";
 import {SkeletonModule} from "primeng/skeleton";
+import { YearOverYearSpendGraphComponent } from './components/year-over-year-spend-graph/year-over-year-spend-graph.component';
 
 
 @NgModule({
   declarations: [
     AnalyticsComponent,
-    NetMonthlyGraphComponent
+    NetMonthlyGraphComponent,
+    YearOverYearSpendGraphComponent
   ],
   imports: [
     CommonModule,

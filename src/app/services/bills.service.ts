@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {filter, map, Observable} from "rxjs";
-import {IBill, IIncome, IPayee, IPayer} from "../models/bill.model";
+import {IBalance, IBill, IIncome, IPayee, IPayer} from "../models/bill.model";
 import {DriveConfig, FilesService} from "./files.service";
 import {IBillSchema, IDriveSchema, ISchemaItem, SchemaType} from "../models/driveSchema.model";
 import {SharedService} from "./shared.service";
@@ -37,7 +37,7 @@ export class BillsService {
             icon: 'pi pi-exclamation-triangle',
             key: 'noBillsConfirmation',
             accept: () => {
-              let newFile: IBillSchema = {bills: [], payees: [], income: []};
+              let newFile: IBillSchema = {bills: [], payees: [], income: [], balances: []};
               this.filesService.createFile(DriveConfig.BILL_FILE_NAME, newFile).then((file) => {
                 location.reload();
               });
@@ -77,6 +77,34 @@ export class BillsService {
         else subscriber.next([])
       })
     });
+  }
+
+  private getBalances(): Observable<IBalance[]>{
+    return new Observable<IBalance[]>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        let balances = billFile?.balances;
+        if(balances) subscriber.next(balances);
+        else subscriber.next([])
+      })
+    });
+  }
+
+  public getYearToDateBills(year: number = this.sharedService.currentYear()): Observable<IBill[]> {
+    return this.getBills().pipe(
+      map((bills) => bills.filter(x => x.year == year))
+    );
+  }
+
+  public getYearToDateBalances(year: number = this.sharedService.currentYear()): Observable<IBalance[]> {
+    return this.getBalances().pipe(
+      map((balances) => balances.filter(x => x.year == year))
+    );
+  }
+
+  public getYearToDateIncome(year: number = this.sharedService.currentYear()): Observable<IIncome[]> {
+    return this.getIncome().pipe(
+      map((income) => income.filter(x => x.year == year))
+    );
   }
 
   public getMonthBills(monthYear: string = this.sharedService.currentMonthYear()): Observable<IBill[]> {

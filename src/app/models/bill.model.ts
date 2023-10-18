@@ -1,5 +1,11 @@
 import {Month} from "./shared.model";
 
+export interface IBalance {
+  month: Month;
+  year: number;
+  amount: number | null;
+}
+
 export interface IPayer {
   name: string;
 }
