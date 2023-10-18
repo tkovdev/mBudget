@@ -1,12 +1,12 @@
 <ng-container *ngIf="bills$ | async as bills">
   <form [formGroup]="billForm" [ngClass]="{'grid': true}" style="max-height: 60vh; padding-top: 1rem;" class="overflow-y-auto">
     <ng-container *ngIf="initBillFormControls(bills)"></ng-container>
-    <ng-container *ngFor="let bill of bills$ | async">
+    <ng-container *ngFor="let bill of bills">
       <ng-container *ngIf="!payeeHidden(bill.payee)">
         <div class="col-12 flex">
           <div class="w-full" formGroupName="bills">
             <span class="p-float-label">
-              <p-inputNumber mode="currency" currency="USD" locale="en-US" inputId="{{bill.payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" [formControlName]="bill.payee.name"></p-inputNumber>
+              <p-inputNumber mode="currency" currency="USD" locale="en-US" inputId="{{bill.payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="{{bill.payee.name}}"></p-inputNumber>
               <label for="{{bill.payee.name}}">{{bill.payee.name}}</label>
             </span>
           </div>

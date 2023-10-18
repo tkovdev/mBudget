@@ -21,9 +21,9 @@ export class BillPayDialogComponent{
 
   billForm: FormGroup = new FormGroup<any>({bills: new FormGroup([])});
   currentBills: IBill[] = [];
-  currentPayees: IPayee[] = [];
 
   hiddenPayees: IPayee[] = [];
+
   constructor(private billsService: BillsService) {}
 
   initBillFormControls(bills: IBill[]): void {
@@ -31,7 +31,7 @@ export class BillPayDialogComponent{
       let currentBill: IBill | undefined = bills.find(x => x.payee.name == payee.name);
       let currentBillAmount: number | null = null;
       if(currentBill) currentBillAmount = currentBill.amount;
-      (this.billForm.controls['bills'] as FormGroup).setControl(payee.name, new FormControl({value: currentBillAmount, disabled: false}));
+      (this.billForm.controls['bills'] as FormGroup).addControl(payee.name, new FormControl({value: currentBillAmount, disabled: false}));
     });
     this.currentBills = bills;
   }
@@ -80,6 +80,8 @@ export class BillPayDialogComponent{
           this.billsService.deleteBill(this.selectedMonthYear, this.hiddenPayees).subscribe((res) => {
             this.close.emit();
           });
+        }else{
+            this.close.emit();
         }
       });
     });
@@ -89,4 +91,6 @@ export class BillPayDialogComponent{
     let currentPayees = bills.map(x => x.payee);
     return allPayees.filter(x => !currentPayees.some(y => y.name == x.name));
   }
+
+  protected readonly FormGroup = FormGroup;
 }
