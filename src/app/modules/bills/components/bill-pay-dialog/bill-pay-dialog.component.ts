@@ -50,6 +50,19 @@ export class BillPayDialogComponent{
     });
   }
 
+  showAllPayees(payees: IPayee[]): void {
+    let selectedMonthYear: string[] = this.selectedMonthYear.split(' ');
+    let month: Month = Month[selectedMonthYear[0] as keyof typeof Month];
+    let year: number = parseInt(selectedMonthYear[1]);
+    let bills: IBill[] = [];
+    payees.forEach((payee) => {
+      bills.push({payee: payee, month: month, year: year, amount: null});
+    })
+    this.billsService.addBill(bills).subscribe((res) => {
+      this.close.emit();
+    });
+  }
+
   payeeHidden(payee: IPayee): boolean {
     return this.hiddenPayees.findIndex(x => x.name == payee.name) > -1;
   }
