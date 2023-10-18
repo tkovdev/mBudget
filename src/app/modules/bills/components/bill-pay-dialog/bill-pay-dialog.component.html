@@ -34,6 +34,9 @@
                 </div>
               </ng-container>
             </div>
+            <div *ngIf="missingPayees.length == allPayees.length" class="flex justify-content-end">
+              <button pButton class="p-button-text" label="Add All" (click)="showAllPayees(allPayees)"></button>
+            </div>
           </ng-container>
         </p-overlayPanel>
       </div>
