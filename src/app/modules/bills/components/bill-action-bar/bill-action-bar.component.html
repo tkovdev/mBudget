@@ -1,0 +1,28 @@
+<div class="grid">
+  <div class="md:col-6 col-12">
+    <ng-container *ngIf="billsMonthYears$ | async as billMonthYears">
+      <p-dropdown [options]="billMonthYears" [(ngModel)]="selectedMonthYear" (onChange)="monthYearSelectedEvent(selectedMonthYear)"></p-dropdown>
+      <button (click)="monthYearPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Month Year"></button>
+    </ng-container>
+  </div>
+  <div class="md:col-6 col-12 flex md:justify-content-end">
+    <button class="mr-1" pButton (click)="billIncomePanel.show($event)" label="Add Income"></button>
+    <p-splitButton class="ml-1 mr-1" label="New Payee" (onClick)="payeePanel.show($event)" [model]="payeeSplitButtonMenu"></p-splitButton>
+    <button class="ml-1" pButton (click)="billPayPanel.show($event);" label="Pay Bills"></button>
+  </div>
+</div>
+<p-overlayPanel #billPayPanel [style]="{width: '90vw'}" (onShow)="billPayDialog = true" (onHide)="billPayDialog = false;">
+  <app-bill-pay-dialog *ngIf="billPayDialog" (close)="billPayPanel.hide(); billChangedEvent()" [payees]="payees$" [bills]="bills$" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
+</p-overlayPanel>
+
+<p-overlayPanel #payeePanel>
+  <app-payee-dialog (close)="payeePanel.hide(); payeeChangedEvent()"></app-payee-dialog>
+</p-overlayPanel>
+
+<p-overlayPanel #monthYearPanel>
+  <app-month-year-dialog (close)="monthYearPanel.hide(); monthYearChangedEvent()"></app-month-year-dialog>
+</p-overlayPanel>
+
+<p-overlayPanel #billIncomePanel [style]="{width: '90vw'}">
+  <app-bill-income-dialog (close)="billIncomePanel.hide(); incomeChangedEvent()" [selectedMonthYear]="selectedMonthYear"></app-bill-income-dialog>
+</p-overlayPanel>

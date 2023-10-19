@@ -1,0 +1,14 @@
+<ng-container *ngIf="loading">
+  <div class="flex justify-content-around mb-2">
+    <p-skeleton width="5rem"></p-skeleton>
+    <p-skeleton width="5rem"></p-skeleton>
+  </div>
+  <p-skeleton class="flex justify-content-center" shape="circle" size="15rem"></p-skeleton>
+</ng-container>
+<p-chart *ngIf="!loading && !noData" type="doughnut" [data]="data" [options]="options"></p-chart>
+<div *ngIf="!loading && noData" class="flex align-items-center justify-content-center">
+  <p>No income and expenses for this month yet!</p>
+</div>
+<div class="flex justify-content-center mt-1">
+  <p-dropdown [(ngModel)]="selectedMonthYear" [options]="monthYearOptions" (onChange)="monthYearChanged()"></p-dropdown>
+</div>

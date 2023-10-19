@@ -1,0 +1,15 @@
+<div class="flex flex-column" *ngIf="income$ | async as incomes">
+  <p *ngIf="incomes.length == 0">No income!</p>
+  <ng-container *ngFor="let income of incomes">
+      <div class="flex align-items-center">
+        <span class="material-symbols-outlined text-green-500">
+          check_circle
+        </span>
+        <div class="flex">
+          <span>{{income.payer.name}}</span>
+          <span class="mr-1 ml-1">-</span>
+          <span>{{income.amount | currency}}</span>
+        </div>
+      </div>
+  </ng-container>
+</div>

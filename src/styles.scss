@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeflex/primeflex.css";
+@import "primeicons/primeicons.css";
+
+body {
+  font-family: var(--font-family);
+  background-color: #e3e3e3;
+}
+
+.material-symbols-outlined {
+  font-size: 16px !important;
+}
+
+.p-float-label input:focus ~ label, .p-float-label input.p-filled ~ label, .p-float-label textarea:focus ~ label, .p-float-label textarea.p-filled ~ label, .p-float-label .p-inputwrapper-focus ~ label, .p-float-label .p-inputwrapper-filled ~ label {
+  top: -.25rem !important;
+}
