@@ -22,8 +22,12 @@ export class AppComponent implements OnInit{
   loading$: Observable<boolean> = this.sharedService.isLoadingEmit;
 
   constructor(private authService: AuthService, private fileService: FilesService, private afAuth: AngularFireAuth, private sharedService: SharedService) {
-    this.afAuth.user.subscribe((res) => {
-      if(res && res.photoURL) this.profileImage = res?.photoURL;
+    this.authService.isLoggedIn.subscribe((loggedIn) => {
+      if(loggedIn){
+        this.afAuth.user.subscribe((res) => {
+          if(res && res.photoURL) this.profileImage = res?.photoURL;
+        });
+      }
     });
     this.menu = [
       {label: 'Home', routerLink: ['']},

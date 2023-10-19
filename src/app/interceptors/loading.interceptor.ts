@@ -6,7 +6,6 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import {finalize, Observable} from 'rxjs';
-import {first, mergeMap} from "rxjs/operators";
 import {SharedService} from "../services/shared.service";
 
 @Injectable()

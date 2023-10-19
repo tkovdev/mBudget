@@ -33,8 +33,9 @@ export class NetMonthlyGraphComponent implements OnInit{
 
   loadGraph(): void {
     this.loading = true;
-    this.analyticsService.monthlyIncomeVsExpenses().subscribe((incomeExpenses) => {
+    this.incomeExpenses$.subscribe((incomeExpenses) => {
       if(incomeExpenses.income == 0 && incomeExpenses.expenses == 0) this.noData = true;
+      else this.noData = false;
       this.data = {
         labels: ['Incoming', 'Outgoing'],
         datasets: [
