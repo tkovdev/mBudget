@@ -39,28 +39,28 @@ export class YearOverYearSpendGraphComponent implements OnInit {
             label: 'Outgoing',
             data: spend.outgoing.map(x => x.value),
             fill: false,
-            borderColor: 'blue',
+            borderColor: '#ffc3e0',
             tension: 0.4
           },
           {
             label: 'Unaccounted',
             data: spend.unaccounted.map(x => x.value),
             fill: false,
-            borderColor: 'red',
+            borderColor: '#e4d1ff',
             tension: 0.4
           },
           {
             label: 'Total',
             data: spend.total.map(x => x.value),
             fill: false,
-            borderColor: 'yellow',
+            borderColor: '#ffa4a4',
             tension: 0.4
           },
           {
             label: 'Remaining',
             data: spend.remaining.map(x => x.value),
             fill: false,
-            borderColor: 'purple',
+            borderColor: '#A8FFC7',
             tension: 0.4
           }
         ]
