@@ -14,47 +14,52 @@ import {Month} from "../models/shared.model";
 })
 export class BillsService {
   billFileId: string = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME) || '';
-  constructor(private filesService: FilesService, private sharedService: SharedService, private confirmationService: ConfirmationService) {
+  constructor(private authService: AuthService, private filesService: FilesService, private sharedService: SharedService, private confirmationService: ConfirmationService) {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.listAppDataFiles().then((files) => {
-        let hasFiles = false;
-        if(files && files.files.length >= 1) {
-          files.files.forEach((v) => {
-            if(v.name == DriveConfig.BILL_FILE_NAME) {
-              hasFiles = true;
-              sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, v.id);
-              this.billFileId = v.id;
-            }
-          });
-        }
-        if(!hasFiles) {
-          this.confirmationService.confirm({
-            message: 'To continue, we will create any necessary files in your personal Google Drive. Create files?',
-            header: 'Files required',
-            icon: 'pi pi-exclamation-triangle',
-            key: 'noBillsConfirmation',
-            accept: () => {
-              let newFile: IBillSchema = {bills: [], payees: [], income: [], balances: []};
-              this.filesService.createFile(DriveConfig.BILL_FILE_NAME, newFile).then((file) => {
-                location.reload();
+      this.authService.isLoggedIn.subscribe((loggedIn) => {
+        if(!loggedIn) subscriber.next(false);
+        else {
+          this.filesService.listAppDataFiles().then((files) => {
+            let hasFiles = false;
+            if(files && files.files.length >= 1) {
+              files.files.forEach((v) => {
+                if(v.name == DriveConfig.BILL_FILE_NAME) {
+                  hasFiles = true;
+                  sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, v.id);
+                  this.billFileId = v.id;
+                }
               });
-            },
-            reject: (type: ConfirmEventType) => {
-              switch (type) {
-                case ConfirmEventType.REJECT:
-                  subscriber.next(false);
-                  break;
-                case ConfirmEventType.CANCEL:
-                  subscriber.next(false);
-                  break;
-              }
             }
+            if(!hasFiles) {
+              this.confirmationService.confirm({
+                message: 'To continue, we will create any necessary files in your personal Google Drive. Create files?',
+                header: 'Files required',
+                icon: 'pi pi-exclamation-triangle',
+                key: 'noBillsConfirmation',
+                accept: () => {
+                  let newFile: IBillSchema = {bills: [], payees: [], income: [], balances: []};
+                  this.filesService.createFile(DriveConfig.BILL_FILE_NAME, newFile).then((file) => {
+                    location.reload();
+                  });
+                },
+                reject: (type: ConfirmEventType) => {
+                  switch (type) {
+                    case ConfirmEventType.REJECT:
+                      subscriber.next(false);
+                      break;
+                    case ConfirmEventType.CANCEL:
+                      subscriber.next(false);
+                      break;
+                  }
+                }
+              });
+            }
+            else subscriber.next(true);
           });
         }
-        else subscriber.next(true);
       });
     });
   }
