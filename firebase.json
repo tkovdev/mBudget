@@ -1,9 +1,8 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "dist/m-budget-app",
     "ignore": [
       "firebase.json",
-      "**/.*",
       "**/node_modules/**"
     ],
     "rewrites": [
