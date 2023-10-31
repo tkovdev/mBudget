@@ -43,3 +43,5 @@ Thumbs.db
 
 src/assets/.info.local
 /.firebase/hosting.ZGlzdFxtLWJ1ZGdldC1hcHA.cache
+/.env
+/src/environments/environment.local.ts
