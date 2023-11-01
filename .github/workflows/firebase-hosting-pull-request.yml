@@ -16,6 +16,7 @@ jobs:
         run: |
           touch .env
           echo "${{ secrets.ENV_FILE }}" > .env
+      - run: npm i ts-node
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
