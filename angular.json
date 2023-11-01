@@ -85,7 +85,7 @@
               ]
             }
           },
-          "defaultConfiguration": "local"
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -95,9 +95,12 @@
             },
             "development": {
               "browserTarget": "mBudget-app:build:development"
+            },
+            "local": {
+              "browserTarget": "mBudget-app:build:local"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "local"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
