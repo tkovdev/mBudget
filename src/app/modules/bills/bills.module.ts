@@ -21,6 +21,7 @@ import {SplitButtonModule} from "primeng/splitbutton";
 import { MonthYearDialogComponent } from './components/month-year-dialog/month-year-dialog.component';
 import { BillIncomeDialogComponent } from './components/bill-income-dialog/bill-income-dialog.component';
 import { IncomeSummaryComponent } from './components/income-summary/income-summary.component';
+import { BalanceDialogComponent } from './components/balance-dialog/balance-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { IncomeSummaryComponent } from './components/income-summary/income-summa
     PayeeDialogComponent,
     MonthYearDialogComponent,
     BillIncomeDialogComponent,
-    IncomeSummaryComponent
+    IncomeSummaryComponent,
+    BalanceDialogComponent
   ],
   imports: [
     CommonModule,

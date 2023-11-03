@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {IBill, IIncome, IPayee} from "../../../../models/bill.model";
+import {IBalance, IBill, IIncome, IPayee} from "../../../../models/bill.model";
 import {Observable} from "rxjs";
 import {BillsService} from "../../../../services/bills.service";
 import {SharedService} from "../../../../services/shared.service";
@@ -16,6 +16,7 @@ export class BillsComponent implements OnInit{
   payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
   bills$: Observable<IBill[]> = this.billsService.getMonthBills(this.currentMonthYear);
   income$: Observable<IIncome[]> = this.billsService.getMonthIncome(this.currentMonthYear);
+  balance$: Observable<IBalance> = this.billsService.getMonthBalance(this.currentMonthYear);
   billMonthYears$: Observable<string[]> = this.billsService.getAllBillMonthYears();
   constructor(private billsService: BillsService, private fileService: FilesService, private sharedService: SharedService) {
   }
@@ -49,5 +50,6 @@ export class BillsComponent implements OnInit{
     this.currentMonthYear = monthYear;
     this.bills$ = this.billsService.getMonthBills(this.currentMonthYear)
     this.income$ = this.billsService.getMonthIncome(this.currentMonthYear)
+    this.balance$ = this.billsService.getMonthBalance(this.currentMonthYear)
   }
 }
