@@ -25,6 +25,22 @@ export class AnalyticsService {
       }));
   }
 
+  public monthlyIncomingOutgoing(monthYear: string = this.sharedService.currentMonthYear()): Observable<IIncomingOutgoing>{
+    let incomingOutgoing: IIncomingOutgoing = { incoming: 0, outgoing: 0, remaining: 0};
+    return combineLatest({
+      income: this.billsService.getMonthIncome(monthYear),
+      balance: this.billsService.getMonthBalance(monthYear),
+      expense: this.billsService.getMonthBills(monthYear)
+    }).pipe(
+      map((combine) => {
+        incomingOutgoing.incoming = combine.income.map(x => x.amount).reduce((acc, currentValue) => acc + currentValue, 0)
+        incomingOutgoing.incoming += combine.balance.amount ?? 0;
+        incomingOutgoing.outgoing = combine.expense.filter(x => x.amount != null).map(x => x.amount as number).reduce((acc, currentValue) => acc + currentValue, 0)
+        incomingOutgoing.remaining = incomingOutgoing.incoming - incomingOutgoing.outgoing;
+        return incomingOutgoing;
+      }));
+  }
+
   public yearOverYearSpend(year: number = this.sharedService.currentYear()): Observable<IYearOverYearSpend>{
     let spend: IYearOverYearSpend = { unaccounted: [], total: [], outgoing: [], remaining: []};
     return combineLatest({
@@ -68,4 +84,10 @@ export interface IYearOverYearSpend {
 export interface IMonthlyIncomeExpenses {
   income: number;
   expenses: number;
+}
+
+export interface IIncomingOutgoing{
+  incoming: number;
+  outgoing: number;
+  remaining: number;
 }

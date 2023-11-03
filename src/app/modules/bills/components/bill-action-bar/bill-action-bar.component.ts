@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {IBill, IIncome, IPayee} from "../../../../models/bill.model";
-import {Observable} from "rxjs";
+import {IBalance, IBill, IIncome, IPayee} from "../../../../models/bill.model";
+import {combineLatest, map, Observable} from "rxjs";
 import {MenuItem} from "primeng/api";
+import {IIncomingOutgoing} from "../../../../services/analytics.service";
 
 @Component({
   selector: 'app-bill-action-bar',
@@ -14,6 +15,7 @@ export class BillActionBarComponent{
   @Output() incomeChanged: EventEmitter<void> = new EventEmitter<void>();
   @Output() monthYearChanged: EventEmitter<void> = new EventEmitter<void>();
   @Output() monthYearSelected: EventEmitter<string> = new EventEmitter<string>();
+  @Output() balanceChanged: EventEmitter<void> = new EventEmitter<void>();
 
   monthYears: string[] = [];
   @Input() selectedMonthYear!: string;
@@ -22,10 +24,12 @@ export class BillActionBarComponent{
   @Input('payees') payees$: Observable<IPayee[]> = new Observable<IPayee[]>();
   @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
   @Input('income') income$: Observable<IIncome[]> = new Observable<IIncome[]>();
+  @Input('balance') balance$: Observable<IBalance> = new Observable<IBalance>();
+  @Input('incomingOutgoing') incomingOutgoing$: Observable<IIncomingOutgoing> = new Observable<IIncomingOutgoing>();
 
   billPayDialog: boolean = false
+  balanceDialog: boolean = false
 
-  payeeSplitButtonMenu: MenuItem[] = [{label: 'View Payees', routerLink: ['','payees']}];
   constructor() {
   }
 
@@ -47,5 +51,9 @@ export class BillActionBarComponent{
 
   incomeChangedEvent(): void {
     this.incomeChanged.emit();
+  }
+
+  balanceChangedEvent(): void {
+    this.balanceChanged.emit();
   }
 }

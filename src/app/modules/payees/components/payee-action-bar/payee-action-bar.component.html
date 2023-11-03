@@ -2,7 +2,7 @@
   <div class="col-6">
   </div>
   <div class="col-6 flex justify-content-end">
-    <button pButton class="mr-1" label="New Payee" (click)="payeePanel.show($event)"></button>
+    <button class="mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-building" pButton (click)="payeePanel.show($event)" pTooltip="New Payee"></button>
   </div>
 </div>
 <p-overlayPanel #payeePanel>
