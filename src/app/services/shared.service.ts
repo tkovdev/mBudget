@@ -48,4 +48,11 @@ export class SharedService {
     let currentDate: Date = new Date();
     return currentDate.getFullYear();
   }
+
+  fromMonthYearString(monthYear: string): {month: Month, year: number} {
+    let monthYearSplit = monthYear.split(' ');
+    let month: Month = <Month> monthYearSplit[0];
+    let year: number = parseInt(monthYearSplit[1]);
+    return {month: month, year: year};
+  }
 }

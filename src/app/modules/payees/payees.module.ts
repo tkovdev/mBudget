@@ -11,6 +11,7 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
 import {PayeeDialogComponent} from "./components/payee-dialog/payee-dialog.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {InputTextModule} from "primeng/inputtext";
+import {TooltipModule} from "primeng/tooltip";
 
 
 @NgModule({
@@ -20,14 +21,15 @@ import {InputTextModule} from "primeng/inputtext";
     PayeeActionBarComponent,
     PayeeDialogComponent
   ],
-  imports: [
-    CommonModule,
-    PayeesRoutingModule,
-    ReactiveFormsModule,
-    CardModule,
-    ButtonModule,
-    OverlayPanelModule,
-    InputTextModule
-  ]
+    imports: [
+        CommonModule,
+        PayeesRoutingModule,
+        ReactiveFormsModule,
+        CardModule,
+        ButtonModule,
+        OverlayPanelModule,
+        InputTextModule,
+        TooltipModule
+    ]
 })
 export class PayeesModule { }

@@ -1,5 +1,19 @@
 <p-card id="action-bar">
-    <app-bill-action-bar [income]="income$" [bills]="bills$" [payees]="payees$" (incomeChanged)="refreshIncome()" (billChanged)="refreshBills()" (payeeChanged)="refreshPayees()" (monthYearSelected)="monthYearSelected($event)" (monthYearChanged)="refreshMonthYears()" [billMonthYears]="billMonthYears$" [selectedMonthYear]="currentMonthYear"></app-bill-action-bar>
+    <app-bill-action-bar
+      [incomingOutgoing]="incomingOutgoing$"
+      [balance]="balance$"
+      [income]="income$"
+      [bills]="bills$"
+      [payees]="payees$"
+      [billMonthYears]="billMonthYears$"
+      [selectedMonthYear]="currentMonthYear"
+      (incomeChanged)="refreshIncome()"
+      (billChanged)="refreshBills()"
+      (payeeChanged)="refreshPayees()"
+      (monthYearSelected)="monthYearSelected($event)"
+      (monthYearChanged)="refreshMonthYears()"
+      (balanceChanged)="refreshBalance()"
+    ></app-bill-action-bar>
 </p-card>
 <p-card styleClass="mt-3" header="Monthly Bills" subheader="{{currentMonthYear}}">
   <app-bill-summary [bills]="bills$" (updateBill)="updateBill($event)"></app-bill-summary>

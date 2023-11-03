@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {filter, map, Observable} from "rxjs";
-import {IBalance, IBill, IIncome, IPayee, IPayer} from "../models/bill.model";
+import {map, Observable} from "rxjs";
+import {IBalance, IBill, IIncome, IPayee} from "../models/bill.model";
 import {DriveConfig, FilesService} from "./files.service";
-import {IBillSchema, IDriveSchema, ISchemaItem, SchemaType} from "../models/driveSchema.model";
+import {IBillSchema} from "../models/driveSchema.model";
 import {SharedService} from "./shared.service";
 import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot} from "@angular/router";
 import {AuthService} from "../authentication/services/auth.service";
@@ -299,6 +299,28 @@ export class BillsService {
     });
   }
 
+  public getMonthBalance(monthYear: string = this.sharedService.currentMonthYear()): Observable<IBalance> {
+    return this.getBalances().pipe(
+      map((balances) => balances.find(x => `${x.month} ${x.year}` == monthYear) ?? { ...this.sharedService.fromMonthYearString(monthYear), amount: 0})
+    )
+  }
+  public updateBalance(balance: IBalance): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.getFile<IBillSchema>(this.billFileId).then((billFile) => {
+        if(billFile){
+          let toUpdateIdx = billFile.balances.findIndex(x => x.month == balance.month && x.year == balance.year);
+          if(toUpdateIdx > -1) {
+            billFile.balances[toUpdateIdx] = balance
+          }else{
+            billFile.balances.push(balance);
+          }
+          this.filesService.updateFile(this.billFileId, billFile).then((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
 }
 
 export const BillGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> => {
