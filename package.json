@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "config": "ts-node ./src/assets/scripts/setEnv.ts",
-    "build": "npm run config -- --environment=prod && ng build --configuration=production",
+    "build:local": "ng build --configuration=local",
+    "build:dev": "ng build --configuration=development",
+    "build:prod": "npm run config -- --environment=prod && ng build --configuration=production",
     "test": "ng test"
   },
   "private": true,
