@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build_and_deploy:
+  build:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
@@ -18,6 +18,7 @@ jobs:
           echo "${{ secrets.ENV_FILE }}" > .env
       - run: npm i ts-node
       - run: npm ci && npm run build:prod
+  deploy:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
