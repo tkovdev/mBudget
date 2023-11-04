@@ -19,13 +19,10 @@ jobs:
           echo "${{ secrets.ENV_FILE }}" > .env
       - run: npm i ts-node
       - run: npm ci && npm run build:prod
-  deploy:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
-    runs-on: ubuntu-latest
-    steps:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TKOVDEV_MBUDGET }}'
           projectId: tkovdev-mbudget
           channelId: live
+
