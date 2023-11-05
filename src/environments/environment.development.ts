@@ -2,7 +2,8 @@ export const environment = {
   production: false,
   apiUrl: "",
   gapi: {
-    clientId: ""
+    clientId: "",
+    redirectUri: ""
   },
   firebase: {
     apiKey: "",

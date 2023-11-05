@@ -1,26 +1,18 @@
-import {inject, Injectable, NgZone} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from "@angular/router";
-import {AngularFireAuth} from "@angular/fire/compat/auth";
-import firebase from "firebase/compat/app";
-import {MessageService} from "primeng/api";
-import {GoogleAuthProvider, idToken} from "@angular/fire/auth";
-import User = firebase.User;
-import {map, Observable, take} from "rxjs";
-import UserCredential = firebase.auth.UserCredential;
+import {map, Observable} from "rxjs";
 import {DriveConfig} from "../../services/files.service";
+import {environment} from "../../../environments/environment";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  readonly _provider = new GoogleAuthProvider();
-
   constructor(
-    private afAuth: AngularFireAuth, // Inject Firebase auth service
     private router: Router,
-    private ngZone: NgZone,
-    private messageService: MessageService,
+    private http: HttpClient
   ) {
   }
 
@@ -34,48 +26,44 @@ export class AuthService {
     }));
   }
 
-  // Returns true when user is logged in and email is verified
+  // Returns true when user is logged in
   get isLoggedIn(): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.afAuth.authState.subscribe((user) => {
-        if(user != null){
-          let currentSessionTokens = sessionStorage.getItem('tokens')
-          if(currentSessionTokens) subscriber.next(true);
-          else subscriber.next(false);
-        }else subscriber.next(false);
-      });
+      if(!this.accessToken) subscriber.next(false);
+      else subscriber.next(true)
     });
   }
 
   // Returns user profile info
   get userProfile(): Observable<UserProfile | null> {
-    return this.afAuth.user.pipe(
-      map(user => UserProfile.parseFromAuth(user)))
-  }
-
-  get tokens(): Observable<Token> {
-    return new Observable<Token>((subscriber) => {
-      let tokens = sessionStorage.getItem('tokens');
-      if(tokens){
-        subscriber.next(JSON.parse(tokens) as Token);
-      }
-    })
+    return this.http.get<UserProfile>('https://www.googleapis.com/oauth2/v1/userinfo');
   }
 
   // Sign in with Google
   SignInGoogle() {
-    this._provider.addScope('https://www.googleapis.com/auth/drive.file');
-    this._provider.addScope('https://www.googleapis.com/auth/drive.appdata');
-    return this.afAuth.signInWithRedirect(this._provider);
+    let redirectUri = environment.gapi.redirectUri;
+    let clientId = environment.gapi.clientId;
+    let scopes = ['openid', 'profile', 'email', 'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.appdata'];
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scopes.join(' ')}`;
   }
 
   // Sign out
-  SignOut() {
-    return this.afAuth.signOut().then(() => {
+  SignOut(): Promise<void> {
+    return new Promise((resolve, reject) => {
       sessionStorage.removeItem('tokens');
       sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
-      this.messageService.add({key: 'global', severity: 'success', summary: 'Sign Out Successful', detail: 'You have been signed out.'})
-    });
+      resolve();
+    })
+  }
+
+  get accessToken(): Token | null {
+    let tokenString = sessionStorage.getItem('tokens');
+    if(!tokenString) return null;
+    try{
+      return JSON.parse(tokenString) as Token;
+    }catch {
+      return null
+    }
   }
 }
 
@@ -84,27 +72,25 @@ export const LoginGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: R
 }
 
 export class UserProfile {
-  public lastLoginAt?: Date;
   public email?: string;
-  public displayName?: string;
-  public photoURL?: string;
-  public provider?: string;
+  public name?: string;
+  public picture?: string;
 
-  static parseFromAuth = (profile: User | null): UserProfile | null => {
-    if(profile == null) return null;
-    let user: UserProfile = new UserProfile();
-
-    try{
-      user.email = profile.email!;
-      user.displayName = profile.displayName!;
-      user.photoURL = profile.photoURL? profile.photoURL : '/assets/default-account-icon.svg';
-      user.lastLoginAt = new Date(profile.metadata.lastSignInTime!);
-      user.provider = profile.providerData[0]?.providerId;
-    }catch{
-      return null;
-    }
-    return user;
-  }
+  // static parseFromAuth = (profile: User | null): UserProfile | null => {
+  //   if(profile == null) return null;
+  //   let user: UserProfile = new UserProfile();
+  //
+  //   try{
+  //     user.email = profile.email!;
+  //     user.displayName = profile.displayName!;
+  //     user.photoURL = profile.photoURL? profile.photoURL : '/assets/default-account-icon.svg';
+  //     user.lastLoginAt = new Date(profile.metadata.lastSignInTime!);
+  //     user.provider = profile.providerData[0]?.providerId;
+  //   }catch{
+  //     return null;
+  //   }
+  //   return user;
+  // }
 
   static parseFromString = (profile: string | null): UserProfile => {
     if(profile == null) return new UserProfile();
@@ -116,20 +102,13 @@ export class UserProfile {
       return user;
     }
     user.email = parsed.email;
-    user.displayName = parsed.displayName;
-    user.photoURL = parsed.photoURL? parsed.photoURL : '/assets/default-account-icon.svg';
-    try{
-      user.lastLoginAt = new Date(Number.parseInt(parsed.lastLoginAt));
-    }catch{}
-    try{
-      user.provider = parsed.providerData[0]?.providerId;
-    }catch{}
+    user.name = parsed.name;
+    user.picture = parsed.picture? parsed.photoURL : '/assets/default-account-icon.svg';
     return user;
   }
 }
 
 export class Token {
-  idToken: string = '';
   accessToken: string = '';
   exp: Date = new Date(0);
 }

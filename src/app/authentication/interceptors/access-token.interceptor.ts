@@ -17,18 +17,14 @@ export class AccessTokenInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if(!request.url.includes('https://www.googleapis.com/')) return next.handle(request);
     // add auth header with access token if account is logged in and request is to the api url
-    return this.authService.tokens.pipe(
-      first(),
-      mergeMap((token: Token) => {
-        if(token){
-          if(new Date(token.exp) <= new Date()) {
-            this.authService.SignInGoogle();
-          }
-          request = request.clone({
-            setHeaders: {Authorization: `Bearer ${token.accessToken}`}
-          });
-        }
-        return next.handle(request);
-      }));
+    let token = this.authService.accessToken
+    if(token && new Date(token!.exp) >= new Date()){
+      request = request.clone({
+        setHeaders: {Authorization: `Bearer ${token.accessToken}`}
+      });
+    }else{
+        this.authService.SignInGoogle();
+    }
+    return next.handle(request);
   }
 }
