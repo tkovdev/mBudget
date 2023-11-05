@@ -47,6 +47,7 @@ const environmentFileContent = `
     apiUrl: "${process.env.API_URL}",
     gapi: {
       clientId: "${process.env.GAPI_CLIENT_ID}"
+      redirectUri: "${process.env.GAPI_REDIRECT_URI}"
     },
     firebase: {
       apiKey: "${process.env.FIREBASE_API_KEY}",

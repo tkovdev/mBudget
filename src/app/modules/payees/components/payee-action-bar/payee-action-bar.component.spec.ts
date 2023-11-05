@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {BillActionBarComponent} from "../../../bills/components/bill-action-bar/bill-action-bar.component";
 
-import { BillActionBarComponent } from './payee-action-bar.component';
 
 describe('BillActionBarComponent', () => {
   let component: BillActionBarComponent;
