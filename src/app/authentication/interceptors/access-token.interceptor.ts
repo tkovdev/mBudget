@@ -17,7 +17,7 @@ export class AccessTokenInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if(!request.url.includes('https://www.googleapis.com/')) return next.handle(request);
     // add auth header with access token if account is logged in and request is to the api url
-    let token = this.authService.accessToken
+    let token = this.authService.tokens
     if(token && new Date(token!.exp) >= new Date()){
       request = request.clone({
         setHeaders: {Authorization: `Bearer ${token.accessToken}`}
