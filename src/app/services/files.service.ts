@@ -108,7 +108,7 @@ export class FilesService {
   listAppDataFilesDetails(): Observable<IFileSearchDetails> {
     let query: HttpParams = new HttpParams();
     query = query.append('spaces', 'appDataFolder')
-    query = query.append('fields', 'files(id,name,kind,mimeType,size,createdTime,modifiedTime)')
+    query = query.append('fields', 'files(id,name,kind,size,mimeType,size,createdTime,modifiedTime)')
 
     let uri = `https://www.googleapis.com/drive/v3/files`
     return this.http.get<IFileSearchDetails>(uri, {params: query})
