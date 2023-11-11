@@ -34,20 +34,20 @@ export class ProfileComponent implements OnInit{
   }
 
   viewFile(id: string): void {
-    this.fileService.getFile<IBillSchema>(id).then((file) => {
+    this.fileService.getFile<IBillSchema>(id).subscribe((file) => {
       this.showFileContent = true;
       this.fileContent = JSON.stringify(file);
     })
   }
 
   deleteFile(id: string): void {
-    this.fileService.deleteFile(id).then((res) => {
+    this.fileService.deleteFile(id).subscribe((res) => {
       location.reload();
     });
   }
 
   viewAdvancedOptions(id: string): void {
-    this.fileService.getFile<IBillSchema>(id).then((file) => {
+    this.fileService.getFile<IBillSchema>(id).subscribe((file) => {
       ;
       this.dialogService.open(ProfileAdvancedOptionsComponent, {
         header: 'Advanced Options',
