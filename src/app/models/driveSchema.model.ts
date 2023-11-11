@@ -39,4 +39,5 @@ export interface FileResourceExt extends FileResource {
   name: string;
   modifiedTime: string;
   createdTime: string;
+  size: number;
 }
