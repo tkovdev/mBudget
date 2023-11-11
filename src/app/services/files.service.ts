@@ -13,8 +13,8 @@ export const DriveConfig = {
   providedIn: 'root'
 })
 export class FilesService {
-  constructor(private authService: AuthService, private http: HttpClient) {
-  }
+
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
   get files(): Observable<IFileSearch>{
     return this.listAppDataFiles();
@@ -26,7 +26,15 @@ export class FilesService {
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files/${id}`
+    let fullUri = FileCache.fullUrl(uri, query)
+
+    if(FileCache.isValid(fullUri)) {
+      let cachedFile = FileCache.getStoredCache(fullUri);
+      return new Observable((subscriber) => subscriber.next(cachedFile!.data as T));
+    }
+
     return this.http.get<any>(uri, {params: query}).pipe(map((res) => {
+      FileCache.setStoredCache(fullUri, res);
       if(res) return res as T
       else return undefined;
     }))
@@ -63,7 +71,11 @@ export class FilesService {
     let body = contents;
 
     let uri = `https://www.googleapis.com/upload/drive/v3/files/${id}`;
-    return this.http.patch<FileResource>(uri, body,{params: query});
+    return this.http.patch<FileResource>(uri, body,{params: query}).pipe(map((res) => {
+      let cacheUri = `https://www.googleapis.com/drive/v3/files/${id}`;
+      FileCache.resetStoredCache();
+      return res;
+    }));
   }
 
   deleteFile(id: string): Observable<boolean> {
@@ -72,8 +84,9 @@ export class FilesService {
 
     let uri = `https://www.googleapis.com/drive/v3/files/${id}`
     return this.http.delete<any>(uri, {params: query}).pipe(map((res) => {
-        if(res) return(false);
-        else return(true);
+      FileCache.resetStoredCache();
+      if(res) return(false);
+      else return(true);
     }));
   }
 
@@ -82,7 +95,15 @@ export class FilesService {
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files`
-    return this.http.get<IFileSearch>(uri, {params: query});
+    let fullUri = FileCache.fullUrl(uri, query)
+    if(FileCache.isValid(fullUri)) {
+      let cachedFile = FileCache.getStoredCache(fullUri);
+      return new Observable((subscriber) => subscriber.next(cachedFile!.data as IFileSearch));
+    }
+    return this.http.get<IFileSearch>(uri, {params: query}).pipe(map((res) => {
+      FileCache.setStoredCache(fullUri, res);
+      return res;
+    }))
   }
 
   listAppDataFilesDetails(): Observable<IFileSearchDetails> {
@@ -91,7 +112,16 @@ export class FilesService {
     query = query.append('fields', 'files(id,name,kind,size,mimeType,size,createdTime,modifiedTime)')
 
     let uri = `https://www.googleapis.com/drive/v3/files`
-    return this.http.get<IFileSearchDetails>(uri, {params: query})
+    let fullUri = FileCache.fullUrl(uri, query)
+    if(FileCache.isValid(fullUri)) {
+      let cachedFile = FileCache.getStoredCache(fullUri);
+      return new Observable((subscriber) => subscriber.next(cachedFile!.data as IFileSearch));
+    }
+
+    return this.http.get<IFileSearchDetails>(uri, {params: query}).pipe(map((res) => {
+      FileCache.setStoredCache(fullUri, res);
+      return res;
+    }))
   }
 
   private findFolder(name: string): Promise<FileResource | undefined> {
@@ -141,5 +171,58 @@ export class FilesService {
         }else resolver(undefined);
       })
     });
+  }
+}
+
+export class FileCache {
+  [key: string]: {time: number, data: any}
+
+  static get cache() {
+    let cachedFiles: FileCache = {};
+    let initCache = sessionStorage.getItem('cache');
+    if(initCache) cachedFiles = JSON.parse(initCache);
+
+    return cachedFiles;
+  }
+
+  static getStoredCache(uri: string) {
+    let cachedFiles = this.cache;
+    if(!cachedFiles[uri]) return undefined;
+    return cachedFiles[uri];
+  }
+
+  static setStoredCache(uri: string, data: any) {
+    let cachedFiles = this.cache;
+    cachedFiles[uri] = {time: Date.now(), data: data};
+    sessionStorage.setItem('cache', JSON.stringify(cachedFiles));
+  }
+
+  static removeStoredCache(uri: string) {
+    let cachedFiles = this.cache;
+    try {
+      delete cachedFiles[uri];
+      sessionStorage.setItem('cache', JSON.stringify(cachedFiles));
+    }catch{}
+  }
+
+  static resetStoredCache() {
+    let cachedFiles = this.cache;
+    Object.keys(cachedFiles).forEach((v) => {
+      delete cachedFiles[v];
+    });
+    sessionStorage.setItem('cache', JSON.stringify(cachedFiles));
+  }
+
+  static isValid(uri: string): boolean {
+    let cache = FileCache.getStoredCache(uri);
+    if(cache == undefined) return false;
+
+    //if last cache < 10 mins reuse cache
+    if (cache.time + 600000 > Date.now()) return true;
+    else return false;
+  }
+
+  static fullUrl(uri: string, query: HttpParams): string {
+    return `${uri}?${query.toString()}`;
   }
 }
