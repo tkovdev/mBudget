@@ -26,18 +26,8 @@ export class FilesService {
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files/${id}`
-    let fullUri = FileCache.fullUrl(uri, query)
 
-    if(FileCache.isValid(fullUri)) {
-      let cachedFile = FileCache.getStoredCache(fullUri);
-      return new Observable((subscriber) => subscriber.next(cachedFile!.data as T));
-    }
-
-    return this.http.get<any>(uri, {params: query}).pipe(map((res) => {
-      FileCache.setStoredCache(fullUri, res);
-      if(res) return res as T
-      else return undefined;
-    }))
+    return this.http.get<any>(uri, {params: query});
   }
 
   createFile(name: string, content: any, parents: string[] = []): Observable<FileResource> {
@@ -71,11 +61,7 @@ export class FilesService {
     let body = contents;
 
     let uri = `https://www.googleapis.com/upload/drive/v3/files/${id}`;
-    return this.http.patch<FileResource>(uri, body,{params: query}).pipe(map((res) => {
-      let cacheUri = `https://www.googleapis.com/drive/v3/files/${id}`;
-      FileCache.resetStoredCache();
-      return res;
-    }));
+    return this.http.patch<FileResource>(uri, body,{params: query});
   }
 
   deleteFile(id: string): Observable<boolean> {
@@ -83,11 +69,7 @@ export class FilesService {
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files/${id}`
-    return this.http.delete<any>(uri, {params: query}).pipe(map((res) => {
-      FileCache.resetStoredCache();
-      if(res) return(false);
-      else return(true);
-    }));
+    return this.http.delete<any>(uri, {params: query});
   }
 
   listAppDataFiles(): Observable<IFileSearch> {
@@ -95,15 +77,7 @@ export class FilesService {
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files`
-    let fullUri = FileCache.fullUrl(uri, query)
-    if(FileCache.isValid(fullUri)) {
-      let cachedFile = FileCache.getStoredCache(fullUri);
-      return new Observable((subscriber) => subscriber.next(cachedFile!.data as IFileSearch));
-    }
-    return this.http.get<IFileSearch>(uri, {params: query}).pipe(map((res) => {
-      FileCache.setStoredCache(fullUri, res);
-      return res;
-    }))
+    return this.http.get<IFileSearch>(uri, {params: query});
   }
 
   listAppDataFilesDetails(): Observable<IFileSearchDetails> {
@@ -112,16 +86,8 @@ export class FilesService {
     query = query.append('fields', 'files(id,name,kind,size,mimeType,size,createdTime,modifiedTime)')
 
     let uri = `https://www.googleapis.com/drive/v3/files`
-    let fullUri = FileCache.fullUrl(uri, query)
-    if(FileCache.isValid(fullUri)) {
-      let cachedFile = FileCache.getStoredCache(fullUri);
-      return new Observable((subscriber) => subscriber.next(cachedFile!.data as IFileSearch));
-    }
 
-    return this.http.get<IFileSearchDetails>(uri, {params: query}).pipe(map((res) => {
-      FileCache.setStoredCache(fullUri, res);
-      return res;
-    }))
+    return this.http.get<IFileSearchDetails>(uri, {params: query})
   }
 
   private findFolder(name: string): Promise<FileResource | undefined> {
