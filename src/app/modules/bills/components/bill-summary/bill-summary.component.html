@@ -1,4 +1,4 @@
-<div class="flex flex-column" *ngIf="bills$ | async as bills">
+<div class="flex flex-column">
   <p *ngIf="bills.length == 0">No bills!</p>
   <ng-container *ngFor="let bill of bills">
     <ng-container *ngIf="bill | paid: false">

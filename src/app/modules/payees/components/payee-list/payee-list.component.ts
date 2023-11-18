@@ -8,7 +8,7 @@ import {IPayee} from "../../../../models/bill.model";
   styleUrls: ['./payee-list.component.scss']
 })
 export class PayeeListComponent {
-  @Input('payees') payees$: Observable<IPayee[]> = new Observable<IPayee[]>();
+  @Input('payees') payees: IPayee[] = [];
   @Output() deletePayee: EventEmitter<IPayee> = new EventEmitter<IPayee>();
   constructor() {
   }

@@ -14,52 +14,94 @@ import {AnalyticsService, IIncomingOutgoing} from "../../../../services/analytic
 })
 export class BillsComponent implements OnInit{
   currentMonthYear: string = this.sharedService.currentMonthYear();
-  payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
-  bills$: Observable<IBill[]> = this.billsService.getMonthBills(this.currentMonthYear);
-  income$: Observable<IIncome[]> = this.billsService.getMonthIncome(this.currentMonthYear);
-  balance$: Observable<IBalance> = this.billsService.getMonthBalance(this.currentMonthYear);
-  billMonthYears$: Observable<string[]> = this.billsService.getAllBillMonthYears();
-  incomingOutgoing$: Observable<IIncomingOutgoing> = this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear);
+  payees: IPayee[] = [];
+  bills: IBill[] = [];
+  incomes: IIncome[] = [];
+  balance: IBalance = {amount: 0, year: this.sharedService.currentYear(), month: this.sharedService.currentMonth()};
+  billMonthYears: string[] = [];
+  incomingOutgoing: IIncomingOutgoing = {incoming: 0, outgoing: 0, remaining: 0};
 
   constructor(private analyticsService: AnalyticsService, private billsService: BillsService, private fileService: FilesService, private sharedService: SharedService) {
   }
 
   ngOnInit(): void {
+    this.billsService.getMonthBills(this.currentMonthYear).subscribe((res) => {
+      this.bills = res;
+    })
+    this.billsService.getMonthIncome(this.currentMonthYear).subscribe((res) => {
+      this.incomes = res;
+    })
+    this.billsService.getAllPayees().subscribe((res) => {
+      this.payees = res;
+    });
+    this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear).subscribe((res) => {
+      this.incomingOutgoing = res;
+    });
+    this.billsService.getMonthBalance(this.currentMonthYear).subscribe((res) => {
+      this.balance = res;
+    });
+    this.billsService.getAllBillMonthYears().subscribe((res) => {
+      this.billMonthYears = res;
+    });
   }
 
   updateBill(bill: IBill): void {
     this.billsService.updateBill(bill).subscribe((res) => {
-      this.bills$ = this.billsService.getMonthBills(this.currentMonthYear);
+      this.billsService.getMonthBills(this.currentMonthYear).subscribe((res) => {
+        this.bills = res;
+      })
     })
   }
 
   refreshBills(): void {
-    this.bills$ = this.billsService.getMonthBills(this.currentMonthYear);
-    this.incomingOutgoing$ = this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear);
+    this.billsService.getMonthBills(this.currentMonthYear).subscribe((res) => {
+      this.bills = res;
+    })
+    this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear).subscribe((res) => {
+      this.incomingOutgoing = res;
+    });
   }
 
   refreshPayees(): void {
-    this.payees$ = this.billsService.getAllPayees();
+    this.billsService.getAllPayees().subscribe((res) => {
+      this.payees = res;
+    });
   }
 
   refreshIncome(): void {
-    this.income$ = this.billsService.getMonthIncome(this.currentMonthYear);
-    this.incomingOutgoing$ = this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear);
+    this.billsService.getMonthIncome(this.currentMonthYear).subscribe((res) => {
+      this.incomes = res;
+    })
+    this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear).subscribe((res) => {
+      this.incomingOutgoing = res;
+    });
   }
 
   refreshBalance(): void {
-    this.incomingOutgoing$ = this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear);
+    this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear).subscribe((res) => {
+      this.incomingOutgoing = res;
+    });
   }
 
   refreshMonthYears(): void {
-    this.billMonthYears$ = this.billsService.getAllBillMonthYears();
+    this.billsService.getAllBillMonthYears().subscribe((res) => {
+      this.billMonthYears = res;
+    });
   }
 
   monthYearSelected(monthYear: string): void {
     this.currentMonthYear = monthYear;
-    this.bills$ = this.billsService.getMonthBills(this.currentMonthYear)
-    this.income$ = this.billsService.getMonthIncome(this.currentMonthYear)
-    this.balance$ = this.billsService.getMonthBalance(this.currentMonthYear)
-    this.incomingOutgoing$ = this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear);
+    this.billsService.getMonthBills(this.currentMonthYear).subscribe((res) => {
+      this.bills = res;
+    })
+    this.billsService.getMonthIncome(this.currentMonthYear).subscribe((res) => {
+      this.incomes = res;
+    })
+    this.billsService.getMonthBalance(this.currentMonthYear).subscribe((res) => {
+      this.balance = res;
+    })
+    this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear).subscribe((res) => {
+      this.incomingOutgoing = res;
+    });
   }
 }

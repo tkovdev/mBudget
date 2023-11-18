@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {IPayee} from "../../../../models/bill.model";
 import {BillsService} from "../../../../services/bills.service";
@@ -8,15 +8,23 @@ import {BillsService} from "../../../../services/bills.service";
   templateUrl: './payees.component.html',
   styleUrls: ['./payees.component.scss']
 })
-export class PayeesComponent {
-  payees$: Observable<IPayee[]> = this.billsService.getAllPayees();
+export class PayeesComponent implements OnInit{
+  payees: IPayee[] = [];
 
   constructor(private billsService: BillsService) {
   }
 
+  ngOnInit() {
+    this.billsService.getAllPayees().subscribe((res) => {
+      this.payees = res;
+    });
+  }
+
   deletePayee(payee: IPayee): void {
     this.billsService.deletePayee(payee).subscribe((res) => {
-      this.payees$ = this.billsService.getAllPayees();
+      this.billsService.getAllPayees().subscribe((res) => {
+        this.payees = res;
+      });
     })
   }
 

@@ -1,45 +1,42 @@
-<ng-container *ngIf="bills$ | async as bills">
-  <form [formGroup]="billForm" [ngClass]="{'grid': true}" style="max-height: 60vh; padding-top: 1rem;" class="overflow-y-auto">
-    <ng-container *ngIf="initBillFormControls(bills)"></ng-container>
-    <ng-container *ngFor="let bill of bills">
-      <ng-container *ngIf="!payeeHidden(bill.payee)">
-        <div class="col-12 flex">
-          <div class="w-full" formGroupName="bills">
-            <span class="p-float-label">
-              <p-inputNumber mode="currency" currency="USD" locale="en-US" inputId="{{bill.payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="{{bill.payee.name}}"></p-inputNumber>
-              <label for="{{bill.payee.name}}">{{bill.payee.name}}</label>
-            </span>
-          </div>
-          <div>
-            <button pButton (click)="hidePayee(bill.payee)" class="p-button-text p-button-info" icon="pi pi-times"></button>
-          </div>
+<form [formGroup]="billForm" [ngClass]="{'grid': true}" style="max-height: 60vh; padding-top: 1rem;" class="overflow-y-auto">
+  <ng-container *ngFor="let bill of bills">
+    <ng-container *ngIf="!payeeHidden(bill.payee)">
+      <div class="col-12 flex">
+        <div class="w-full" formGroupName="bills">
+          <span class="p-float-label">
+            <p-inputNumber mode="currency" currency="USD" locale="en-US" inputId="{{bill.payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="{{bill.payee.name}}"></p-inputNumber>
+            <label for="{{bill.payee.name}}">{{bill.payee.name}}</label>
+          </span>
         </div>
-      </ng-container>
-    </ng-container>
-  </form>
-  <div class="flex justify-content-between mt-1">
-    <div class="w-full">
-      <button [disabled]="!billForm.valid || currentBills.length <= 0" pButton (click)="saveBill()" label="Save"></button>
-    </div>
-    <ng-container *ngIf="payees$ | async as allPayees">
-      <div *ngIf="missingPayees(allPayees, bills).length > 0" class="w-full text-right">
-        <button pButton class="p-button-text" (click)="morePayeesPanel.show($event)" label="More Payees"></button>
-        <p-overlayPanel #morePayeesPanel>
-          <ng-container *ngIf="missingPayees(allPayees, bills) as missingPayees">
-            <div style="max-height: 40vh; padding-top: 1rem;" class="overflow-y-auto">
-              <ng-container *ngFor="let payee of missingPayees">
-                <div class="flex justify-content-between">
-                  <p class="mr-1">{{payee.name}}</p>
-                  <button pButton class="p-button-text ml-1" label="Add" (click)="showPayee(payee)"></button>
-                </div>
-              </ng-container>
-            </div>
-            <div *ngIf="missingPayees.length == allPayees.length" class="flex justify-content-end">
-              <button pButton class="p-button-text" label="Add All" (click)="showAllPayees(allPayees)"></button>
-            </div>
-          </ng-container>
-        </p-overlayPanel>
+        <div>
+          <button pButton (click)="hidePayee(bill.payee)" class="p-button-text p-button-info" icon="pi pi-times"></button>
+        </div>
       </div>
     </ng-container>
+  </ng-container>
+</form>
+<div class="flex justify-content-between mt-1">
+  <div class="w-full">
+    <button [disabled]="!billForm.valid || currentBills.length <= 0" pButton (click)="saveBill()" label="Save"></button>
   </div>
-</ng-container>
+  <ng-container *ngIf="payees">
+    <div *ngIf="missingPayees(payees, bills).length > 0" class="w-full text-right">
+      <button pButton class="p-button-text" (click)="morePayeesPanel.show($event)" label="More Payees"></button>
+      <p-overlayPanel #morePayeesPanel>
+        <ng-container *ngIf="missingPayees(payees, bills) as missingPayees">
+          <div style="max-height: 40vh; padding-top: 1rem;" class="overflow-y-auto">
+            <ng-container *ngFor="let payee of missingPayees">
+              <div class="flex justify-content-between">
+                <p class="mr-1">{{payee.name}}</p>
+                <button pButton class="p-button-text ml-1" label="Add" (click)="showPayee(payee)"></button>
+              </div>
+            </ng-container>
+          </div>
+          <div *ngIf="missingPayees.length == payees.length" class="flex justify-content-end">
+            <button pButton class="p-button-text" label="Add All" (click)="showAllPayees(payees)"></button>
+          </div>
+        </ng-container>
+      </p-overlayPanel>
+    </div>
+  </ng-container>
+</div>

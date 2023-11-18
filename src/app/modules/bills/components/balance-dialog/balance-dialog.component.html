@@ -1,14 +1,11 @@
-<ng-container *ngIf="balance$ | async as balance">
-  <ng-container *ngIf="initBalanceForm(balance)"></ng-container>
-  <form [formGroup]="balanceForm" class="grid">
-    <div class="col-9">
-      <span class="p-float-label">
-        <p-inputNumber mode="currency" currency="USD" locale="en-US" id="amount" inputId="amount" class="w-full"  styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
-        <label for="amount">Incoming Balance</label>
-      </span>
-    </div>
-    <div class="col-3">
-      <button [disabled]="!balanceForm.valid" pButton (click)="saveBalance();" icon="pi pi-save"></button>
-    </div>
-  </form>
-</ng-container>
+<form [formGroup]="balanceForm" class="grid">
+  <div class="col-9">
+    <span class="p-float-label">
+      <p-inputNumber mode="currency" currency="USD" locale="en-US" id="amount" inputId="amount" class="w-full"  styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
+      <label for="amount">Incoming Balance</label>
+    </span>
+  </div>
+  <div class="col-3">
+    <button [disabled]="!balanceForm.valid" pButton (click)="saveBalance();" icon="pi pi-save"></button>
+  </div>
+</form>

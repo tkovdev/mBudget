@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {BillsService} from "../../../../services/bills.service";
 import {IBalance} from "../../../../models/bill.model";
@@ -10,16 +10,19 @@ import {Observable} from "rxjs";
   templateUrl: './balance-dialog.component.html',
   styleUrls: ['./balance-dialog.component.scss']
 })
-export class BalanceDialogComponent {
+export class BalanceDialogComponent implements OnInit{
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
   @Input() selectedMonthYear!: string;
-  @Input('balance') balance$: Observable<IBalance> = new Observable<IBalance>();
+  @Input('balance') balance!: IBalance;
 
   balanceForm: FormGroup = new FormGroup({});
 
   constructor(private billsService: BillsService) {
   }
 
+  ngOnInit(): void {
+    this.initBalanceForm(this.balance);
+  }
 
   initBalanceForm(balance: IBalance): void {
     this.balanceForm.addControl('amount', new FormControl({value: balance.amount, disabled: false}, [Validators.required, Validators.min(0)]))
