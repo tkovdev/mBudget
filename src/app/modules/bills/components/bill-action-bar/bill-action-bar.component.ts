@@ -19,13 +19,13 @@ export class BillActionBarComponent{
 
   monthYears: string[] = [];
   @Input() selectedMonthYear!: string;
-  @Input('billMonthYears') billsMonthYears$!: Observable<string[]>;
+  @Input('billMonthYears') billsMonthYears: string[] = [];
 
-  @Input('payees') payees$: Observable<IPayee[]> = new Observable<IPayee[]>();
-  @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
-  @Input('income') income$: Observable<IIncome[]> = new Observable<IIncome[]>();
-  @Input('balance') balance$: Observable<IBalance> = new Observable<IBalance>();
-  @Input('incomingOutgoing') incomingOutgoing$: Observable<IIncomingOutgoing> = new Observable<IIncomingOutgoing>();
+  @Input('payees') payees: IPayee[] = [];
+  @Input('bills') bills: IBill[] = [];
+  @Input('income') incomes: IIncome[] = [];
+  @Input('balance') balance!: IBalance;
+  @Input('incomingOutgoing') incomingOutgoing!: IIncomingOutgoing;
 
   billPayDialog: boolean = false
   balanceDialog: boolean = false

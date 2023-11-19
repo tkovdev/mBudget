@@ -12,7 +12,6 @@ import {Observable} from "rxjs";
 })
 export class YearOverYearSpendGraphComponent implements OnInit {
   loading: boolean = false;
-  spend$: Observable<IYearOverYearSpend> = this.analyticsService.yearOverYearSpend();
   data: any;
   options: any;
 
@@ -26,83 +25,86 @@ export class YearOverYearSpendGraphComponent implements OnInit {
     this.billsService.getAvailableYears().subscribe((years) => {
       this.yearOptions = years;
     });
-    this.loadGraph();
-  }
-
-  loadGraph(): void {
     this.loading = true;
-    this.spend$.subscribe((spend) => {
-      this.data = {
-        labels: Object.keys(Month),
-        datasets: [
-          {
-            label: 'Outgoing',
-            data: spend.outgoing.map(x => x.value),
-            fill: false,
-            borderColor: '#ffc3e0',
-            tension: 0.4
-          },
-          {
-            label: 'Unaccounted',
-            data: spend.unaccounted.map(x => x.value),
-            fill: false,
-            borderColor: '#e4d1ff',
-            tension: 0.4
-          },
-          {
-            label: 'Total',
-            data: spend.total.map(x => x.value),
-            fill: false,
-            borderColor: '#ffa4a4',
-            tension: 0.4
-          },
-          {
-            label: 'Remaining',
-            data: spend.remaining.map(x => x.value),
-            fill: false,
-            borderColor: '#A8FFC7',
-            tension: 0.4
-          }
-        ]
-      };
-
-      this.options = {
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            labels: {
-              color: 'black'
-            }
-          }
-        },
-        scales: {
-          x: {
-            ticks: {
-              color: 'black'
-            },
-            grid: {
-              color: 'grey',
-              drawBorder: false
-            }
-          },
-          y: {
-            ticks: {
-              color: 'black'
-            },
-            grid: {
-              color: 'grey',
-              drawBorder: false
-            }
-          }
-        }
-      };
+    this.analyticsService.yearOverYearSpend(this.selectedYear).subscribe((res) => {
+      this.loadGraph(res);
       this.loading = false;
     });
   }
 
+  loadGraph(spend: IYearOverYearSpend): void {
+    this.data = {
+      labels: Object.keys(Month),
+      datasets: [
+        {
+          label: 'Outgoing',
+          data: spend.outgoing.map(x => x.value),
+          fill: false,
+          borderColor: '#ffc3e0',
+          tension: 0.4
+        },
+        {
+          label: 'Unaccounted',
+          data: spend.unaccounted.map(x => x.value),
+          fill: false,
+          borderColor: '#e4d1ff',
+          tension: 0.4
+        },
+        {
+          label: 'Total',
+          data: spend.total.map(x => x.value),
+          fill: false,
+          borderColor: '#ffa4a4',
+          tension: 0.4
+        },
+        {
+          label: 'Remaining',
+          data: spend.remaining.map(x => x.value),
+          fill: false,
+          borderColor: '#A8FFC7',
+          tension: 0.4
+        }
+      ]
+    };
+
+    this.options = {
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: 'black'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: 'black'
+          },
+          grid: {
+            color: 'grey',
+            drawBorder: false
+          }
+        },
+        y: {
+          ticks: {
+            color: 'black'
+          },
+          grid: {
+            color: 'grey',
+            drawBorder: false
+          }
+        }
+      }
+    };
+  }
+
   yearChanged(): void {
-    this.spend$ = this.analyticsService.yearOverYearSpend(this.selectedYear);
-    this.loadGraph();
+    this.loading = true;
+    this.analyticsService.yearOverYearSpend(this.selectedYear).subscribe((res) => {
+      this.loadGraph(res);
+      this.loading = false;
+    });
   }
 
 }

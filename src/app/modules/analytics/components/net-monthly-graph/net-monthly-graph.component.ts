@@ -12,9 +12,7 @@ import {AnalyticsService, IMonthlyIncomeExpenses} from "../../../../services/ana
 })
 export class NetMonthlyGraphComponent implements OnInit{
   loading: boolean = false;
-  incomeExpenses$: Observable<IMonthlyIncomeExpenses> = this.analyticsService.monthlyIncomeVsExpenses();
   data: any;
-
   selectedMonthYear: string = this.sharedService.currentMonthYear();
   monthYearOptions: string[] = [];
   noData: boolean = false;
@@ -28,25 +26,25 @@ export class NetMonthlyGraphComponent implements OnInit{
     this.billsService.getAllBillMonthYears().subscribe((monthYears) => {
       this.monthYearOptions = monthYears;
     });
-    this.loadGraph();
+    this.loading = true;
+    this.analyticsService.monthlyIncomeVsExpenses(this.selectedMonthYear).subscribe((res) => {
+      this.loadGraph(res);
+      this.loading = false;
+    })
   }
 
-  loadGraph(): void {
-    this.loading = true;
-    this.incomeExpenses$.subscribe((incomeExpenses) => {
-      if(incomeExpenses.income == 0 && incomeExpenses.expenses == 0) this.noData = true;
-      else this.noData = false;
-      this.data = {
-        labels: ['Incoming', 'Outgoing'],
-        datasets: [
-          {
-            data: [incomeExpenses.income, incomeExpenses.expenses],
-            backgroundColor: ['#A8FFC7', '#ffa4a4'],
-          }
-        ]
-      };
-      this.loading = false;
-    });
+  loadGraph(incomeExpenses: IMonthlyIncomeExpenses): void {
+    if(incomeExpenses.income == 0 && incomeExpenses.expenses == 0) this.noData = true;
+    else this.noData = false;
+    this.data = {
+      labels: ['Incoming', 'Outgoing'],
+      datasets: [
+        {
+          data: [incomeExpenses.income, incomeExpenses.expenses],
+          backgroundColor: ['#A8FFC7', '#ffa4a4'],
+        }
+      ]
+    };
 
     this.options = {
       cutout: '60%',
@@ -61,8 +59,11 @@ export class NetMonthlyGraphComponent implements OnInit{
   }
 
   monthYearChanged(): void {
-    this.incomeExpenses$ = this.analyticsService.monthlyIncomeVsExpenses(this.selectedMonthYear);
-    this.loadGraph();
+    this.loading = true;
+    this.analyticsService.monthlyIncomeVsExpenses(this.selectedMonthYear).subscribe((res) => {
+      this.loadGraph(res);
+      this.loading = false;
+    })
   }
 
 

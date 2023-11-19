@@ -9,11 +9,5 @@ import {IBill} from "../../../../models/bill.model";
 })
 export class BillSummaryComponent {
   @Output() updateBill: Subject<IBill> = new Subject<IBill>();
-  @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
-
-  pay(bill: IBill): void{
-    if(bill.amount == null) bill.amount = 10;
-    else bill.amount = null;
-    this.updateBill.next(bill);
-  }
+  @Input('bills') bills: IBill[] = [];
 }

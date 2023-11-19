@@ -1,5 +1,5 @@
 <div class="grid">
-  <ng-container *ngFor="let payee of payees$ | async">
+  <ng-container *ngFor="let payee of payees">
     <div class="col-12 flex align-items-center justify-content-between p-0">
       <span>{{payee.name}}</span>
       <button pButton (click)="delete(payee)" icon="pi pi-trash" class="p-button-danger p-button-text ml-1"></button>

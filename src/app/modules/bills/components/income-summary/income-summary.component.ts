@@ -8,7 +8,7 @@ import {IBill, IIncome} from "../../../../models/bill.model";
   styleUrls: ['./income-summary.component.scss']
 })
 export class IncomeSummaryComponent {
-  @Input('income') income$: Observable<IIncome[]> = new Observable<IIncome[]>();
+  @Input('income') incomes: IIncome[] = [];
 
 
 }
