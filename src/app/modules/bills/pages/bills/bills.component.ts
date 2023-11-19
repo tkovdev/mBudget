@@ -78,8 +78,8 @@ export class BillsComponent implements OnInit{
   }
 
   refreshBalance(): void {
-    this.analyticsService.monthlyIncomingOutgoing(this.currentMonthYear).subscribe((res) => {
-      this.incomingOutgoing = res;
+    this.billsService.getMonthBalance(this.currentMonthYear).subscribe((res) => {
+      this.balance = res;
     });
   }
 

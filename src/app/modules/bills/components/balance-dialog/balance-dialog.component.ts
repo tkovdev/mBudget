@@ -25,7 +25,7 @@ export class BalanceDialogComponent implements OnInit{
   }
 
   initBalanceForm(balance: IBalance): void {
-    this.balanceForm.addControl('amount', new FormControl({value: balance.amount, disabled: false}, [Validators.required, Validators.min(0)]))
+    this.balanceForm.setControl('amount', new FormControl({value: balance.amount, disabled: false}, [Validators.required, Validators.min(0)]))
   }
 
   saveBalance(): void {

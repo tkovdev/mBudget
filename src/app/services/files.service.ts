@@ -1,12 +1,19 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {AuthService} from "../authentication/services/auth.service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {IFileSearch, IFileSearchDetails} from "../models/driveSchema.model";
+import {IBillSchema, IFileSearch, IFileSearchDetails} from "../models/driveSchema.model";
 import FileResource = gapi.client.drive.FileResource;
 import {map, Observable} from "rxjs";
+import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot} from "@angular/router";
+import {BillsService} from "./bills.service";
+import {ConfirmationService, ConfirmEventType} from "primeng/api";
 
 export const DriveConfig = {
   BILL_FILE_NAME: '.bills'
+}
+
+export const FileGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
+  return inject(FilesService).canActivate(next, state);
 }
 
 @Injectable({
@@ -14,10 +21,63 @@ export const DriveConfig = {
 })
 export class FilesService {
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private authService: AuthService, private http: HttpClient, private confirmationService: ConfirmationService) {}
+
+  async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise((resolver) => {
+      let billFileId = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME);
+      if(billFileId) {
+        return resolver(true);
+      }
+      this.findFileId(DriveConfig.BILL_FILE_NAME).subscribe((res) => {
+        if(res){
+          sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, res);
+          return resolver(true);
+        }else {
+          this.createBillFile();
+          return resolver(false);
+        }
+      });
+    });
+  }
+
+  private createBillFile(): void {
+    this.confirmationService.confirm({
+      message: 'To continue, we will create any necessary files in your personal Google Drive. Create files?',
+      header: 'Files required',
+      icon: 'pi pi-exclamation-triangle',
+      key: 'noBillsConfirmation',
+      accept: () => {
+        let newFile: IBillSchema = {bills: [], payees: [], income: [], balances: []};
+        this.createFile(DriveConfig.BILL_FILE_NAME, newFile).subscribe((file) => {
+          location.reload();
+        });
+      },
+      reject: (type: ConfirmEventType) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            break;
+          case ConfirmEventType.CANCEL:
+            break;
+        }
+      }
+    });
+  }
 
   get files(): Observable<IFileSearch>{
     return this.listAppDataFiles();
+  }
+
+  retrieveFile<T>(sessionStorageKey: string): Observable<T | undefined> {
+    return new Observable((subscriber) => {
+      let sessionFile = sessionStorage.getItem(sessionStorageKey);
+      if(!sessionFile) {
+        subscriber.next(undefined);
+        return;
+      }
+      let file = JSON.parse(sessionFile) as T;
+      subscriber.next(file);
+    });
   }
 
   getFile<T>(id: string): Observable<T | undefined> {
@@ -122,7 +182,7 @@ export class FilesService {
     });
   }
 
-  private findFile(name: string): Promise<FileResource | undefined> {
+  public findFile(name: string): Promise<FileResource | undefined> {
     return new Promise<FileResource | undefined>((resolver) => {
       let query: HttpParams = new HttpParams();
       let search = "mimeType='application/json'"
@@ -135,6 +195,23 @@ export class FilesService {
         if(res && res.files.length > 0){
           resolver(res.files[0]);
         }else resolver(undefined);
+      })
+    });
+  }
+
+  public findFileId(name: string): Observable<string | undefined> {
+    return new Observable<string | undefined>((subscriber) => {
+      let query: HttpParams = new HttpParams();
+      let search = "mimeType='application/json'"
+      search = search + " and "
+      search = search + `name='${name}'`
+      query = query.append('q', search)
+      query = query.append('spaces', 'appDataFolder')
+      let uri = `https://www.googleapis.com/drive/v3/files`;
+      this.http.get<IFileSearch>(uri,{params: query}).subscribe((res) => {
+        if(res && res.files.length > 0){
+          subscriber.next(res.files[0].id);
+        }else subscriber.next(undefined);
       })
     });
   }
