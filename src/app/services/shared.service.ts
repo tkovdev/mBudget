@@ -55,4 +55,24 @@ export class SharedService {
     let year: number = parseInt(monthYearSplit[1]);
     return {month: month, year: year};
   }
+
+  cleanMonth(uncleanMonth: string): string {
+    let cleanMonth = uncleanMonth.toLowerCase();
+    let capLetter = cleanMonth.charAt(0).toUpperCase();
+    let remainingLetter = cleanMonth.substring(1);
+    cleanMonth = capLetter + remainingLetter;
+    if(!Month[<Month>cleanMonth]) return 'not a month';
+    return cleanMonth;
+  }
+
+  cleanYear(uncleanYear: string): number {
+    let cleanYear = -1;
+    try{
+      cleanYear = parseInt(uncleanYear);
+    }catch {
+      return -1
+    }
+    if(Number.isNaN(cleanYear)) return -1;
+    return cleanYear;
+  }
 }
