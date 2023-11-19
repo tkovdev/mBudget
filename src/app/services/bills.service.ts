@@ -168,7 +168,6 @@ export class BillsService {
             }
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
-            sessionStorage.setItem(this.billFileId, JSON.stringify(billFile));
             subscriber.next(true);
           })
         }
@@ -192,7 +191,6 @@ export class BillsService {
             }
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
-            sessionStorage.setItem(this.billFileId, JSON.stringify(billFile));
             subscriber.next(true);
           })
         }
@@ -212,7 +210,6 @@ export class BillsService {
             billFile.bills = billFile.bills.filter(x => !(`${x.month} ${x.year}` == monthYear && x.payee.name == payees.name))
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
-            sessionStorage.setItem(this.billFileId, JSON.stringify(billFile));
             subscriber.next(true);
           })
         }
@@ -226,7 +223,6 @@ export class BillsService {
         if (billFile) {
           billFile.payees.push(payee);
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
-            sessionStorage.setItem(this.billFileId, JSON.stringify(billFile));
             subscriber.next(true);
           })
         }
@@ -241,7 +237,6 @@ export class BillsService {
           billFile.bills = billFile.bills.filter(x => x.payee.name != payee.name || x.amount != null);
           billFile.payees = billFile.payees.filter(x => x.name != payee.name);
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
-            sessionStorage.setItem(this.billFileId, JSON.stringify(billFile));
             subscriber.next(true);
           })
         }
@@ -291,7 +286,6 @@ export class BillsService {
             if (existingIncome > -1) billFile.income[existingIncome] = income;
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
-            sessionStorage.setItem(this.billFileId, JSON.stringify(billFile));
             subscriber.next(true);
           })
         }
@@ -319,7 +313,6 @@ export class BillsService {
             billFile.balances.push(balance);
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
-            sessionStorage.setItem(this.billFileId, JSON.stringify(billFile));
             subscriber.next(true);
           })
         }

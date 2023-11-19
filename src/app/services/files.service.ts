@@ -121,7 +121,10 @@ export class FilesService {
     let body = contents;
 
     let uri = `https://www.googleapis.com/upload/drive/v3/files/${id}`;
-    return this.http.patch<FileResource>(uri, body,{params: query});
+    return this.http.patch<FileResource>(uri, body,{params: query}).pipe(map((res) => {
+      sessionStorage.setItem(id, JSON.stringify(contents));
+      return res;
+    }));
   }
 
   deleteFile(id: string): Observable<boolean> {
@@ -129,7 +132,11 @@ export class FilesService {
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files/${id}`
-    return this.http.delete<any>(uri, {params: query});
+    return this.http.delete<any>(uri, {params: query}).pipe(map((res) => {
+      sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
+      sessionStorage.removeItem(id);
+      return res;
+    }))
   }
 
   listAppDataFiles(): Observable<IFileSearch> {
