@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {BillsService} from "../../../../services/bills.service";
@@ -10,14 +10,20 @@ import {Month} from "../../../../models/shared.model";
   templateUrl: './bill-income-dialog.component.html',
   styleUrls: ['./bill-income-dialog.component.scss']
 })
-export class BillIncomeDialogComponent {
+export class BillIncomeDialogComponent implements OnInit{
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
   @Input() selectedMonthYear!: string;
   incomeForm: FormGroup = this.initIncomeForm();
-  payers$: Observable<string[]> = this.billsService.getIncomePayers();
+  payers: string[] = [];
 
   constructor(private billsService: BillsService) {
+  }
+
+  ngOnInit() {
+    this.billsService.getIncomePayers().subscribe((res) => {
+      this.payers = res;
+    })
   }
 
   initIncomeForm(): FormGroup {

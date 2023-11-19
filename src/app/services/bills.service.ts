@@ -6,69 +6,61 @@ import {IBillSchema} from "../models/driveSchema.model";
 import {SharedService} from "./shared.service";
 import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot} from "@angular/router";
 import {AuthService} from "../authentication/services/auth.service";
-import {ConfirmationService, ConfirmEventType} from "primeng/api";
 import {Month} from "../models/shared.model";
+
+export const BillGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
+  return inject(BillsService).canActivate(next, state);
+}
+
+export const BillFileGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
+  var fileService = inject(FilesService);
+  var billService = inject(BillsService);
+  return fileService.canActivate(next, state).then((fileGuard) => {
+    if(fileGuard){
+      return billService.canActivate(next, state);
+    }else {
+      return new Promise((resolver) => {
+        return resolver(false)
+      })
+    }
+  });
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class BillsService {
   billFileId: string = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME) || '';
-  constructor(private authService: AuthService, private filesService: FilesService, private sharedService: SharedService, private confirmationService: ConfirmationService) {
+
+  constructor(private authService: AuthService, private filesService: FilesService, private sharedService: SharedService) {
   }
 
-  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return new Observable<boolean>((subscriber) => {
-      this.authService.isLoggedIn.subscribe((loggedIn) => {
-        if(!loggedIn) subscriber.next(false);
-        else {
-          this.filesService.listAppDataFiles().subscribe((files) => {
-            let hasFiles = false;
-            if(files && files.files.length >= 1) {
-              files.files.forEach((v) => {
-                if(v.name == DriveConfig.BILL_FILE_NAME) {
-                  hasFiles = true;
-                  sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, v.id);
-                  this.billFileId = v.id;
-                }
-              });
-            }
-            if(!hasFiles) {
-              this.confirmationService.confirm({
-                message: 'To continue, we will create any necessary files in your personal Google Drive. Create files?',
-                header: 'Files required',
-                icon: 'pi pi-exclamation-triangle',
-                key: 'noBillsConfirmation',
-                accept: () => {
-                  let newFile: IBillSchema = {bills: [], payees: [], income: [], balances: []};
-                  this.filesService.createFile(DriveConfig.BILL_FILE_NAME, newFile).subscribe((file) => {
-                    location.reload();
-                  });
-                },
-                reject: (type: ConfirmEventType) => {
-                  switch (type) {
-                    case ConfirmEventType.REJECT:
-                      subscriber.next(false);
-                      break;
-                    case ConfirmEventType.CANCEL:
-                      subscriber.next(false);
-                      break;
-                  }
-                }
-              });
-            }
-            else subscriber.next(true);
-          });
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise((resolver) => {
+      let billFileId = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME);
+      if(!billFileId) return resolver(false);
+      this.billFileId = billFileId;
+
+      let billFile = sessionStorage.getItem(this.billFileId);
+      if (billFile) {
+        return resolver(true);
+      }
+      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((res) => {
+        if (res) {
+          sessionStorage.setItem(this.billFileId, JSON.stringify(res));
+          return resolver(true);
+        } else {
+          return resolver(false);
         }
-      });
+      })
     });
   }
 
-  private getPayees(): Observable<IPayee[]>{
+  private getPayees(): Observable<IPayee[]> {
     return new Observable<IPayee[]>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
         let payees = billFile?.payees;
-        if(payees) subscriber.next(payees);
+        if (payees) subscriber.next(payees);
         else subscriber.next([])
       })
     });
@@ -76,19 +68,19 @@ export class BillsService {
 
   private getBills(): Observable<IBill[]> {
     return new Observable<IBill[]>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
         let bills = billFile?.bills;
-        if(bills) subscriber.next(bills);
+        if (bills) subscriber.next(bills);
         else subscriber.next([])
       })
     });
   }
 
-  private getBalances(): Observable<IBalance[]>{
+  private getBalances(): Observable<IBalance[]> {
     return new Observable<IBalance[]>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
         let balances = billFile?.balances;
-        if(balances) subscriber.next(balances);
+        if (balances) subscriber.next(balances);
         else subscriber.next([])
       })
     });
@@ -114,7 +106,7 @@ export class BillsService {
 
   getAvailableYears(): Observable<number[]> {
     return this.getBills().pipe(
-      map((bills) =>{
+      map((bills) => {
           let billMap = bills.map((bill: IBill) => bill.year);
           billMap.push(this.sharedService.currentYear());
           billMap = [...new Set(billMap)];
@@ -142,7 +134,7 @@ export class BillsService {
 
   public getAllBillMonthYears(): Observable<string[]> {
     return this.getBills().pipe(
-      map((bills) =>{
+      map((bills) => {
           let billMap = bills.map((bill: IBill) => `${bill.month} ${bill.year}`);
           billMap.push(`${this.sharedService.currentMonthYear()}`);
           billMap = [...new Set(billMap)];
@@ -160,18 +152,18 @@ export class BillsService {
 
   public updateBill(bills: IBill | IBill[]): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
-        if(billFile){
-          if(Array.isArray(bills)) {
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+        if (billFile) {
+          if (Array.isArray(bills)) {
             bills.forEach(bill => {
               let toUpdateIdx = billFile.bills.findIndex(x => `${x.month} ${x.year}` == `${bill.month} ${bill.year}` && x.payee.name == bill.payee.name)
-              if(toUpdateIdx > -1) {
+              if (toUpdateIdx > -1) {
                 billFile.bills[toUpdateIdx] = bill;
               }
             })
-          }else{
+          } else {
             let toUpdateIdx = billFile.bills.findIndex(x => `${x.month} ${x.year}` == `${bills.month} ${bills.year}` && x.payee.name == bills.payee.name)
-            if(toUpdateIdx > -1) {
+            if (toUpdateIdx > -1) {
               billFile.bills[toUpdateIdx] = bills;
             }
           }
@@ -185,16 +177,16 @@ export class BillsService {
 
   public addBill(bills: IBill | IBill[]): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
-        if(billFile){
-          if(Array.isArray(bills)) {
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+        if (billFile) {
+          if (Array.isArray(bills)) {
             bills.forEach(bill => {
-              if(!billFile.bills.some(x => `${x.month} ${x.year}` == `${bill.month} ${bill.year}` && x.payee.name == bill.payee.name)){
+              if (!billFile.bills.some(x => `${x.month} ${x.year}` == `${bill.month} ${bill.year}` && x.payee.name == bill.payee.name)) {
                 billFile.bills.push(bill);
               }
             })
-          }else{
-            if(!billFile.bills.some(x => `${x.month} ${x.year}` == `${bills.month} ${bills.year}` && x.payee.name == bills.payee.name)) {
+          } else {
+            if (!billFile.bills.some(x => `${x.month} ${x.year}` == `${bills.month} ${bills.year}` && x.payee.name == bills.payee.name)) {
               billFile.bills.push(bills);
             }
           }
@@ -208,13 +200,13 @@ export class BillsService {
 
   public deleteBill(monthYear: string, payees: IPayee | IPayee[]): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
-        if(billFile){
-          if(Array.isArray(payees)){
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+        if (billFile) {
+          if (Array.isArray(payees)) {
             payees.forEach((payee, i) => {
               billFile.bills = billFile.bills.filter(x => !(`${x.month} ${x.year}` == monthYear && x.payee.name == payee.name));
             });
-          }else {
+          } else {
             billFile.bills = billFile.bills.filter(x => !(`${x.month} ${x.year}` == monthYear && x.payee.name == payees.name))
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
@@ -227,8 +219,8 @@ export class BillsService {
 
   public addPayee(payee: IPayee): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
-        if(billFile){
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+        if (billFile) {
           billFile.payees.push(payee);
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
             subscriber.next(true);
@@ -240,8 +232,8 @@ export class BillsService {
 
   public deletePayee(payee: IPayee): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
-        if(billFile){
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+        if (billFile) {
           billFile.bills = billFile.bills.filter(x => x.payee.name != payee.name || x.amount != null);
           billFile.payees = billFile.payees.filter(x => x.name != payee.name);
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
@@ -254,13 +246,14 @@ export class BillsService {
 
   private getIncome(): Observable<IIncome[]> {
     return new Observable<IIncome[]>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
         let income = billFile?.income;
-        if(income) subscriber.next(income);
+        if (income) subscriber.next(income);
         else subscriber.next([])
       })
     });
   }
+
   public getMonthIncome(monthYear: string = this.sharedService.currentMonthYear()): Observable<IIncome[]> {
     return this.getIncome().pipe(
       map((income) => income.filter(x => `${x.month} ${x.year}` == monthYear))
@@ -269,7 +262,7 @@ export class BillsService {
 
   public getIncomePayers(): Observable<string[]> {
     return this.getIncome().pipe(
-      map((incomes) =>{
+      map((incomes) => {
           let incomeMap = incomes.map((income: IIncome) => `${income.payer.name}`);
           incomeMap = [...new Set(incomeMap)];
           let months = Object.keys(Month);
@@ -281,15 +274,16 @@ export class BillsService {
       )
     );
   }
+
   public addIncome(income: IIncome): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
-        if(billFile){
-          if(!billFile.income.some(x => `${x.month} ${x.year}` == `${income.month} ${income.year}` && x.payer.name == income.payer.name)) {
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+        if (billFile) {
+          if (!billFile.income.some(x => `${x.month} ${x.year}` == `${income.month} ${income.year}` && x.payer.name == income.payer.name)) {
             billFile.income.push(income);
-          }else{
+          } else {
             let existingIncome = billFile.income.findIndex(x => `${x.month} ${x.year}` == `${income.month} ${income.year}` && x.payer.name == income.payer.name)
-            if(existingIncome > -1) billFile.income[existingIncome] = income;
+            if (existingIncome > -1) billFile.income[existingIncome] = income;
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
             subscriber.next(true);
@@ -301,17 +295,21 @@ export class BillsService {
 
   public getMonthBalance(monthYear: string = this.sharedService.currentMonthYear()): Observable<IBalance> {
     return this.getBalances().pipe(
-      map((balances) => balances.find(x => `${x.month} ${x.year}` == monthYear) ?? { ...this.sharedService.fromMonthYearString(monthYear), amount: 0})
+      map((balances) => balances.find(x => `${x.month} ${x.year}` == monthYear) ?? {
+        ...this.sharedService.fromMonthYearString(monthYear),
+        amount: 0
+      })
     )
   }
+
   public updateBalance(balance: IBalance): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
-      this.filesService.getFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
-        if(billFile){
+      this.filesService.retrieveFile<IBillSchema>(this.billFileId).subscribe((billFile) => {
+        if (billFile) {
           let toUpdateIdx = billFile.balances.findIndex(x => x.month == balance.month && x.year == balance.year);
-          if(toUpdateIdx > -1) {
+          if (toUpdateIdx > -1) {
             billFile.balances[toUpdateIdx] = balance
-          }else{
+          } else {
             billFile.balances.push(balance);
           }
           this.filesService.updateFile(this.billFileId, billFile).subscribe((res) => {
@@ -321,8 +319,4 @@ export class BillsService {
       });
     });
   }
-}
-
-export const BillGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> => {
-  return inject(BillsService).canActivate(next, state);
 }

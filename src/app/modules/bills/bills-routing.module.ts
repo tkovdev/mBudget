@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { BillsComponent } from './pages/bills/bills.component';
 
 const routes: Routes = [
-  {path: '', component: BillsComponent}
+  {path: '', component: BillsComponent},
+  {path: ':year/:month', component: BillsComponent}
 ];
 
 @NgModule({

@@ -11,10 +11,10 @@ import {Month} from "../../../../models/shared.model";
   templateUrl: './bill-pay-dialog.component.html',
   styleUrls: ['./bill-pay-dialog.component.scss']
 })
-export class BillPayDialogComponent{
+export class BillPayDialogComponent implements OnInit{
   @Input() selectedMonthYear!: string;
-  @Input('payees') payees$: Observable<IPayee[]> = new Observable<IPayee[]>();
-  @Input('bills') bills$: Observable<IBill[]> = new Observable<IBill[]>();
+  @Input('payees') payees: IPayee[] = [];
+  @Input('bills') bills: IBill[] = [];
 
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
@@ -25,6 +25,10 @@ export class BillPayDialogComponent{
   hiddenPayees: IPayee[] = [];
 
   constructor(private billsService: BillsService) {}
+
+  ngOnInit(): void {
+      this.initBillFormControls(this.bills);
+    }
 
   initBillFormControls(bills: IBill[]): void {
     bills.map(x => x.payee).forEach((payee) => {

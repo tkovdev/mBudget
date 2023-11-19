@@ -1,4 +1,4 @@
-<div class="flex flex-column" *ngIf="income$ | async as incomes">
+<div class="flex flex-column">
   <p *ngIf="incomes.length == 0">No income!</p>
   <ng-container *ngFor="let income of incomes">
       <div class="flex align-items-center">

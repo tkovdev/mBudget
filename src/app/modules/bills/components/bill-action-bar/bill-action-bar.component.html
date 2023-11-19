@@ -1,10 +1,10 @@
 <div class="grid">
   <div class="md:col-8 col-12">
     <div class="flex flex-wrap">
-      <div class="md:w-auto w-full" *ngIf="billsMonthYears$ | async as billMonthYears">
+      <div class="md:w-auto w-full">
         <div class="grid">
           <div class="md:col-8 col-10">
-            <p-dropdown styleClass="w-full md:w-auto" [options]="billMonthYears" [(ngModel)]="selectedMonthYear" (onChange)="monthYearSelectedEvent(selectedMonthYear)"></p-dropdown>
+            <p-dropdown styleClass="w-full md:w-auto" [options]="billsMonthYears" [(ngModel)]="selectedMonthYear" (onChange)="monthYearSelectedEvent(selectedMonthYear)"></p-dropdown>
           </div>
           <div class="md:col-4 col-2">
             <button (click)="monthYearPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Month Year"></button>
@@ -14,15 +14,15 @@
       <div class="flex justify-content-around md:w-auto w-full">
         <div class="flex flex-column mx-1 align-items-center">
           <span>Incoming</span>
-          <span style="color: green">{{(incomingOutgoing$ | async)?.incoming | currency: 'USD'}}</span>
+          <span style="color: green">{{incomingOutgoing.incoming | currency: 'USD'}}</span>
         </div>
         <div class="flex flex-column mx-1 align-items-center">
           <span>Outgoing</span>
-          <span style="color: red;">{{(incomingOutgoing$ | async)?.outgoing | currency: 'USD'}}</span>
+          <span style="color: red;">{{incomingOutgoing.outgoing | currency: 'USD'}}</span>
         </div>
         <div class="flex flex-column mx-1 align-items-center">
           <span>Remaining</span>
-          <span>{{(incomingOutgoing$ | async)?.remaining | currency: 'USD'}}</span>
+          <span>{{incomingOutgoing.remaining | currency: 'USD'}}</span>
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
   </div>
 </div>
 <p-overlayPanel #billPayPanel [style]="{width: '90vw'}" (onShow)="billPayDialog = true" (onHide)="billPayDialog = false;">
-  <app-bill-pay-dialog *ngIf="billPayDialog" (close)="billPayPanel.hide(); billChangedEvent()" [payees]="payees$" [bills]="bills$" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
+  <app-bill-pay-dialog *ngIf="billPayDialog" (close)="billPayPanel.hide(); billChangedEvent()" [payees]="payees" [bills]="bills" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
 </p-overlayPanel>
 
 <p-overlayPanel #payeePanel>
@@ -51,5 +51,5 @@
 </p-overlayPanel>
 
 <p-overlayPanel #balancePanel [style]="{width: '90vw'}" (onShow)="balanceDialog = true" (onHide)="balanceDialog = false">
-  <app-balance-dialog *ngIf="balanceDialog" [selectedMonthYear]="selectedMonthYear" [balance]="balance$" (close)="balancePanel.hide(); balanceChangedEvent()"></app-balance-dialog>
+  <app-balance-dialog *ngIf="balanceDialog" [selectedMonthYear]="selectedMonthYear" [balance]="balance" (close)="balancePanel.hide(); balanceChangedEvent()"></app-balance-dialog>
 </p-overlayPanel>
