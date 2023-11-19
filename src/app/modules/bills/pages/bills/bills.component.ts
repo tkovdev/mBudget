@@ -32,6 +32,9 @@ export class BillsComponent implements OnInit{
         let uncleanYear = params.get('year')!;
         let cleanMonth = this.sharedService.cleanMonth(uncleanMonth);
         let cleanYear = this.sharedService.cleanYear(uncleanYear);
+
+        if(cleanYear == -1) this.router.navigate(['','bills']);
+        if(cleanMonth == 'not a month') this.router.navigate(['', 'bills']);
         this.currentMonthYear = `${cleanMonth} ${cleanYear}`;
       }
       this.loadData();

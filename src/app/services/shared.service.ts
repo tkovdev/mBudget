@@ -61,6 +61,7 @@ export class SharedService {
     let capLetter = cleanMonth.charAt(0).toUpperCase();
     let remainingLetter = cleanMonth.substring(1);
     cleanMonth = capLetter + remainingLetter;
+    if(!Month[<Month>cleanMonth]) return 'not a month';
     return cleanMonth;
   }
 
@@ -71,6 +72,7 @@ export class SharedService {
     }catch {
       return -1
     }
+    if(Number.isNaN(cleanYear)) return -1;
     return cleanYear;
   }
 }
