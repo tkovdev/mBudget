@@ -28,7 +28,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/.info"
+              "src/.info",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.scss",
@@ -37,7 +38,9 @@
             ],
             "scripts": [
               "node_modules/chart.js/dist/chart.js"
-            ]
+            ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
@@ -118,7 +121,8 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.scss"
