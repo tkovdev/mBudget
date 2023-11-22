@@ -1,1 +1,3 @@
-<p>budgets works!</p>
+<p-card id="action-bar">
+  <app-budget-action-bar [budgets]="budgets" [selectedBudget]="selectedBudget" (budgetChanged)="budgetSelected($event)"></app-budget-action-bar>
+</p-card>

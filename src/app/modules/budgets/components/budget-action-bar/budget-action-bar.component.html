@@ -1,0 +1,35 @@
+<div class="grid">
+  <div class="md:col-8 col-12">
+    <div class="flex flex-wrap">
+      <div class="md:w-auto w-full">
+        <div class="grid">
+          <div class="md:col-8 col-10">
+            <p-dropdown styleClass="w-full md:w-auto" [options]="budgets" [(ngModel)]="selectedBudget" (onChange)="budgetSelectedEvent(selectedBudget)"></p-dropdown>
+          </div>
+          <div class="md:col-4 col-2">
+            <button (click)="budgetPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Budget"></button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-content-around md:w-auto w-full">
+        <div class="flex flex-column mx-1 align-items-center">
+          <span>Need</span>
+          <span style="color: green">{{0 | currency: 'USD'}}</span>
+        </div>
+        <div class="flex flex-column mx-1 align-items-center">
+          <span>Want</span>
+          <span style="color: red;">{{0 | currency: 'USD'}}</span>
+        </div>
+        <div class="flex flex-column mx-1 align-items-center">
+          <span>Extra</span>
+          <span>{{0 | currency: 'USD'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="md:col-4 col-12 flex md:justify-content-end justify-content-around">
+<!--    <button class="mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-percentage" pButton pTooltip="Add Incoming Balance"></button>-->
+  </div>
+</div>
+<p-overlayPanel #budgetPanel [style]="{width: '90vw'}" (onShow)="budgetDialog = true" (onHide)="budgetDialog = false">
+</p-overlayPanel>
