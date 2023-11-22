@@ -10,13 +10,15 @@ import {TooltipModule} from "primeng/tooltip";
 import {CardModule} from "primeng/card";
 import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
 
 
 @NgModule({
   declarations: [
     BudgetsComponent,
-    BudgetActionBarComponent
+    BudgetActionBarComponent,
+    BudgetDialogComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +29,8 @@ import {FormsModule} from "@angular/forms";
     OverlayPanelModule,
     InputTextModule,
     TooltipModule,
-    DropdownModule
+    DropdownModule,
+    ReactiveFormsModule
   ]
 })
 export class BudgetsModule { }

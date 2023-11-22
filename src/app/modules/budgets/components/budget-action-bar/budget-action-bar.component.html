@@ -31,5 +31,6 @@
 <!--    <button class="mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-percentage" pButton pTooltip="Add Incoming Balance"></button>-->
   </div>
 </div>
-<p-overlayPanel #budgetPanel [style]="{width: '90vw'}" (onShow)="budgetDialog = true" (onHide)="budgetDialog = false">
+<p-overlayPanel #budgetPanel (onShow)="budgetDialog = true" (onHide)="budgetDialog = false">
+  <app-budget-dialog *ngIf="budgetDialog"></app-budget-dialog>
 </p-overlayPanel>

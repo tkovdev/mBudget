@@ -1,0 +1,11 @@
+<form [formGroup]="budgetForm" class="grid">
+  <div class="col-9">
+    <span class="p-float-label">
+      <input pInputText formControlName="name" id="name" maxlength="16" minlength="3"/>
+      <label for="name">Budget Name</label>
+    </span>
+  </div>
+  <div class="col-3">
+    <button [disabled]="!budgetForm.valid" pButton (click)="saveBudget();" icon="pi pi-save"></button>
+  </div>
+</form>
