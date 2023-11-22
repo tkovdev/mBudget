@@ -27,6 +27,7 @@ export class AppComponent implements OnInit{
       }
     });
     this.menu = [
+      {label: 'Budgets', routerLink: ['', 'budgets']},
       {label: 'Bills', routerLink: ['', 'bills']},
       {label: 'Payees', routerLink: ['', 'payees']},
     ]
