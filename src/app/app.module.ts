@@ -15,8 +15,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import {MenubarModule} from "primeng/menubar";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {LoadingInterceptor} from "./interceptors/loading.interceptor";
-import {BillGuard} from "./services/bills.service";
-import {FileGuard} from "./services/files.service";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import {NgOptimizedImage} from "@angular/common";
 
