@@ -1,0 +1,59 @@
+<div class="grid">
+  <div class="col-12 md:col-4">
+    <p>Need</p>
+    <span class="p-float-label">
+      <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.need.planned"></p-inputNumber>
+      <label for="needDesiredPercent">Planned Percent</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber suffix="%" id="needActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.need.actual" [disabled]="true"></p-inputNumber>
+      <label for="needActualPercent">Actual Percent</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber mode="currency" currency="USD" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.need.salaryTotal" [disabled]="true"></p-inputNumber>
+      <label for="needSalaryUsed">Used Salary</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber mode="currency" currency="USD" id="needMonthlyUsed" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.need.monthlyTotal" [disabled]="true"></p-inputNumber>
+      <label for="needMonthlyUsed">Used Monthly</label>
+    </span>
+  </div>
+  <div class="col-12 md:col-4">
+    <p>Want</p>
+    <span class="p-float-label">
+      <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.want.planned"></p-inputNumber>
+      <label for="wantDesiredPercent">Planned Percent</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber suffix="%" id="wantActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.want.actual" [disabled]="true"></p-inputNumber>
+      <label for="wantActualPercent">Actual Percent</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber mode="currency" currency="USD" id="wantSalaryUsed" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.want.salaryTotal" [disabled]="true"></p-inputNumber>
+      <label for="wantSalaryUsed">Used Salary</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber mode="currency" currency="USD" id="wantMonthlyUsed" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.want.monthlyTotal" [disabled]="true"></p-inputNumber>
+      <label for="wantMonthlyUsed">Used Monthly</label>
+    </span>
+  </div>
+  <div class="col-12 md:col-4">
+    <p>Extra</p>
+    <span class="p-float-label">
+      <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.extra.planned"></p-inputNumber>
+      <label for="extraDesiredPercent">Planned Percent</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber suffix="%" id="extraActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.extra.actual" [disabled]="true"></p-inputNumber>
+      <label for="extraActualPercent">Actual Percent</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber mode="currency" currency="USD" id="extraSalaryUsed" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.extra.salaryTotal" [disabled]="true"></p-inputNumber>
+      <label for="extraSalaryUsed">Used Salary</label>
+    </span>
+    <span class="p-float-label mt-3">
+      <p-inputNumber mode="currency" currency="USD" id="extraMonthlyUsed" styleClass="w-full" class="w-full" [(ngModel)]="budgetBreakdown.extra.monthlyTotal" [disabled]="true"></p-inputNumber>
+      <label for="extraMonthlyUsed">Used Monthly</label>
+    </span>
+  </div>
+</div>

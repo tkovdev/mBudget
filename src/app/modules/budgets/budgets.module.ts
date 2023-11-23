@@ -12,13 +12,16 @@ import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
+import { BudgetSummaryComponent } from './components/budget-summary/budget-summary.component';
+import {InputNumberModule} from "primeng/inputnumber";
 
 
 @NgModule({
   declarations: [
     BudgetsComponent,
     BudgetActionBarComponent,
-    BudgetDialogComponent
+    BudgetDialogComponent,
+    BudgetSummaryComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +33,8 @@ import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.
     InputTextModule,
     TooltipModule,
     DropdownModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputNumberModule
   ]
 })
 export class BudgetsModule { }

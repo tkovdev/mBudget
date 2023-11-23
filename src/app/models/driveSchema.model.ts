@@ -1,5 +1,6 @@
 import {IBalance, IBill, IIncome, IPayee} from "./bill.model";
 import FileResource = gapi.client.drive.FileResource;
+import {IBudgetBreakdown} from "./budget.model";
 
 export interface IDriveSchema {
   name: string;
@@ -22,6 +23,10 @@ export interface IBillSchema {
   bills: IBill[];
   income: IIncome[];
   balances: IBalance[];
+}
+
+export interface IBudgetSchema {
+  breakdown: IBudgetBreakdown;
 }
 
 export interface IFileSearch {
