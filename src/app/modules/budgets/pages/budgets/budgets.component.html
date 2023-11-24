@@ -1,5 +1,5 @@
 <p-card id="action-bar">
-  <app-budget-action-bar [budgets]="budgets" [selectedBudget]="selectedBudget" (budgetChanged)="budgetSelected($event)"></app-budget-action-bar>
+  <app-budget-action-bar [budgets]="budgets" [selectedBudget]="selectedBudget" (budgetSelectionChanged)="budgetSelected($event)" (budgetChanged)="budgetChanged()" (budgetDeleted)="budgetDeleted($event)"></app-budget-action-bar>
 </p-card>
 <p-card styleClass="mt-3" header="Budget Summary" subheader="{{selectedBudget}}">
   <app-budget-summary [budgetBreakdown]="budgetBreakdown"></app-budget-summary>

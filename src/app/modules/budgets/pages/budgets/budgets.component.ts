@@ -26,11 +26,7 @@ export class BudgetsComponent implements OnInit{
       want: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0},
       extra: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0}
     }
-    this.budgetService.getBudgetNames().subscribe((res) => {
-      this.budgets = res;
-      this.selectedBudget = this.budgets[0];
-    });
-
+    this.loadNames();
   }
 
   ngOnInit(): void {
@@ -43,13 +39,32 @@ export class BudgetsComponent implements OnInit{
     this.loadBreakdown();
   }
 
+  loadNames(): void {
+    this.budgetService.getBudgetNames().subscribe((res) => {
+      this.budgets = res;
+      this.selectedBudget = this.budgets[0];
+    });
+  }
+
   loadBreakdown(): void {
     this.budgetService.getBudgetBreakdown(this.selectedBudget).subscribe((res) => {
       if(res) this.budgetBreakdown = res;
     });
   }
 
-  budgetSelected(budget: string): void {
+  budgetSelected(budget: string | undefined): void {
     this.router.navigate(['', 'budgets', budget]);
+  }
+
+  budgetChanged(): void {
+    this.loadNames();
+    this.loadBreakdown();
+  }
+
+  budgetDeleted(name: string): void {
+    this.budgetService.deleteBudget(name).subscribe((res) => {
+      this.loadNames();
+      this.router.navigate(['', 'budgets']);
+    })
   }
 }

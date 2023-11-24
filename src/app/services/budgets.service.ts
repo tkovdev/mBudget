@@ -6,6 +6,7 @@ import {SharedService} from "./shared.service";
 import {IBillSchema, IBudgetSchema} from "../models/driveSchema.model";
 import {map, Observable} from "rxjs";
 import {IBudget, IBudgetBreakdown} from "../models/budget.model";
+import {IPayee} from "../models/bill.model";
 export const BudgetGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
   return inject(BudgetsService).canActivate(next, state);
 }
@@ -75,4 +76,45 @@ export class BudgetsService {
       return budgets.find(x => x.name == budgetName)?.breakdown
     }));
   }
+
+  public addBudget(name: string): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let newBudget: IBudget = {
+            name: name,
+            breakdown: {
+              need: {
+                planned: 50
+              },
+              want: {
+                planned: 30
+              },
+              extra: {
+                planned: 20
+              }
+            }
+          };
+          budgetFile.budgets.push(newBudget);
+          this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
+  public deleteBudget(name: string): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          budgetFile.budgets = budgetFile.budgets.filter(x => x.name != name);
+          this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
 }

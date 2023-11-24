@@ -8,7 +8,9 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class BudgetActionBarComponent {
   @Input('budgets') budgets: string[] = [];
   @Input('selectedBudget') selectedBudget!: string;
-  @Output() budgetChanged: EventEmitter<string> = new EventEmitter<string>();
+  @Output() budgetChanged: EventEmitter<void> = new EventEmitter<void>();
+  @Output() budgetDeleted: EventEmitter<string> = new EventEmitter<string>();
+  @Output() budgetSelectionChanged: EventEmitter<string> = new EventEmitter<string>();
 
   budgetDialog: boolean = false;
 
@@ -20,6 +22,10 @@ export class BudgetActionBarComponent {
   }
 
   budgetSelectedEvent(selectedBudget: string): void {
-    this.budgetChanged.emit(selectedBudget);
+    this.budgetSelectionChanged.emit(selectedBudget);
+  }
+
+  deleteBudget(name: string): void {
+    this.budgetDeleted.emit(name);
   }
 }
