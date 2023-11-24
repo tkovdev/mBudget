@@ -5,6 +5,7 @@ import {BillsService} from "../../../../services/bills.service";
 import {FilesService} from "../../../../services/files.service";
 import {SharedService} from "../../../../services/shared.service";
 import {IBudgetBreakdown} from "../../../../models/budget.model";
+import {BudgetsService} from "../../../../services/budgets.service";
 
 @Component({
   selector: 'app-budgets',
@@ -13,18 +14,22 @@ import {IBudgetBreakdown} from "../../../../models/budget.model";
 })
 export class BudgetsComponent implements OnInit{
 
-  budgets: string[] = ['Primary', 'What If'];
+  budgets: string[] = [];
 
-  selectedBudget: string = 'Primary';
+  selectedBudget!: string;
 
   budgetBreakdown!: IBudgetBreakdown;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(private router: Router, private route: ActivatedRoute, private budgetService: BudgetsService) {
     this.budgetBreakdown = {
       need: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0},
       want: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0},
       extra: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0}
     }
+    this.budgetService.getBudgetNames().subscribe((res) => {
+      this.budgets = res;
+      this.selectedBudget = this.budgets[0];
+    })
   }
 
   ngOnInit(): void {

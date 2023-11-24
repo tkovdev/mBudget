@@ -82,7 +82,7 @@ export class FilesService {
       key: 'noBillsConfirmation',
       accept: () => {
         let newFile: IBudgetSchema = {
-          budget: {
+          budgets: [{
             name: 'Primary',
             breakdown: {
               need: {
@@ -95,7 +95,7 @@ export class FilesService {
                 planned: 20
               }
             }
-          }
+          }]
         };
         this.createFile(DriveConfig.BUDGET_FILE_NAME, newFile).subscribe((file) => {
           location.reload();

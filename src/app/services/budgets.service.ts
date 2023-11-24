@@ -4,6 +4,8 @@ import {DriveConfig, FilesService} from "./files.service";
 import {AuthService} from "../authentication/services/auth.service";
 import {SharedService} from "./shared.service";
 import {IBillSchema, IBudgetSchema} from "../models/driveSchema.model";
+import {map, Observable} from "rxjs";
+import {IBudget} from "../models/budget.model";
 export const BudgetGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
   return inject(BudgetsService).canActivate(next, state);
 }
@@ -50,5 +52,21 @@ export class BudgetsService {
         }
       })
     });
+  }
+
+  private getBudgets(): Observable<IBudget[]> {
+    return new Observable<IBudget[]>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        let budgets = budgetFile?.budgets
+        if (budgets) subscriber.next(budgets);
+        else subscriber.next([])
+      })
+    });
+  }
+
+  public getBudgetNames(): Observable<string[]> {
+    return this.getBudgets().pipe(map((budgets) => {
+      return budgets.map((budget) => budget.name);
+    }));
   }
 }

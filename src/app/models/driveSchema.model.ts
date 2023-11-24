@@ -26,7 +26,7 @@ export interface IBillSchema {
 }
 
 export interface IBudgetSchema {
-  budget: IBudget;
+  budgets: IBudget[];
 }
 
 export interface IFileSearch {
