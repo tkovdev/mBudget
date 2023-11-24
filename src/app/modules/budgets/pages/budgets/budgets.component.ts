@@ -29,14 +29,23 @@ export class BudgetsComponent implements OnInit{
     this.budgetService.getBudgetNames().subscribe((res) => {
       this.budgets = res;
       this.selectedBudget = this.budgets[0];
-    })
+    });
+
   }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       if(params.has('budget')){
         this.selectedBudget = params.get('budget')!;
+        this.loadBreakdown();
       }
+    });
+    this.loadBreakdown();
+  }
+
+  loadBreakdown(): void {
+    this.budgetService.getBudgetBreakdown(this.selectedBudget).subscribe((res) => {
+      if(res) this.budgetBreakdown = res;
     });
   }
 
