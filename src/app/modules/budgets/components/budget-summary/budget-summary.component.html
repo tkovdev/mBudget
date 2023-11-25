@@ -11,7 +11,10 @@
         <label for="needDesiredPercent">Planned Percent</label>
       </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber suffix="%" id="needActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.actual" [disabled]="true"></p-inputNumber>
+        <p-inputNumber [ngClass]="{
+                                    'bg-red-700': checkActualVPlan(budget.breakdown.need.actual, budget.breakdown.need.planned) < 0,
+                                    'bg-green-700': checkActualVPlan(budget.breakdown.need.actual, budget.breakdown.need.planned) > 0
+                                  }" suffix="%" id="needActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.actual" [disabled]="true"></p-inputNumber>
         <label for="needActualPercent">Actual Percent</label>
       </span>
         <span class="p-float-label mt-3">
@@ -30,7 +33,11 @@
         <label for="wantDesiredPercent">Planned Percent</label>
       </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber suffix="%" id="wantActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.actual" [disabled]="true"></p-inputNumber>
+        <p-inputNumber [ngClass]="{
+                                    'bg-red-700': checkActualVPlan(budget.breakdown.want.actual, budget.breakdown.want.planned) < 0,
+                                    'bg-green-700': checkActualVPlan(budget.breakdown.want.actual, budget.breakdown.want.planned) > 0
+                                  }"
+          suffix="%" id="wantActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.actual" [disabled]="true"></p-inputNumber>
         <label for="wantActualPercent">Actual Percent</label>
       </span>
         <span class="p-float-label mt-3">
@@ -49,7 +56,11 @@
       <label for="extraDesiredPercent">Planned Percent</label>
     </span>
       <span class="p-float-label mt-3">
-      <p-inputNumber suffix="%" id="extraActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.actual" [disabled]="true"></p-inputNumber>
+      <p-inputNumber [ngClass]="{
+                                    'bg-red-700': checkActualVPlan(budget.breakdown.extra.actual, budget.breakdown.extra.planned) < 0,
+                                    'bg-green-700': checkActualVPlan(budget.breakdown.extra.actual, budget.breakdown.extra.planned) > 0
+                                  }"
+                     suffix="%" id="extraActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.actual" [disabled]="true"></p-inputNumber>
       <label for="extraActualPercent">Actual Percent</label>
     </span>
       <span class="p-float-label mt-3">

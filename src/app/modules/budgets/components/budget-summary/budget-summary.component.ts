@@ -23,4 +23,9 @@ export class BudgetSummaryComponent {
       this.budgetChanged.emit();
     })
   }
+
+  checkActualVPlan(actual: number | undefined, plan: number): number {
+    if(actual == undefined) return 0;
+    return plan - actual;
+  }
 }

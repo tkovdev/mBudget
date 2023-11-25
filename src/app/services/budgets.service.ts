@@ -79,7 +79,21 @@ export class BudgetsService {
 
   public getBudget(budgetName: string): Observable<IBudget | undefined> {
     return this.getBudgets().pipe(map((budgets) => {
-      return budgets.find(x => x.name == budgetName)
+      let budget = budgets.find(x => x.name == budgetName);
+      if(budget){
+        budget.breakdown.need.monthlyTotal = budget.need.map((x) => x.amount).reduce((total, currentValue) => total + currentValue, 0);
+        budget.breakdown.want.monthlyTotal = budget.want.map((x) => x.amount).reduce((total, currentValue) => total + currentValue, 0);
+        budget.breakdown.extra.monthlyTotal = budget.extra.map((x) => x.amount).reduce((total, currentValue) => total + currentValue, 0);
+
+        budget.breakdown.need.salaryTotal = budget.breakdown.need.monthlyTotal * 12;
+        budget.breakdown.want.salaryTotal = budget.breakdown.want.monthlyTotal * 12;
+        budget.breakdown.extra.salaryTotal = budget.breakdown.extra.monthlyTotal * 12;
+
+        budget.breakdown.need.actual = budget.breakdown.need.monthlyTotal / budget.income * 100;
+        budget.breakdown.want.actual = budget.breakdown.want.monthlyTotal / budget.income * 100;
+        budget.breakdown.extra.actual = budget.breakdown.extra.monthlyTotal / budget.income * 100;
+      }
+      return budget;
     }));
   }
 
