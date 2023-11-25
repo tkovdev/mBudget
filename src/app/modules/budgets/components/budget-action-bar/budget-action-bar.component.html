@@ -15,15 +15,19 @@
       <div class="flex justify-content-around md:w-auto w-full ml-2">
         <div class="flex flex-column mx-1 align-items-center">
           <span>Need</span>
-          <span style="color: green">{{0 | currency: 'USD'}}</span>
+          <span>{{budget.breakdown.need.monthlyTotal | currency: 'USD'}}</span>
         </div>
         <div class="flex flex-column mx-1 align-items-center">
           <span>Want</span>
-          <span style="color: red;">{{0 | currency: 'USD'}}</span>
+          <span>{{budget.breakdown.want.monthlyTotal | currency: 'USD'}}</span>
         </div>
         <div class="flex flex-column mx-1 align-items-center">
           <span>Extra</span>
-          <span>{{0 | currency: 'USD'}}</span>
+          <span>{{budget.breakdown.extra.monthlyTotal | currency: 'USD'}}</span>
+        </div>
+        <div class="flex flex-column mx-1 align-items-center">
+          <span>Unallocated</span>
+          <span style="color: green">{{remaining  | currency: 'USD'}}</span>
         </div>
       </div>
     </div>
