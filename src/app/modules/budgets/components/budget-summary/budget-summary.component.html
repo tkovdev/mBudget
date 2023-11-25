@@ -42,7 +42,7 @@
         <label for="wantMonthlyUsed">Used Monthly</label>
       </span>
       </div>
-      <div class="col-12 md:col-4 mt-0">
+    <div class="col-12 md:col-4 pt-0">
       <p class="mt-0">Extra</p>
       <span class="p-float-label">
       <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.want.planned)"></p-inputNumber>
