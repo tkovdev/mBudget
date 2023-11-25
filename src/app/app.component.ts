@@ -56,8 +56,11 @@ export class AppComponent implements OnInit{
       key: 'refreshCacheConfirmation',
       accept: () => {
         let billFileId = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME);
+        let budgetFileId = sessionStorage.getItem(DriveConfig.BUDGET_FILE_NAME);
         if(!billFileId) return;
+        if(!budgetFileId) return;
         sessionStorage.removeItem(billFileId);
+        sessionStorage.removeItem(budgetFileId);
         location.reload();
       },
       reject: (type: ConfirmEventType) => {

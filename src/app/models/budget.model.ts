@@ -1,6 +1,8 @@
 export interface IBudget {
   name: string;
   breakdown: IBudgetBreakdown;
+  income: number;
+  debt: number;
 }
 
 export interface IBudgetBreakdown {

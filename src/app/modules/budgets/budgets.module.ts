@@ -14,6 +14,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
 import { BudgetSummaryComponent } from './components/budget-summary/budget-summary.component';
 import {InputNumberModule} from "primeng/inputnumber";
+import { BudgetIncomeDebtComponent } from './components/budget-income-debt/budget-income-debt.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import {InputNumberModule} from "primeng/inputnumber";
     BudgetsComponent,
     BudgetActionBarComponent,
     BudgetDialogComponent,
-    BudgetSummaryComponent
+    BudgetSummaryComponent,
+    BudgetIncomeDebtComponent
   ],
   imports: [
     CommonModule,

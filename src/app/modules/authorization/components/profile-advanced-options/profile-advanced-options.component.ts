@@ -17,7 +17,7 @@ export class ProfileAdvancedOptionsComponent {
   }
 
   saveFile(): void {
-    this.filesService.updateFile(this.fileId, this.fileContent).subscribe(() => {
+    this.filesService.saveFile(this.fileId, this.fileContent).subscribe(() => {
       this.ref.close();
     })
   }

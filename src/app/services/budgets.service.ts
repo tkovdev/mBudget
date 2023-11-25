@@ -77,12 +77,20 @@ export class BudgetsService {
     }));
   }
 
+  public getBudget(budgetName: string): Observable<IBudget | undefined> {
+    return this.getBudgets().pipe(map((budgets) => {
+      return budgets.find(x => x.name == budgetName)
+    }));
+  }
+
   public addBudget(name: string): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
       this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
         if (budgetFile) {
           let newBudget: IBudget = {
             name: name,
+            income: 0,
+            debt: 0,
             breakdown: {
               need: {
                 planned: 50
@@ -109,6 +117,26 @@ export class BudgetsService {
       this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
         if (budgetFile) {
           budgetFile.budgets = budgetFile.budgets.filter(x => x.name != name);
+          this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
+  public saveDebtToIncome(budget: IBudget): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let budgetIdx = budgetFile.budgets.findIndex(x => x.name == budget.name);
+          if(budgetIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+          budgetFile.budgets[budgetIdx].income = budget.income;
+          budgetFile.budgets[budgetIdx].debt = budget.debt;
+
           this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
             subscriber.next(true);
           })

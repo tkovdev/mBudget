@@ -84,6 +84,8 @@ export class FilesService {
         let newFile: IBudgetSchema = {
           budgets: [{
             name: 'Primary',
+            income: 0,
+            debt: 0,
             breakdown: {
               need: {
                 planned: 50
@@ -175,14 +177,35 @@ export class FilesService {
     }));
   }
 
+  saveFile(id: string, contents: any): Observable<FileResource> {
+    let query: HttpParams = new HttpParams();
+    query = query.append('uploadType', 'media');
+
+    let body = contents;
+
+    let uri = `https://www.googleapis.com/upload/drive/v3/files/${id}`;
+    return this.http.patch<FileResource>(uri, body,{params: query}).pipe(map((res) => {
+      sessionStorage.setItem(id, contents);
+      return res;
+    }));
+  }
+
   deleteFile(id: string): Observable<boolean> {
     let query: HttpParams = new HttpParams();
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files/${id}`
     return this.http.delete<any>(uri, {params: query}).pipe(map((res) => {
-      sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
-      sessionStorage.removeItem(id);
+      let billFileId = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME);
+      if(billFileId){
+        sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
+        sessionStorage.removeItem(billFileId);
+      }
+      let budgetFileId = sessionStorage.getItem(DriveConfig.BUDGET_FILE_NAME);
+      if(budgetFileId){
+        sessionStorage.removeItem(DriveConfig.BUDGET_FILE_NAME);
+        sessionStorage.removeItem(budgetFileId);
+      }
       return res;
     }))
   }

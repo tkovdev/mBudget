@@ -4,7 +4,7 @@ import {AnalyticsService} from "../../../../services/analytics.service";
 import {BillsService} from "../../../../services/bills.service";
 import {FilesService} from "../../../../services/files.service";
 import {SharedService} from "../../../../services/shared.service";
-import {IBudgetBreakdown} from "../../../../models/budget.model";
+import {IBudget, IBudgetBreakdown} from "../../../../models/budget.model";
 import {BudgetsService} from "../../../../services/budgets.service";
 
 @Component({
@@ -19,6 +19,7 @@ export class BudgetsComponent implements OnInit{
   selectedBudget!: string;
 
   budgetBreakdown!: IBudgetBreakdown;
+  budget!: IBudget;
 
   constructor(private router: Router, private route: ActivatedRoute, private budgetService: BudgetsService) {
     this.budgetBreakdown = {
@@ -34,9 +35,11 @@ export class BudgetsComponent implements OnInit{
       if(params.has('budget')){
         this.selectedBudget = params.get('budget')!;
         this.loadBreakdown();
+        this.loadBudget();
       }
     });
     this.loadBreakdown();
+    this.loadBudget();
   }
 
   loadNames(): void {
@@ -52,6 +55,12 @@ export class BudgetsComponent implements OnInit{
     });
   }
 
+  loadBudget(): void {
+    this.budgetService.getBudget(this.selectedBudget).subscribe((res) => {
+      if(res != undefined) this.budget = res;
+    });
+  }
+
   budgetSelected(budget: string | undefined): void {
     this.router.navigate(['', 'budgets', budget]);
   }
@@ -59,6 +68,7 @@ export class BudgetsComponent implements OnInit{
   budgetChanged(): void {
     this.loadNames();
     this.loadBreakdown();
+    this.loadBudget();
   }
 
   budgetDeleted(name: string): void {
