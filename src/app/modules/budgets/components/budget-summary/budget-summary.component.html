@@ -1,11 +1,11 @@
 <div class="grid">
-  <div class="col-12">
-    <p-message *ngIf="budgetRemaining" severity="info" text="{{budgetRemaining}}% left to allocate"></p-message>
+  <div *ngIf="budgetRemaining > 0" class="col-12">
+    <p-message severity="info" text="{{budgetRemaining}}% left to allocate"></p-message>
   </div>
   <div class="col-12">
     <div class="grid">
-      <div class="col-12 md:col-4">
-        <p>Need</p>
+      <div class="col-12 md:col-4 pt-0">
+        <p class="mt-0">Need</p>
         <span class="p-float-label">
         <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.planned" [min]="0" [max]="100 - (budget.breakdown.want.planned + budget.breakdown.extra.planned)"></p-inputNumber>
         <label for="needDesiredPercent">Planned Percent</label>
@@ -23,8 +23,8 @@
         <label for="needMonthlyUsed">Used Monthly</label>
       </span>
       </div>
-      <div class="col-12 md:col-4">
-        <p>Want</p>
+      <div class="col-12 md:col-4 pt-0">
+        <p class="mt-0">Want</p>
         <span class="p-float-label">
         <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.extra.planned)"></p-inputNumber>
         <label for="wantDesiredPercent">Planned Percent</label>
@@ -42,8 +42,8 @@
         <label for="wantMonthlyUsed">Used Monthly</label>
       </span>
       </div>
-      <div class="col-12 md:col-4">
-      <p>Extra</p>
+      <div class="col-12 md:col-4 mt-0">
+      <p class="mt-0">Extra</p>
       <span class="p-float-label">
       <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.want.planned)"></p-inputNumber>
       <label for="extraDesiredPercent">Planned Percent</label>
