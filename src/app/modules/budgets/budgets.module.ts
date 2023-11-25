@@ -15,7 +15,7 @@ import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.
 import { BudgetSummaryComponent } from './components/budget-summary/budget-summary.component';
 import {InputNumberModule} from "primeng/inputnumber";
 import { BudgetIncomeDebtComponent } from './components/budget-income-debt/budget-income-debt.component';
-
+import {MessageModule} from "primeng/message";
 
 @NgModule({
   declarations: [
@@ -36,7 +36,8 @@ import { BudgetIncomeDebtComponent } from './components/budget-income-debt/budge
     TooltipModule,
     DropdownModule,
     ReactiveFormsModule,
-    InputNumberModule
+    InputNumberModule,
+    MessageModule
   ]
 })
 export class BudgetsModule { }

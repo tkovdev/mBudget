@@ -145,4 +145,21 @@ export class BudgetsService {
     });
   }
 
+  public saveBreakdown(budget: IBudget): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let budgetIdx = budgetFile.budgets.findIndex(x => x.name == budget.name);
+          if(budgetIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+          budgetFile.budgets[budgetIdx].breakdown = budget.breakdown;
+          this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
 }

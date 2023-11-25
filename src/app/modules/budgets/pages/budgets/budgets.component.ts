@@ -18,15 +18,9 @@ export class BudgetsComponent implements OnInit{
 
   selectedBudget!: string;
 
-  budgetBreakdown!: IBudgetBreakdown;
   budget!: IBudget;
 
   constructor(private router: Router, private route: ActivatedRoute, private budgetService: BudgetsService) {
-    this.budgetBreakdown = {
-      need: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0},
-      want: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0},
-      extra: {actual: 0, planned: 0, salaryTotal: 0, monthlyTotal: 0}
-    }
     this.loadNames();
   }
 
@@ -34,11 +28,9 @@ export class BudgetsComponent implements OnInit{
     this.route.paramMap.subscribe((params) => {
       if(params.has('budget')){
         this.selectedBudget = params.get('budget')!;
-        this.loadBreakdown();
         this.loadBudget();
       }
     });
-    this.loadBreakdown();
     this.loadBudget();
   }
 
@@ -46,12 +38,6 @@ export class BudgetsComponent implements OnInit{
     this.budgetService.getBudgetNames().subscribe((res) => {
       this.budgets = res;
       this.selectedBudget = this.budgets[0];
-    });
-  }
-
-  loadBreakdown(): void {
-    this.budgetService.getBudgetBreakdown(this.selectedBudget).subscribe((res) => {
-      if(res) this.budgetBreakdown = res;
     });
   }
 
@@ -67,7 +53,6 @@ export class BudgetsComponent implements OnInit{
 
   budgetChanged(): void {
     this.loadNames();
-    this.loadBreakdown();
     this.loadBudget();
   }
 

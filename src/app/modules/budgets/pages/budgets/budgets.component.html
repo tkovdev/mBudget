@@ -5,5 +5,5 @@
   <app-budget-income-debt [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-income-debt>
 </p-card>
 <p-card styleClass="mt-3" header="Budget Summary" subheader="{{selectedBudget}}">
-  <app-budget-summary [budgetBreakdown]="budgetBreakdown"></app-budget-summary>
+  <app-budget-summary [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-summary>
 </p-card>

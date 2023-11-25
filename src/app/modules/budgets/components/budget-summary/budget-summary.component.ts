@@ -1,5 +1,6 @@
-import {Component, Input} from '@angular/core';
-import {IBudgetBreakdown} from "../../../../models/budget.model";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {IBudget, IBudgetBreakdown} from "../../../../models/budget.model";
+import {BudgetsService} from "../../../../services/budgets.service";
 
 @Component({
   selector: 'app-budget-summary',
@@ -7,5 +8,19 @@ import {IBudgetBreakdown} from "../../../../models/budget.model";
   styleUrls: ['./budget-summary.component.scss']
 })
 export class BudgetSummaryComponent {
-  @Input('budgetBreakdown') budgetBreakdown!: IBudgetBreakdown;
+  @Output('budgetChanged') budgetChanged: EventEmitter<void> = new EventEmitter<void>();
+  @Input('budget') budget!: IBudget;
+
+  constructor(private budgetService: BudgetsService) {
+  }
+
+  get budgetRemaining(): number {
+    return 100 - (this.budget.breakdown.need.planned + this.budget.breakdown.want.planned +  this.budget.breakdown.extra.planned)
+  }
+
+  save(): void {
+    this.budgetService.saveBreakdown(this.budget).subscribe((res) => {
+      this.budgetChanged.emit();
+    })
+  }
 }
