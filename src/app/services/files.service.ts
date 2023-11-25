@@ -1,15 +1,15 @@
 import {inject, Injectable} from '@angular/core';
 import {AuthService} from "../authentication/services/auth.service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {IBillSchema, IFileSearch, IFileSearchDetails} from "../models/driveSchema.model";
+import {IBillSchema, IBudgetSchema, IFileSearch, IFileSearchDetails} from "../models/driveSchema.model";
 import FileResource = gapi.client.drive.FileResource;
-import {map, Observable} from "rxjs";
+import {combineLatest, map, Observable} from "rxjs";
 import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot} from "@angular/router";
-import {BillsService} from "./bills.service";
 import {ConfirmationService, ConfirmEventType} from "primeng/api";
 
 export const DriveConfig = {
-  BILL_FILE_NAME: '.bills'
+  BILL_FILE_NAME: '.bills',
+  BUDGET_FILE_NAME: '.budgets'
 }
 
 export const FileGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
@@ -26,30 +26,84 @@ export class FilesService {
   async canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
     return new Promise((resolver) => {
       let billFileId = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME);
-      if(billFileId) {
+      let budgetFileId = sessionStorage.getItem(DriveConfig.BUDGET_FILE_NAME);
+      if(billFileId && budgetFileId) {
         return resolver(true);
       }
-      this.findFileId(DriveConfig.BILL_FILE_NAME).subscribe((res) => {
-        if(res){
-          sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, res);
-          return resolver(true);
-        }else {
-          this.createBillFile();
+      combineLatest({
+        bill: this.findFileId(DriveConfig.BILL_FILE_NAME),
+        budget: this.findFileId(DriveConfig.BUDGET_FILE_NAME)
+      }).pipe(
+        map((combine) => {
+          if(combine.bill && combine.budget) {
+            sessionStorage.setItem(DriveConfig.BILL_FILE_NAME, combine.bill);
+            sessionStorage.setItem(DriveConfig.BUDGET_FILE_NAME, combine.budget);
+            return resolver(true);
+          }
+          console.log(combine.bill)
+          if(!combine.bill) {
+            this.createBillFile();
+          }
+          if(!combine.budget){
+            this.createBudgetFile();
+          }
           return resolver(false);
-        }
-      });
+        })).subscribe(() => {});
     });
   }
 
   private createBillFile(): void {
     this.confirmationService.confirm({
-      message: 'To continue, we will create any necessary files in your personal Google Drive. Create files?',
-      header: 'Files required',
+      message: 'To continue, we will create a file to store bills in your personal Google Drive. Create file?',
+      header: 'Bill file required',
       icon: 'pi pi-exclamation-triangle',
       key: 'noBillsConfirmation',
       accept: () => {
         let newFile: IBillSchema = {bills: [], payees: [], income: [], balances: []};
         this.createFile(DriveConfig.BILL_FILE_NAME, newFile).subscribe((file) => {
+          location.reload();
+        });
+      },
+      reject: (type: ConfirmEventType) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+            break;
+          case ConfirmEventType.CANCEL:
+            break;
+        }
+      }
+    });
+  }
+
+  private createBudgetFile(): void {
+    this.confirmationService.confirm({
+      message: 'To continue, we will create a file to store budgets in your personal Google Drive. Create file?',
+      header: 'File required',
+      icon: 'pi pi-exclamation-triangle',
+      key: 'noBillsConfirmation',
+      accept: () => {
+        let newFile: IBudgetSchema = {
+          budgets: [{
+            name: 'Primary',
+            income: 0,
+            debt: 0,
+            need: [],
+            want: [],
+            extra: [],
+            breakdown: {
+              need: {
+                planned: 50
+              },
+              want: {
+                planned: 30
+              },
+              extra: {
+                planned: 20
+              }
+            }
+          }]
+        };
+        this.createFile(DriveConfig.BUDGET_FILE_NAME, newFile).subscribe((file) => {
           location.reload();
         });
       },
@@ -127,14 +181,35 @@ export class FilesService {
     }));
   }
 
+  saveFile(id: string, contents: any): Observable<FileResource> {
+    let query: HttpParams = new HttpParams();
+    query = query.append('uploadType', 'media');
+
+    let body = contents;
+
+    let uri = `https://www.googleapis.com/upload/drive/v3/files/${id}`;
+    return this.http.patch<FileResource>(uri, body,{params: query}).pipe(map((res) => {
+      sessionStorage.setItem(id, contents);
+      return res;
+    }));
+  }
+
   deleteFile(id: string): Observable<boolean> {
     let query: HttpParams = new HttpParams();
     query = query.append('spaces', 'appDataFolder')
 
     let uri = `https://www.googleapis.com/drive/v3/files/${id}`
     return this.http.delete<any>(uri, {params: query}).pipe(map((res) => {
-      sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
-      sessionStorage.removeItem(id);
+      let billFileId = sessionStorage.getItem(DriveConfig.BILL_FILE_NAME);
+      if(billFileId){
+        sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
+        sessionStorage.removeItem(billFileId);
+      }
+      let budgetFileId = sessionStorage.getItem(DriveConfig.BUDGET_FILE_NAME);
+      if(budgetFileId){
+        sessionStorage.removeItem(DriveConfig.BUDGET_FILE_NAME);
+        sessionStorage.removeItem(budgetFileId);
+      }
       return res;
     }))
   }

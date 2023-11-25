@@ -1,0 +1,43 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="grid">
+      <div class="col-12 md:col-4">
+        <span class="p-float-label">
+          <p-inputNumber mode="currency" currency="USD" id="monthlyIncome" styleClass="w-full" class="w-full" [(ngModel)]="budget.income"></p-inputNumber>
+          <label for="monthlyIncome">Monthly Net Income</label>
+        </span>
+      </div>
+      <div class="col-12 md:col-4">
+        <span class="p-float-label">
+          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="hourlyIncome" styleClass="w-full" class="w-full" [ngModel]="incomeHourly"></p-inputNumber>
+          <label for="hourlyIncome">Hourly Net Income</label>
+        </span>
+      </div>
+      <div class="col-12 md:col-4">
+        <span class="p-float-label">
+          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="salaryIncome" styleClass="w-full" class="w-full" [ngModel]="incomeSalary"></p-inputNumber>
+          <label for="salaryIncome">Salary Net Income</label>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="grid">
+      <div class="col-12 md:col-4">
+        <span class="p-float-label">
+          <p-inputNumber mode="currency" currency="USD" id="actualDebt" styleClass="w-full" class="w-full" [(ngModel)]="budget.debt"></p-inputNumber>
+          <label for="actualDebt">Actual Debt</label>
+        </span>
+      </div>
+      <div class="col-12 md:col-4">
+        <span class="p-float-label">
+          <p-inputNumber [disabled]="true" suffix="%" id="debtToIncome" styleClass="w-full" class="w-full" [ngModel]="debtToIncome"></p-inputNumber>
+          <label for="debtToIncome">Debt to Income</label>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <button (click)="save()" label="Save" pButton></button>
+  </div>
+</div>
