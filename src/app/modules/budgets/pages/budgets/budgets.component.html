@@ -7,3 +7,21 @@
 <p-card styleClass="mt-3" header="Budget Summary" subheader="{{selectedBudget}}">
   <app-budget-summary [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-summary>
 </p-card>
+
+<div class="grid mt-3">
+  <div class="col-12 md:col-4">
+    <p-card header="Need" subheader="{{selectedBudget}}">
+      <app-budget-categories category="need" [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-categories>
+    </p-card>
+  </div>
+  <div class="col-12 md:col-4">
+    <p-card header="Want" subheader="{{selectedBudget}}">
+      <app-budget-categories category="want" [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-categories>
+    </p-card>
+  </div>
+  <div class="col-12 md:col-4">
+    <p-card header="Extra" subheader="{{selectedBudget}}">
+      <app-budget-categories category="extra" [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-categories>
+    </p-card>
+  </div>
+</div>

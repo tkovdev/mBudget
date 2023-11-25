@@ -5,7 +5,7 @@ import {AuthService} from "../authentication/services/auth.service";
 import {SharedService} from "./shared.service";
 import {IBillSchema, IBudgetSchema} from "../models/driveSchema.model";
 import {map, Observable} from "rxjs";
-import {IBudget, IBudgetBreakdown} from "../models/budget.model";
+import {IBudget, IBudgetBreakdown, IBudgetItem} from "../models/budget.model";
 import {IPayee} from "../models/bill.model";
 export const BudgetGuard: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> => {
   return inject(BudgetsService).canActivate(next, state);
@@ -91,6 +91,9 @@ export class BudgetsService {
             name: name,
             income: 0,
             debt: 0,
+            need: [],
+            want: [],
+            extra: [],
             breakdown: {
               need: {
                 planned: 50
@@ -155,6 +158,44 @@ export class BudgetsService {
             return;
           }
           budgetFile.budgets[budgetIdx].breakdown = budget.breakdown;
+          this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
+  public addBudgetItem(budgetName: string, category: 'need' | 'want' | 'extra', budgetItem: IBudgetItem): Observable<boolean>{
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let budgetIdx = budgetFile.budgets.findIndex(x => x.name == budgetName);
+          if(budgetIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+          budgetFile.budgets[budgetIdx][category].push(budgetItem);
+
+          this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
+  public removeBudgetItem(budgetName: string, category: 'need' | 'want' | 'extra', name: string): Observable<boolean>{
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let budgetIdx = budgetFile.budgets.findIndex(x => x.name == budgetName);
+          if(budgetIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+          budgetFile.budgets[budgetIdx][category] = budgetFile.budgets[budgetIdx][category].filter(x => x.name != name);
+
           this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
             subscriber.next(true);
           })

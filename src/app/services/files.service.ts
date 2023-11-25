@@ -40,6 +40,7 @@ export class FilesService {
             sessionStorage.setItem(DriveConfig.BUDGET_FILE_NAME, combine.budget);
             return resolver(true);
           }
+          console.log(combine.bill)
           if(!combine.bill) {
             this.createBillFile();
           }
@@ -86,6 +87,9 @@ export class FilesService {
             name: 'Primary',
             income: 0,
             debt: 0,
+            need: [],
+            want: [],
+            extra: [],
             breakdown: {
               need: {
                 planned: 50

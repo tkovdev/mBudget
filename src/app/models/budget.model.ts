@@ -3,6 +3,11 @@ export interface IBudget {
   breakdown: IBudgetBreakdown;
   income: number;
   debt: number;
+  need: IBudgetItem[];
+  want: IBudgetItem[];
+  extra: IBudgetItem[];
+
+  [key: string]: any;
 }
 
 export interface IBudgetBreakdown {
@@ -16,4 +21,9 @@ export interface IBudgetBreakdownItem {
   actual?: number;
   salaryTotal?: number;
   monthlyTotal?: number;
+}
+
+export interface IBudgetItem {
+  name: string;
+  amount: number;
 }

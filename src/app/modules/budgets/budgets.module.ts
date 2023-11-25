@@ -16,6 +16,9 @@ import { BudgetSummaryComponent } from './components/budget-summary/budget-summa
 import {InputNumberModule} from "primeng/inputnumber";
 import { BudgetIncomeDebtComponent } from './components/budget-income-debt/budget-income-debt.component';
 import {MessageModule} from "primeng/message";
+import { BudgetCategoriesComponent } from './components/budget-categories/budget-categories.component';
+import {AccordionModule} from "primeng/accordion";
+import { BudgetCategoryItemComponent } from './components/budget-category-item/budget-category-item.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,9 @@ import {MessageModule} from "primeng/message";
     BudgetActionBarComponent,
     BudgetDialogComponent,
     BudgetSummaryComponent,
-    BudgetIncomeDebtComponent
+    BudgetIncomeDebtComponent,
+    BudgetCategoriesComponent,
+    BudgetCategoryItemComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +42,8 @@ import {MessageModule} from "primeng/message";
     DropdownModule,
     ReactiveFormsModule,
     InputNumberModule,
-    MessageModule
+    MessageModule,
+    AccordionModule
   ]
 })
 export class BudgetsModule { }

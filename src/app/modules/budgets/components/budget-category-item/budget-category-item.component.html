@@ -1,0 +1,11 @@
+<form [formGroup]="budgetItemForm" class="flex flex-column">
+  <span class="p-float-label">
+    <input pInputText formControlName="name" id="name" maxlength="16" minlength="3"/>
+    <label for="name">Name</label>
+  </span>
+  <span class="p-float-label my-3">
+    <p-inputNumber mode="currency" currency="USD" formControlName="amount" id="amount" [min]="0"/>
+    <label for="amount">Amount</label>
+  </span>
+  <button [disabled]="!budgetItemForm.valid" pButton (click)="saveBudgetItem();" icon="pi pi-save"></button>
+</form>
