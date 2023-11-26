@@ -1,7 +1,10 @@
 export interface IBudget {
   name: string;
   breakdown: IBudgetBreakdown;
-  income: number;
+  income: {
+    net: number;
+    gross: number;
+  };
   debt: number;
   need: IBudgetItem[];
   want: IBudgetItem[];
