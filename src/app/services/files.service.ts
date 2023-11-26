@@ -85,7 +85,10 @@ export class FilesService {
         let newFile: IBudgetSchema = {
           budgets: [{
             name: 'Primary',
-            income: 0,
+            income: {
+              net: 0,
+              gross: 0
+            },
             debt: 0,
             need: [],
             want: [],

@@ -89,9 +89,9 @@ export class BudgetsService {
         budget.breakdown.want.salaryTotal = budget.breakdown.want.monthlyTotal * 12;
         budget.breakdown.extra.salaryTotal = budget.breakdown.extra.monthlyTotal * 12;
 
-        budget.breakdown.need.actual = budget.breakdown.need.monthlyTotal / budget.income * 100;
-        budget.breakdown.want.actual = budget.breakdown.want.monthlyTotal / budget.income * 100;
-        budget.breakdown.extra.actual = budget.breakdown.extra.monthlyTotal / budget.income * 100;
+        budget.breakdown.need.actual = budget.breakdown.need.monthlyTotal / budget.income.net * 100;
+        budget.breakdown.want.actual = budget.breakdown.want.monthlyTotal / budget.income.net * 100;
+        budget.breakdown.extra.actual = budget.breakdown.extra.monthlyTotal / budget.income.net * 100;
       }
       return budget;
     }));
@@ -103,7 +103,10 @@ export class BudgetsService {
         if (budgetFile) {
           let newBudget: IBudget = {
             name: name,
-            income: 0,
+            income: {
+              net: 0,
+              gross: 0
+            },
             debt: 0,
             need: [],
             want: [],

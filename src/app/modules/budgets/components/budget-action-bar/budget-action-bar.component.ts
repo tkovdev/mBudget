@@ -35,6 +35,6 @@ export class BudgetActionBarComponent {
     let need = this.budget.breakdown.need.monthlyTotal!;
     let want = this.budget.breakdown.want.monthlyTotal!;
     let extra = this.budget.breakdown.extra.monthlyTotal!;
-    return (this.budget.income - (need + want + extra));
+    return (this.budget.income.net - (need + want + extra));
   }
 }

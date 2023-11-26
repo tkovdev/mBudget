@@ -14,17 +14,25 @@ export class BudgetIncomeDebtComponent {
   constructor(private budgetService: BudgetsService) {
   }
 
-  get incomeHourly(): number {
-    return this.budget.income / 4 / 40 | 0;
+  get incomeHourlyNet(): number {
+    return this.budget.income.net / 4 / 40 | 0;
   }
 
-  get incomeSalary(): number {
-    return this.budget.income * 12 | 0;
+  get incomeSalaryNet(): number {
+    return this.budget.income.net * 12 | 0;
+  }
+
+  get incomeHourlyGross(): number {
+    return this.budget.income.gross / 4 / 40 | 0;
+  }
+
+  get incomeSalaryGross(): number {
+    return this.budget.income.gross * 12 | 0;
   }
 
   get debtToIncome(): number {
-    if(this.budget.income == 0) return 0;
-    return this.budget.debt / this.budget.income * 100;
+    if(this.budget.income.gross == 0) return 0;
+    return this.budget.debt / this.budget.income.gross * 100;
   }
 
   save(): void {
