@@ -46,7 +46,7 @@
   <app-month-year-dialog (close)="monthYearPanel.hide(); monthYearChangedEvent()"></app-month-year-dialog>
 </p-overlayPanel>
 
-<p-overlayPanel #billIncomePanel [style]="{width: '90vw'}">
+<p-overlayPanel #billIncomePanel>
   <app-bill-income-dialog (close)="billIncomePanel.hide(); incomeChangedEvent()" [selectedMonthYear]="selectedMonthYear"></app-bill-income-dialog>
 </p-overlayPanel>
 
