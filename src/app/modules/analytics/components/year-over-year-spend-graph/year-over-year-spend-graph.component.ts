@@ -51,13 +51,6 @@ export class YearOverYearSpendGraphComponent implements OnInit {
           tension: 0.4
         },
         {
-          label: 'Total',
-          data: spend.total.map(x => x.value),
-          fill: false,
-          borderColor: '#ffa4a4',
-          tension: 0.4
-        },
-        {
           label: 'Remaining',
           data: spend.remaining.map(x => x.value),
           fill: false,
