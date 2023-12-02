@@ -1,4 +1,4 @@
-<div class="grid">
+<div class="grid w-full">
   <div class="md:col-8 col-12">
     <div class="flex flex-wrap">
       <div class="md:w-auto w-full">
@@ -31,12 +31,12 @@
     <button class="mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-percentage" pButton (click)="balancePanel.show($event)" pTooltip="Add Incoming Balance"></button>
     <button class="ml-1 mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-dollar" pButton (click)="billIncomePanel.show($event)" pTooltip="Add Income"></button>
     <button class="ml-1 mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-building" pButton (click)="payeePanel.show($event)" pTooltip="New Payee"></button>
-    <button class="ml-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-money-bill" pButton (click)="billPayPanel.show($event);" pTooltip="Pay Bills"></button>
+    <button class="ml-1 mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-money-bill" pButton (click)="billPayDialog = true;" pTooltip="Pay Bills"></button>
   </div>
 </div>
-<p-overlayPanel #billPayPanel [style]="{width: '90vw'}" (onShow)="billPayDialog = true" (onHide)="billPayDialog = false;">
-  <app-bill-pay-dialog *ngIf="billPayDialog" (close)="billPayPanel.hide(); billChangedEvent()" [payees]="payees" [bills]="bills" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
-</p-overlayPanel>
+<p-dialog header="Pay Bills" [(visible)]="billPayDialog" [modal]="true" [contentStyle]="{'overflow-y': 'hidden'}">
+  <app-bill-pay-dialog *ngIf="billPayDialog" (close)="billPayDialog = false; billChangedEvent()" [payees]="payees" [bills]="bills" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
+</p-dialog>
 
 <p-overlayPanel #payeePanel>
   <app-payee-dialog (close)="payeePanel.hide(); payeeChangedEvent()"></app-payee-dialog>
@@ -50,6 +50,6 @@
   <app-bill-income-dialog (close)="billIncomePanel.hide(); incomeChangedEvent()" [selectedMonthYear]="selectedMonthYear"></app-bill-income-dialog>
 </p-overlayPanel>
 
-<p-overlayPanel #balancePanel [style]="{width: '90vw'}" (onShow)="balanceDialog = true" (onHide)="balanceDialog = false">
+<p-overlayPanel #balancePanel (onShow)="balanceDialog = true" (onHide)="balanceDialog = false">
   <app-balance-dialog *ngIf="balanceDialog" [selectedMonthYear]="selectedMonthYear" [balance]="balance" (close)="balancePanel.hide(); balanceChangedEvent()"></app-balance-dialog>
 </p-overlayPanel>

@@ -23,6 +23,7 @@ import { BillIncomeDialogComponent } from './components/bill-income-dialog/bill-
 import { IncomeSummaryComponent } from './components/income-summary/income-summary.component';
 import { BalanceDialogComponent } from './components/balance-dialog/balance-dialog.component';
 import {AutoCompleteModule} from "primeng/autocomplete";
+import {DialogModule} from "primeng/dialog";
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import {AutoCompleteModule} from "primeng/autocomplete";
     ButtonModule,
     DynamicDialogModule,
     OverlayPanelModule,
+    DialogModule,
     InputTextModule,
     TooltipModule,
     InputNumberModule,
