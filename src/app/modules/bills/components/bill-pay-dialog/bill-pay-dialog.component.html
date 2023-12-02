@@ -8,8 +8,9 @@
             <label for="{{bill.payee.name}}">{{bill.payee.name}}</label>
           </span>
         </div>
-        <div>
-          <button pButton (click)="hidePayee(bill.payee)" class="p-button-text p-button-info" icon="pi pi-times"></button>
+        <div class="flex">
+          <button pButton (click)="useLastMonth(bill.payee)" class="p-button-text p-button-info" icon="pi pi-history" pTooltip="Use Last Month"></button>
+          <button pButton (click)="hidePayee(bill.payee)" class="p-button-text p-button-danger" icon="pi pi-times" pTooltip="Remove"></button>
         </div>
       </div>
     </ng-container>

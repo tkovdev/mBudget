@@ -22,6 +22,8 @@ import { MonthYearDialogComponent } from './components/month-year-dialog/month-y
 import { BillIncomeDialogComponent } from './components/bill-income-dialog/bill-income-dialog.component';
 import { IncomeSummaryComponent } from './components/income-summary/income-summary.component';
 import { BalanceDialogComponent } from './components/balance-dialog/balance-dialog.component';
+import {AutoCompleteModule} from "primeng/autocomplete";
+import {DialogModule} from "primeng/dialog";
 
 @NgModule({
   declarations: [
@@ -46,10 +48,12 @@ import { BalanceDialogComponent } from './components/balance-dialog/balance-dial
     ButtonModule,
     DynamicDialogModule,
     OverlayPanelModule,
+    DialogModule,
     InputTextModule,
     TooltipModule,
     InputNumberModule,
-    SplitButtonModule
+    SplitButtonModule,
+    AutoCompleteModule
   ],
   providers: [DialogService]
 })

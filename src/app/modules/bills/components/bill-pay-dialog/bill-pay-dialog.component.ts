@@ -5,6 +5,7 @@ import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {map, Observable} from "rxjs";
 import {BillsService} from "../../../../services/bills.service";
 import {Month} from "../../../../models/shared.model";
+import {SharedService} from "../../../../services/shared.service";
 
 @Component({
   selector: 'app-bill-pay-dialog',
@@ -24,10 +25,13 @@ export class BillPayDialogComponent implements OnInit{
 
   hiddenPayees: IPayee[] = [];
 
-  constructor(private billsService: BillsService) {}
+  lastMonthBills: IBill[] = [];
+
+  constructor(private billsService: BillsService, private sharedService: SharedService) {}
 
   ngOnInit(): void {
       this.initBillFormControls(this.bills);
+      this.retrieveLastMonthBills();
     }
 
   initBillFormControls(bills: IBill[]): void {
@@ -40,8 +44,24 @@ export class BillPayDialogComponent implements OnInit{
     this.currentBills = bills;
   }
 
+  retrieveLastMonthBills(): void {
+    let currentMonth = this.sharedService.fromMonthYearString(this.selectedMonthYear);
+    let lastMonth = this.sharedService.previousMonth(currentMonth.month);
+    this.billsService.getMonthBills(`${lastMonth} ${currentMonth.year}`).subscribe((res) => {
+      this.lastMonthBills = res;
+    });
+  }
+
   hidePayee(payee: IPayee): void {
     this.hiddenPayees.push(payee);
+  }
+
+  useLastMonth(payee: IPayee): void {
+    let amount = null;
+    let lastMonth = this.lastMonthBills.find(x => x.payee.name == payee.name);
+    if(lastMonth) amount = lastMonth.amount;
+
+    (this.billForm.controls['bills'] as FormGroup).controls[payee.name].patchValue(amount);
   }
 
   showPayee(payee: IPayee): void {

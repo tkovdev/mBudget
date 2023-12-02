@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BillsService} from "./bills.service";
-import {combineLatest, forkJoin, map, mergeMap, Observable} from "rxjs";
+import {combineLatest, map, Observable} from "rxjs";
 import {KeyValue} from "@angular/common";
 import {Month} from "../models/shared.model";
 import {SharedService} from "./shared.service";
@@ -42,7 +42,7 @@ export class AnalyticsService {
   }
 
   public yearOverYearSpend(year: number = this.sharedService.currentYear()): Observable<IYearOverYearSpend>{
-    let spend: IYearOverYearSpend = { unaccounted: [], total: [], outgoing: [], remaining: []};
+    let spend: IYearOverYearSpend = { unaccounted: [], outgoing: [], remaining: []};
     return combineLatest({
       bills: this.billsService.getYearToDateBills(),
       balances: this.billsService.getYearToDateBalances(),
@@ -51,22 +51,24 @@ export class AnalyticsService {
         map((combine) => {
           Object.keys(Month).forEach((month, i) => {
             let monthOutgoing = 0;
-            monthOutgoing = combine.bills.filter(x => x.month == month && x.amount != null).reduce((acc, currentValue) => acc + currentValue.amount!, monthOutgoing)
-
+            let monthIncome = 0;
+            let monthBalance = 0;
             let monthUnaccounted = 0;
-            if(i > 0 && monthOutgoing > 0) {
-              monthUnaccounted = spend.outgoing[i-1].value - combine.balances.filter(x => x.month == month && x.amount != null).reduce((acc, currentValue) => acc + currentValue.amount!, monthUnaccounted)
+            let monthRemaining = 0;
+            let previousMonth = this.sharedService.previousMonth(<Month> month);
+
+            monthOutgoing = combine.bills.filter(x => x.month == <Month> month).map(x => x.amount).reduce((prev, curr) => (prev ?? 0) + (curr ?? 0), 0) ?? 0
+            monthIncome = combine.income.filter(x => x.month == <Month> month).map(x => x.amount).reduce((prev, curr) => (prev ?? 0) + (curr ?? 0), 0) ?? 0
+            monthBalance = combine.balances.filter(x => x.month == <Month> month).map(x => x.amount).reduce((prev, curr) => (prev ?? 0) + (curr ?? 0), 0) ?? 0
+            monthRemaining = (monthIncome + monthBalance) - monthOutgoing;
+
+            if(<Month> month != Month.January){
+              let prevMonthSpend = spend.remaining.find(x => x.key == previousMonth)?.value ?? 0;
+              monthUnaccounted = -1 * (monthBalance - prevMonthSpend)
+              spend.unaccounted.push({key: previousMonth, value: monthUnaccounted});
             }
-            if(monthUnaccounted < 0) monthUnaccounted = 0;
-
-            let monthTotal = monthOutgoing + monthUnaccounted;
-
-            let monthRemaining = 0
-            monthRemaining = combine.income.filter(x => x.month == month && x.amount != null).reduce((acc, currentValue) => acc + currentValue.amount!, monthRemaining) - monthTotal
 
             spend.outgoing.push({key: <Month> month, value: monthOutgoing});
-            spend.unaccounted.push({key: <Month> month, value: monthUnaccounted});
-            spend.total.push({key: <Month> month, value: monthTotal});
             spend.remaining.push({key: <Month> month, value: monthRemaining});
           });
           return spend;
@@ -76,7 +78,6 @@ export class AnalyticsService {
 
 export interface IYearOverYearSpend {
   outgoing: KeyValue<Month, number>[];
-  total: KeyValue<Month, number>[];
   unaccounted: KeyValue<Month, number>[];
   remaining: KeyValue<Month, number>[];
 }
