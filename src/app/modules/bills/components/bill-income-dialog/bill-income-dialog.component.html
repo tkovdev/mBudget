@@ -2,7 +2,7 @@
   <div class="col-12 flex">
     <div class="w-full">
       <span class="p-float-label">
-        <p-dropdown formControlName="payer" id="payer" inputId="payer" [options]="payers" [editable]="true" class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-dropdown>
+        <p-autoComplete formControlName="payer" id="payer" inputId="payer" [suggestions]="filteredPayers" (completeMethod)="autoComplete($event)" class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-autoComplete>
         <label for="payer">Payer</label>
       </span>
     </div>

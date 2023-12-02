@@ -16,6 +16,7 @@ export class BillIncomeDialogComponent implements OnInit{
   @Input() selectedMonthYear!: string;
   incomeForm: FormGroup = this.initIncomeForm();
   payers: string[] = [];
+  filteredPayers: string[] = [];
 
   constructor(private billsService: BillsService) {
   }
@@ -46,6 +47,20 @@ export class BillIncomeDialogComponent implements OnInit{
       this.close.emit();
     });
 
+  }
+
+  autoComplete(event: any) {
+    let filtered: any[] = [];
+    let query = event.query;
+
+    for (let i = 0; i < this.payers.length; i++) {
+      let payers = this.payers[i];
+      if (payers.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+        filtered.push(payers);
+      }
+    }
+
+    this.filteredPayers = filtered;
   }
 
 }

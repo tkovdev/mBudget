@@ -49,6 +49,37 @@ export class SharedService {
     return currentDate.getFullYear();
   }
 
+  previousMonth(currentMonth: Month): Month {
+    switch(currentMonth) {
+      case Month.January:
+        return Month.December;
+      case Month.February:
+        return Month.January;
+      case Month.March:
+        return Month.February;
+      case Month.April:
+        return Month.March;
+      case Month.May:
+        return Month.April;
+      case Month.June:
+        return Month.May;
+      case Month.July:
+        return Month.June;
+      case Month.August:
+        return Month.July;
+      case Month.September:
+        return Month.August;
+      case Month.October:
+        return Month.September;
+      case Month.November:
+        return Month.October;
+      case Month.December:
+        return Month.November;
+      default:
+        return Month.January;
+    }
+  }
+
   fromMonthYearString(monthYear: string): {month: Month, year: number} {
     let monthYearSplit = monthYear.split(' ');
     let month: Month = <Month> monthYearSplit[0];
