@@ -142,7 +142,8 @@ export class BillsService {
           billMap = billMap.sort((a, b) => {
             let monthYearSplitA = a.split(' ');
             let monthYearSplitB = b.split(' ');
-            return parseInt(`${monthYearSplitA[1]}${months.indexOf(monthYearSplitA[0])}`) - parseInt(`${monthYearSplitB[1]}${months.indexOf(monthYearSplitB[0])}`)
+            if(monthYearSplitA[1] > monthYearSplitB[1]) return 1;
+            return parseInt(`${months.indexOf(monthYearSplitA[0])}`) - parseInt(`${months.indexOf(monthYearSplitB[0])}`)
           });
           return billMap;
         }
