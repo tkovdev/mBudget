@@ -37,7 +37,7 @@ export class BudgetsComponent implements OnInit{
   loadNames(): void {
     this.budgetService.getBudgetNames().subscribe((res) => {
       this.budgets = res;
-      this.selectedBudget = this.budgets[0];
+      if(this.selectedBudget == undefined) this.selectedBudget = this.budgets[0];
     });
   }
 
