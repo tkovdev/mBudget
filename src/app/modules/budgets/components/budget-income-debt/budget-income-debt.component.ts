@@ -32,7 +32,7 @@ export class BudgetIncomeDebtComponent {
 
   get debtToIncome(): number {
     if(this.incomeSalaryGross == 0) return 0;
-    return this.budget.debt / this.incomeSalaryGross * 100;
+    return this.budget.debt / (this.incomeSalaryGross/12) * 100;
   }
 
   save(): void {
