@@ -27,6 +27,12 @@ export class BudgetCategoriesComponent {
     });
   }
 
+  saveItem(budgetItem: IBudgetItem): void {
+    this.budgetService.updateBudgetItem(this.budget.name, this.category, budgetItem).subscribe((res) => {
+      this.budgetChanged.emit();
+    })
+  }
+
   budgetChangedEvent(): void {
     this.budgetChanged.emit();
   }
