@@ -5,7 +5,7 @@
   <ng-container *ngFor="let budgetItem of budget[category]">
     <div class="col-9">
       <span class="p-float-label">
-        <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="{{getBudgetItemNameId(budgetItem.name)}}" inputStyleClass="w-full" [(ngModel)]="budgetItem.amount"></p-inputNumber>
+        <p-inputNumber mode="currency" currency="USD" id="{{getBudgetItemNameId(budgetItem.name)}}" inputStyleClass="w-full" [(ngModel)]="budgetItem.amount" (onBlur)="saveItem(budgetItem)"></p-inputNumber>
         <label for="{{getBudgetItemNameId(budgetItem.name)}}">{{budgetItem.name}}</label>
       </span>
     </div>

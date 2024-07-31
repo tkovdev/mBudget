@@ -192,6 +192,11 @@ export class BudgetsService {
             subscriber.next(false);
             return;
           }
+          let budgetItemIdx = budgetFile.budgets[budgetIdx][category].findIndex(x => x.name == budgetItem.name)
+          if(budgetItemIdx > -1) {
+            subscriber.next(false);
+            return;
+          }
           budgetFile.budgets[budgetIdx][category].push(budgetItem);
 
           this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
@@ -216,6 +221,32 @@ export class BudgetsService {
           this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
             subscriber.next(true);
           })
+        }
+      });
+    });
+  }
+
+  public updateBudgetItem(budgetName: string, category: 'need' | 'want' | 'extra', budgetItem: IBudgetItem): Observable<boolean>{
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let budgetIdx = budgetFile.budgets.findIndex(x => x.name == budgetName);
+          if(budgetIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+          let budgetItemIdx = budgetFile.budgets[budgetIdx][category].findIndex(x => x.name == budgetItem.name)
+          if(budgetItemIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+          if(budgetItem.amount !== budgetFile.budgets[budgetIdx][category][budgetItemIdx].amount){
+            budgetFile.budgets[budgetIdx][category][budgetItemIdx] = budgetItem
+
+            this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+              subscriber.next(true);
+            })
+          }
         }
       });
     });
