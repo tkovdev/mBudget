@@ -1,3 +1,8 @@
 ::ng-deep .p-progress-spinner-circle {
   stroke: deepskyblue !important;
 }
+
+::ng-deep .menu-static {
+  position: sticky;
+  top: 0;
+}
