@@ -7,7 +7,7 @@
       <div class="col-12 md:col-4 pt-0">
         <p class="mt-0">Need</p>
         <span class="p-float-label">
-        <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.planned" [min]="0" [max]="100 - (budget.breakdown.want.planned + budget.breakdown.extra.planned)"></p-inputNumber>
+        <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.planned" [min]="0" [max]="100 - (budget.breakdown.want.planned + budget.breakdown.extra.planned)" (onBlur)="save()"></p-inputNumber>
         <label for="needDesiredPercent">Planned Percent</label>
       </span>
         <span class="p-float-label mt-3">
@@ -29,7 +29,7 @@
       <div class="col-12 md:col-4 pt-0">
         <p class="mt-0">Want</p>
         <span class="p-float-label">
-        <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.extra.planned)"></p-inputNumber>
+        <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.extra.planned)" (onBlur)="save()"></p-inputNumber>
         <label for="wantDesiredPercent">Planned Percent</label>
       </span>
         <span class="p-float-label mt-3">
@@ -52,7 +52,7 @@
     <div class="col-12 md:col-4 pt-0">
       <p class="mt-0">Extra</p>
       <span class="p-float-label">
-      <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.want.planned)"></p-inputNumber>
+      <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.want.planned)" (onBlur)="save()"></p-inputNumber>
       <label for="extraDesiredPercent">Planned Percent</label>
     </span>
       <span class="p-float-label mt-3">
@@ -74,7 +74,7 @@
     </div>
     </div>
   </div>
-  <div class="col-12">
-    <button [disabled]="budgetRemaining > 0" (click)="save()" label="Save" pButton></button>
-  </div>
+<!--  <div class="col-12">-->
+<!--    <button [disabled]="budgetRemaining > 0" (click)="save()" label="Save" pButton></button>-->
+<!--  </div>-->
 </div>
