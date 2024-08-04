@@ -3,7 +3,7 @@
     <div class="grid">
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber mode="currency" currency="USD" id="monthlyGrossIncome" styleClass="w-full" class="w-full" [(ngModel)]="budget.income.gross"></p-inputNumber>
+          <p-inputNumber mode="currency" currency="USD" id="monthlyGrossIncome" styleClass="w-full" class="w-full" [(ngModel)]="budget.income.gross" (onBlur)="save()"></p-inputNumber>
           <label for="monthlyGrossIncome">Monthly Gross Income</label>
         </span>
       </div>
@@ -25,7 +25,7 @@
     <div class="grid">
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber mode="currency" currency="USD" id="monthlyIncome" styleClass="w-full" class="w-full" [(ngModel)]="budget.income.net"></p-inputNumber>
+          <p-inputNumber mode="currency" currency="USD" id="monthlyIncome" styleClass="w-full" class="w-full" [(ngModel)]="budget.income.net" (onBlur)="save()"></p-inputNumber>
           <label for="monthlyIncome">Monthly Net Income</label>
         </span>
       </div>
@@ -47,7 +47,7 @@
     <div class="grid">
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber mode="currency" currency="USD" id="actualDebt" styleClass="w-full" class="w-full" [(ngModel)]="budget.debt"></p-inputNumber>
+          <p-inputNumber mode="currency" currency="USD" id="actualDebt" styleClass="w-full" class="w-full" [(ngModel)]="budget.debt" (onBlur)="save()"></p-inputNumber>
           <label for="actualDebt">Actual Debt</label>
         </span>
       </div>
@@ -58,8 +58,5 @@
         </span>
       </div>
     </div>
-  </div>
-  <div class="col-12">
-    <button (click)="save()" label="Save" pButton></button>
   </div>
 </div>
