@@ -4,9 +4,9 @@
 <!--<p-card styleClass="mt-3" header="Debt to Income" subheader="{{selectedBudget}}">-->
 <!--  <app-budget-income-debt [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-income-debt>-->
 <!--</p-card>-->
-<!--<p-card styleClass="mt-3" header="Budget Summary" subheader="{{selectedBudget}}">-->
-<!--  <app-budget-summary [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-summary>-->
-<!--</p-card>-->
+<p-card styleClass="mt-3" header="Budget Summary" subheader="{{selectedBudget}}">
+  <app-budget-summary [fgBudget]="fgBudget"></app-budget-summary>
+</p-card>
 
 <div class="grid mt-3">
   <div class="col-12 md:col-4">

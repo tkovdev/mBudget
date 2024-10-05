@@ -64,15 +64,15 @@ export class BudgetsComponent implements OnInit{
       need: this.initBudgetBreakdownItemFormGroup(),
       want: this.initBudgetBreakdownItemFormGroup(),
       extra: this.initBudgetBreakdownItemFormGroup()
-    })
+    }, {updateOn:'blur'})
   }
 
   initBudgetBreakdownItemFormGroup(): FormGroup {
     return new FormGroup({
         planned: new FormControl({value: null, disabled: false}),
-        actual : new FormControl({value: null, disabled: false}),
-        salaryTotal : new FormControl({value: null, disabled: false}),
-        monthlyTotal : new FormControl({value: null, disabled: false})
+        actual : new FormControl({value: null, disabled: true}),
+        salaryTotal : new FormControl({value: null, disabled: true}),
+        monthlyTotal : new FormControl({value: null, disabled: true})
     });
   }
 
