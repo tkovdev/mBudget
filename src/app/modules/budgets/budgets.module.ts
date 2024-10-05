@@ -33,6 +33,7 @@ import { BudgetCategoryItemComponent } from './components/budget-category-item/b
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     BudgetsRoutingModule,
     CardModule,
     ButtonModule,

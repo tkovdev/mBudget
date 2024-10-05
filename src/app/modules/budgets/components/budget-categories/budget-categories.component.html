@@ -1,22 +1,26 @@
-<div class="grid">
-  <ng-container *ngIf="budget[category].length <= 0">
-    <div class="col-12"><span>No budget items!</span></div>
-  </ng-container>
-  <ng-container *ngFor="let budgetItem of budget[category]">
-    <div class="col-9">
-      <span class="p-float-label">
-        <p-inputNumber mode="currency" currency="USD" id="{{getBudgetItemNameId(budgetItem.name)}}" inputStyleClass="w-full" [(ngModel)]="budgetItem.amount" (onBlur)="saveItem(budgetItem)"></p-inputNumber>
-        <label for="{{getBudgetItemNameId(budgetItem.name)}}">{{budgetItem.name}}</label>
-      </span>
-    </div>
+<form [formGroup]="fgBudget">
+  <div class="grid">
+    <ng-container *ngIf="categoryFormArray.length <= 0">
+      <div class="col-12"><span>No budget items!</span></div>
+    </ng-container>
+    <ng-container [formArrayName]="category">
+      <ng-container *ngFor="let budgetItem of categoryFormArray.controls; let i = index" [formGroupName]="i">
+        <div class="col-9">
+          <span class="p-float-label">
+            <p-inputNumber mode="currency" currency="USD" id="{{budgetItem.get('name')?.getRawValue()}}" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
+            <label for="{{budgetItem.get('name')?.getRawValue()}}">{{budgetItem.get('name')?.getRawValue()}}</label>
+          </span>
+        </div>
+        <div class="col-3">
+          <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
+        </div>
+      </ng-container>
+    </ng-container>
     <div class="col-3">
-      <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(budgetItem)"></button>
+      <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="budgetItemPanel.show($event)"></button>
     </div>
-  </ng-container>
-  <div class="col-3">
-    <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="budgetItemPanel.show($event)"></button>
   </div>
-</div>
+</form>
 <p-overlayPanel #budgetItemPanel (onShow)="budgetItemDialog = true" (onHide)="budgetItemDialog = false">
-  <app-budget-category-item *ngIf="budgetItemDialog" [budget]="budget" [category]="category" (close)="budgetItemPanel.hide(); budgetChangedEvent()"></app-budget-category-item>
+  <app-budget-category-item *ngIf="budgetItemDialog" [fgBudget]="fgBudget" [category]="category" (save)="budgetItemPanel.hide()"></app-budget-category-item>
 </p-overlayPanel>
