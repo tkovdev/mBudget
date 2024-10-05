@@ -93,13 +93,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "mBudget-app:build:production"
+              "buildTarget": "mBudget-app:build:production"
             },
             "development": {
-              "browserTarget": "mBudget-app:build:development"
+              "buildTarget": "mBudget-app:build:development"
             },
             "local": {
-              "browserTarget": "mBudget-app:build:local"
+              "buildTarget": "mBudget-app:build:local"
             }
           },
           "defaultConfiguration": "local"
@@ -107,7 +107,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "mBudget-app:build"
+            "buildTarget": "mBudget-app:build"
           }
         },
         "test": {
