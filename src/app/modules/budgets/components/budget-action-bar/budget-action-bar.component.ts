@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IBudget} from "../../../../models/budget.model";
 import {FormGroup} from "@angular/forms";
 import {Router} from "@angular/router";
+import {BudgetsService} from "../../../../services/budgets.service";
 
 @Component({
   selector: 'app-budget-action-bar',
@@ -14,7 +15,7 @@ export class BudgetActionBarComponent implements OnInit{
 
   budgetDialog: boolean = false;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private budgetService: BudgetsService) {
   }
 
   ngOnInit(): void {
@@ -24,7 +25,9 @@ export class BudgetActionBarComponent implements OnInit{
   }
 
   deleteBudget(): void {
-    // this.budgetDeleted.emit(name);
+    this.budgetService.deleteBudget(this.fgBudget.get('name')?.value).subscribe((res) => {
+      this.router.navigate([]);
+    });
   }
 
   get remaining(): number {

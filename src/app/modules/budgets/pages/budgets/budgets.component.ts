@@ -25,6 +25,7 @@ export class BudgetsComponent implements OnInit{
     this.loadNames();
 
     this.route.queryParamMap.subscribe((params) => {
+      this.loadNames();
       if(params.has('name')){
         this.fgBudget.controls['name'].patchValue(params.get('name'))
         this.loadBudget();
@@ -81,7 +82,7 @@ export class BudgetsComponent implements OnInit{
   loadNames(): void {
     this.budgetService.getBudgetNames().subscribe((res) => {
       this.budgets = res;
-      if(res && res[0]) this.router.navigate([], {queryParams: {name: res[0]}})
+      if(res && res[0] && !this.route.snapshot.queryParamMap.has('name')) this.router.navigate([], {queryParams: {name: res[0]}})
     });
   }
 
