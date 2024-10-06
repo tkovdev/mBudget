@@ -39,8 +39,8 @@ export class BudgetsComponent implements OnInit{
       income: new FormGroup({
         net: new FormControl({value: null, disabled: false}),
         gross: new FormControl({value: null, disabled: false}),
-      }),
-      debt: new FormControl({value: null, disabled: false}),
+      }, {updateOn: 'blur'}),
+      debt: new FormControl({value: null, disabled: false}, {updateOn: 'blur'}),
       need: this.initBudgetItemFormArray(),
       want: this.initBudgetItemFormArray(),
       extra: this.initBudgetItemFormArray()

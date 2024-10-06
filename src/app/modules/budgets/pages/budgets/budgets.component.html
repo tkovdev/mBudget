@@ -1,9 +1,9 @@
 <p-card id="action-bar">
   <app-budget-action-bar [fgBudget]="fgBudget" [budgets]="budgets"></app-budget-action-bar>
 </p-card>
-<!--<p-card styleClass="mt-3" header="Debt to Income" subheader="{{selectedBudget}}">-->
-<!--  <app-budget-income-debt [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-income-debt>-->
-<!--</p-card>-->
+<p-card styleClass="mt-3" header="Debt to Income" subheader="{{fgBudget.get('name')?.value}}">
+  <app-budget-income-debt [fgBudget]="fgBudget"></app-budget-income-debt>
+</p-card>
 <ng-container *ngIf="fgBudget.get('name')?.value">
   <p-card styleClass="mt-3" header="Budget Summary" subheader="{{fgBudget.get('name')?.value}}">
     <app-budget-summary [fgBudget]="fgBudget"></app-budget-summary>

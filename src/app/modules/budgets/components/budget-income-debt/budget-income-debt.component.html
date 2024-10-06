@@ -1,43 +1,43 @@
-<div class="grid">
-  <div class="col-12">
+<form class="grid" [formGroup]="fgBudget">
+  <div class="col-12" formGroupName="income">
     <div class="grid">
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber mode="currency" currency="USD" id="monthlyGrossIncome" styleClass="w-full" class="w-full" [(ngModel)]="budget.income.gross" (onBlur)="save()"></p-inputNumber>
+          <p-inputNumber mode="currency" currency="USD" id="monthlyGrossIncome" styleClass="w-full" class="w-full" formControlName="gross"></p-inputNumber>
           <label for="monthlyGrossIncome">Monthly Gross Income</label>
         </span>
       </div>
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="hourlyGrossIncome" styleClass="w-full" class="w-full" [ngModel]="incomeHourlyGross"></p-inputNumber>
+          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="hourlyGrossIncome" styleClass="w-full" class="w-full" [ngModelOptions]="{standalone: true}" [ngModel]="incomeHourlyGross"></p-inputNumber>
           <label for="hourlyGrossIncome">Hourly Gross Income</label>
         </span>
       </div>
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="salaryGrossIncome" styleClass="w-full" class="w-full" [ngModel]="incomeSalaryGross"></p-inputNumber>
+          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="salaryGrossIncome" styleClass="w-full" class="w-full"  [ngModelOptions]="{standalone: true}" [ngModel]="incomeSalaryGross"></p-inputNumber>
           <label for="salaryGrossIncome">Salary Gross Income</label>
         </span>
       </div>
     </div>
   </div>
-  <div class="col-12">
+  <div class="col-12" formGroupName="income">
     <div class="grid">
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber mode="currency" currency="USD" id="monthlyIncome" styleClass="w-full" class="w-full" [(ngModel)]="budget.income.net" (onBlur)="save()"></p-inputNumber>
+          <p-inputNumber mode="currency" currency="USD" id="monthlyIncome" styleClass="w-full" class="w-full" formControlName="net"></p-inputNumber>
           <label for="monthlyIncome">Monthly Net Income</label>
         </span>
       </div>
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="hourlyNetIncome" styleClass="w-full" class="w-full" [ngModel]="incomeHourlyNet"></p-inputNumber>
+          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="hourlyNetIncome" styleClass="w-full" class="w-full" [ngModelOptions]="{standalone: true}" [ngModel]="incomeHourlyNet"></p-inputNumber>
           <label for="hourlyNetIncome">Hourly Net Income</label>
         </span>
       </div>
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="salaryNetIncome" styleClass="w-full" class="w-full" [ngModel]="incomeSalaryNet"></p-inputNumber>
+          <p-inputNumber [disabled]="true" mode="currency" currency="USD" id="salaryNetIncome" styleClass="w-full" class="w-full" [ngModelOptions]="{standalone: true}" [ngModel]="incomeSalaryNet"></p-inputNumber>
           <label for="salaryNetIncome">Salary Net Income</label>
         </span>
       </div>
@@ -47,16 +47,16 @@
     <div class="grid">
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber mode="currency" currency="USD" id="actualDebt" styleClass="w-full" class="w-full" [(ngModel)]="budget.debt" (onBlur)="save()"></p-inputNumber>
+          <p-inputNumber mode="currency" currency="USD" id="actualDebt" styleClass="w-full" class="w-full" formControlName="debt"></p-inputNumber>
           <label for="actualDebt">Actual Debt</label>
         </span>
       </div>
       <div class="col-12 md:col-4">
         <span class="p-float-label">
-          <p-inputNumber [disabled]="true" suffix="%" id="debtToIncome" styleClass="w-full" class="w-full" [ngModel]="debtToIncome"></p-inputNumber>
+          <p-inputNumber [disabled]="true" suffix="%" id="debtToIncome" styleClass="w-full" class="w-full" [ngModelOptions]="{standalone: true}" [ngModel]="debtToIncome"></p-inputNumber>
           <label for="debtToIncome">Debt to Income</label>
         </span>
       </div>
     </div>
   </div>
-</div>
+</form>
