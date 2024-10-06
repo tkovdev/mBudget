@@ -3,27 +3,28 @@
     <div class="flex flex-wrap">
       <div class="md:w-auto w-full">
         <div class="grid">
-          <div class="md:col-8 col-10">
-            <p-dropdown styleClass="w-full" [options]="budgets" [(ngModel)]="selectedBudget" (onChange)="budgetSelectedEvent(selectedBudget)"></p-dropdown>
-          </div>
+          <form [formGroup]="fgBudget" class="md:col-8 col-10">
+            <p-dropdown styleClass="w-full" [options]="budgets" formControlName="name"></p-dropdown>
+          </form>
           <div class="md:col-4 col-2 flex">
-            <button (click)="budgetPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Budget"></button>
-            <button (click)="deleteBudget(selectedBudget)" pButton class="p-button-text p-button-danger" icon="pi pi-trash" pTooltip="Delete Budget"></button>
+            <button (click)="budgetPanelAdd.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Budget"></button>
+            <button (click)="budgetPanelCopy.show($event)" pButton class="p-button-text" icon="pi pi-copy" pTooltip="Copy Budget"></button>
+            <button (click)="deleteBudget()" pButton class="p-button-text p-button-danger" icon="pi pi-trash" pTooltip="Delete Budget"></button>
           </div>
         </div>
       </div>
       <div class="flex justify-content-around md:w-auto w-full ml-2">
         <div class="flex flex-column mx-1 align-items-center">
           <span>Need</span>
-          <span>{{budget.breakdown.need.monthlyTotal | currency: 'USD'}}</span>
+          <span>{{need.get('monthlyTotal')?.value | currency: 'USD'}}</span>
         </div>
         <div class="flex flex-column mx-1 align-items-center">
           <span>Want</span>
-          <span>{{budget.breakdown.want.monthlyTotal | currency: 'USD'}}</span>
+          <span>{{want.get('monthlyTotal')?.value | currency: 'USD'}}</span>
         </div>
         <div class="flex flex-column mx-1 align-items-center">
           <span>Extra</span>
-          <span>{{budget.breakdown.extra.monthlyTotal | currency: 'USD'}}</span>
+          <span>{{extra.get('monthlyTotal')?.value | currency: 'USD'}}</span>
         </div>
         <div class="flex flex-column mx-1 align-items-center">
           <span>Unallocated</span>
@@ -36,6 +37,9 @@
 <!--    <button class="mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-save" pButton></button>-->
   </div>
 </div>
-<p-overlayPanel #budgetPanel (onShow)="budgetDialog = true" (onHide)="budgetDialog = false">
-  <app-budget-dialog *ngIf="budgetDialog" (close)="budgetPanel.hide(); budgetChangedEvent()"></app-budget-dialog>
+<p-overlayPanel #budgetPanelAdd>
+  <app-budget-dialog (close)="budgetPanelAdd.hide();" [fgBudget]="fgBudget" type="new"></app-budget-dialog>
+</p-overlayPanel>
+<p-overlayPanel #budgetPanelCopy >
+  <app-budget-dialog (close)="budgetPanelCopy.hide();" [fgBudget]="fgBudget" type="copy">></app-budget-dialog>
 </p-overlayPanel>

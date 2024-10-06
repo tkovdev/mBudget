@@ -145,6 +145,27 @@ export class BudgetsService {
     });
   }
 
+
+  public copyBudget(existingName: string, newName: string): Observable<boolean> {
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let budgetIdx = budgetFile.budgets.findIndex(x => x.name == existingName);
+          if(budgetIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+          let copy = Object.assign({}, budgetFile.budgets[budgetIdx])
+          copy.name = newName
+          budgetFile.budgets.push(copy);
+          this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+            subscriber.next(true);
+          })
+        }
+      });
+    });
+  }
+
   public saveDebtToIncome(budget: IBudget): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
       this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {

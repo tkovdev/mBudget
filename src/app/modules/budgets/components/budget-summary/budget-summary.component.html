@@ -1,80 +1,71 @@
-<div class="grid">
-  <div *ngIf="budgetRemaining > 0" class="col-12">
-    <p-message severity="info" text="{{budgetRemaining}}% left to allocate"></p-message>
-  </div>
-  <div class="col-12">
+<form class="grid py-4" [formGroup]="fgBudget">
+  <div class="col-12" formGroupName="breakdown">
     <div class="grid">
-      <div class="col-12 md:col-4 pt-0">
-        <p class="mt-0">Need</p>
+      <div class="col-12 md:col-4 pt-0" formGroupName="need">
+        <h3 class="mt-0">Need</h3>
         <span class="p-float-label">
-        <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.planned" [min]="0" [max]="100 - (budget.breakdown.want.planned + budget.breakdown.extra.planned)" (onBlur)="save()"></p-inputNumber>
-        <label for="needDesiredPercent">Planned Percent</label>
-      </span>
+          <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
+          <label for="needDesiredPercent">Planned Percent</label>
+        </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber [ngClass]="{
-                                    'bg-red-700': checkActualVPlan(budget.breakdown.need.actual, budget.breakdown.need.planned) < 0,
-                                    'bg-green-700': checkActualVPlan(budget.breakdown.need.actual, budget.breakdown.need.planned) > 0
-                                  }" suffix="%" id="needActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.actual" [disabled]="true"></p-inputNumber>
-        <label for="needActualPercent">Actual Percent</label>
-      </span>
+          <p-inputNumber suffix="%" id="needActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
+          <label for="needActualPercent">Actual Percent</label>
+        </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber mode="currency" currency="USD" id="needSalaryUsed" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.salaryTotal" [disabled]="true"></p-inputNumber>
-        <label for="needSalaryUsed">Used Salary</label>
-      </span>
+          <p-inputNumber mode="currency" currency="USD" id="needSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
+          <label for="needSalaryUsed">Used Salary</label>
+        </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber mode="currency" currency="USD" id="needMonthlyUsed" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.need.monthlyTotal" [disabled]="true"></p-inputNumber>
-        <label for="needMonthlyUsed">Used Monthly</label>
-      </span>
+          <p-inputNumber mode="currency" currency="USD" id="needMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
+          <label for="needMonthlyUsed">Used Monthly</label>
+        </span>
       </div>
-      <div class="col-12 md:col-4 pt-0">
-        <p class="mt-0">Want</p>
+      <div class="col-12 md:col-4 pt-0" formGroupName="want">
+        <h3 class="mt-0">Want</h3>
         <span class="p-float-label">
-        <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.extra.planned)" (onBlur)="save()"></p-inputNumber>
+        <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
         <label for="wantDesiredPercent">Planned Percent</label>
       </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber [ngClass]="{
-                                    'bg-red-700': checkActualVPlan(budget.breakdown.want.actual, budget.breakdown.want.planned) < 0,
-                                    'bg-green-700': checkActualVPlan(budget.breakdown.want.actual, budget.breakdown.want.planned) > 0
-                                  }"
-          suffix="%" id="wantActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.actual" [disabled]="true"></p-inputNumber>
+        <p-inputNumber suffix="%" id="wantActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
         <label for="wantActualPercent">Actual Percent</label>
       </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber mode="currency" currency="USD" id="wantSalaryUsed" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.salaryTotal" [disabled]="true"></p-inputNumber>
+        <p-inputNumber mode="currency" currency="USD" id="wantSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
         <label for="wantSalaryUsed">Used Salary</label>
       </span>
         <span class="p-float-label mt-3">
-        <p-inputNumber mode="currency" currency="USD" id="wantMonthlyUsed" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.want.monthlyTotal" [disabled]="true"></p-inputNumber>
+        <p-inputNumber mode="currency" currency="USD" id="wantMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
         <label for="wantMonthlyUsed">Used Monthly</label>
       </span>
       </div>
-    <div class="col-12 md:col-4 pt-0">
-      <p class="mt-0">Extra</p>
+    <div class="col-12 md:col-4 pt-0" formGroupName="extra">
+      <h3 class="mt-0">Extra</h3>
       <span class="p-float-label">
-      <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.planned" [min]="0" [max]="100 - (budget.breakdown.need.planned + budget.breakdown.want.planned)" (onBlur)="save()"></p-inputNumber>
+      <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
       <label for="extraDesiredPercent">Planned Percent</label>
     </span>
       <span class="p-float-label mt-3">
-      <p-inputNumber [ngClass]="{
-                                    'bg-red-700': checkActualVPlan(budget.breakdown.extra.actual, budget.breakdown.extra.planned) < 0,
-                                    'bg-green-700': checkActualVPlan(budget.breakdown.extra.actual, budget.breakdown.extra.planned) > 0
-                                  }"
-                     suffix="%" id="extraActualPercent" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.actual" [disabled]="true"></p-inputNumber>
+      <p-inputNumber suffix="%" id="extraActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
       <label for="extraActualPercent">Actual Percent</label>
     </span>
       <span class="p-float-label mt-3">
-      <p-inputNumber mode="currency" currency="USD" id="extraSalaryUsed" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.salaryTotal" [disabled]="true"></p-inputNumber>
+      <p-inputNumber mode="currency" currency="USD" id="extraSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
       <label for="extraSalaryUsed">Used Salary</label>
     </span>
       <span class="p-float-label mt-3">
-      <p-inputNumber mode="currency" currency="USD" id="extraMonthlyUsed" styleClass="w-full" class="w-full" [(ngModel)]="budget.breakdown.extra.monthlyTotal" [disabled]="true"></p-inputNumber>
+      <p-inputNumber mode="currency" currency="USD" id="extraMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
       <label for="extraMonthlyUsed">Used Monthly</label>
     </span>
     </div>
     </div>
   </div>
+  <div class="col-12">
+    <p-message *ngIf="budgetRemaining == 0" severity="success" text="{{100 - budgetRemaining}}% allocated"></p-message>
+    <p-message *ngIf="budgetRemaining > 0" severity="info" text="{{budgetRemaining}}% under allocate"></p-message>
+    <p-message *ngIf="budgetRemaining < 0" severity="error" text="{{(-1 * budgetRemaining)}}% over allocated"></p-message>
+  </div>
 <!--  <div class="col-12">-->
 <!--    <button [disabled]="budgetRemaining > 0" (click)="save()" label="Save" pButton></button>-->
 <!--  </div>-->
-</div>
+</form>

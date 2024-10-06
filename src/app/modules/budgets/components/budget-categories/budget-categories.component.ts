@@ -1,39 +1,47 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IBudget, IBudgetItem} from "../../../../models/budget.model";
 import {BudgetsService} from "../../../../services/budgets.service";
+import {AbstractControl, FormArray, FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-budget-categories',
   templateUrl: './budget-categories.component.html',
   styleUrls: ['./budget-categories.component.scss']
 })
-export class BudgetCategoriesComponent {
-  @Output('budgetChanged') budgetChanged: EventEmitter<void> = new EventEmitter<void>();
-  @Input('category') category!: 'need' | 'want' | 'extra'
-  @Input('budget') budget!: IBudget;
+export class BudgetCategoriesComponent implements OnInit{
+  @Input() category!: 'need' | 'want' | 'extra'
+  @Input() fgBudget!: FormGroup;
 
   budgetItemDialog: boolean = false;
 
   constructor(private budgetService: BudgetsService) {
   }
 
-  getBudgetItemNameId(name: string): string {
-    return name.toLowerCase().replace(' ', '-')
-  }
-
-  deleteItem(budgetItem: IBudgetItem): void {
-    this.budgetService.removeBudgetItem(this.budget.name, this.category, budgetItem.name).subscribe((res) => {
-      this.budgetChanged.emit();
-    });
-  }
-
-  saveItem(budgetItem: IBudgetItem): void {
-    this.budgetService.updateBudgetItem(this.budget.name, this.category, budgetItem).subscribe((res) => {
-      this.budgetChanged.emit();
+  ngOnInit(): void {
+    this.fgBudget.controls[this.category].valueChanges.subscribe(() => {
+      for(let i =0; i < (this.fgBudget.controls[this.category] as FormArray).controls.length; i++){
+        let item = (this.fgBudget.controls[this.category] as FormArray).controls.at(i)
+        if(item && item.dirty) this.saveItem(i)
+      }
     })
   }
 
-  budgetChangedEvent(): void {
-    this.budgetChanged.emit();
+  deleteItem(index: number): void {
+    let budgetItem = (this.fgBudget.controls[this.category] as FormArray).at(index);
+    this.budgetService.removeBudgetItem(this.fgBudget.get('name')?.getRawValue(), this.category, budgetItem.get('name')?.getRawValue()).subscribe((res) => {
+      (this.fgBudget.controls[this.category] as FormArray).removeAt(index);
+    });
+  }
+
+  saveItem(index: number): void {
+    let budgetItem = (this.fgBudget.controls[this.category] as FormArray).at(index);
+    this.budgetService.updateBudgetItem(this.fgBudget.get('name')?.getRawValue(), this.category, budgetItem.getRawValue()).subscribe((res) => {
+      this.fgBudget.markAsPristine()
+      this.fgBudget.markAsUntouched()
+    })
+  }
+
+  get categoryFormArray(): FormArray {
+    return this.fgBudget.get(this.category) as FormArray
   }
 }

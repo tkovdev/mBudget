@@ -19,6 +19,7 @@ import {MessageModule} from "primeng/message";
 import { BudgetCategoriesComponent } from './components/budget-categories/budget-categories.component';
 import {AccordionModule} from "primeng/accordion";
 import { BudgetCategoryItemComponent } from './components/budget-category-item/budget-category-item.component';
+import {TabViewModule} from "primeng/tabview";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { BudgetCategoryItemComponent } from './components/budget-category-item/b
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     BudgetsRoutingModule,
     CardModule,
     ButtonModule,
@@ -43,7 +45,8 @@ import { BudgetCategoryItemComponent } from './components/budget-category-item/b
     ReactiveFormsModule,
     InputNumberModule,
     MessageModule,
-    AccordionModule
+    AccordionModule,
+    TabViewModule
   ]
 })
 export class BudgetsModule { }

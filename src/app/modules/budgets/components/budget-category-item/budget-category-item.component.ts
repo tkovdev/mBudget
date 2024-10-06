@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {BudgetsService} from "../../../../services/budgets.service";
 import {IBudget} from "../../../../models/budget.model";
 
@@ -8,27 +8,32 @@ import {IBudget} from "../../../../models/budget.model";
   templateUrl: './budget-category-item.component.html',
   styleUrls: ['./budget-category-item.component.scss']
 })
-export class BudgetCategoryItemComponent {
-  @Output() close: EventEmitter<void> = new EventEmitter<void>();
-  @Input('budget') budget!: IBudget;
-  @Input('category') category!: 'need' | 'want' | 'extra';
-  budgetItemForm: FormGroup = this.initBudgetItemForm();
+export class BudgetCategoryItemComponent implements OnInit{
+  @Output() save: EventEmitter<void> = new EventEmitter<void>();
+  @Input() fgBudget!: FormGroup;
+  @Input() category!: 'need' | 'want' | 'extra';
+
+  fgBudgetItem!: FormGroup;
 
   constructor(private budgetService: BudgetsService) {
   }
 
+  ngOnInit(): void {
+    this.fgBudgetItem = this.initBudgetItemFormGroup();
+  }
 
-  initBudgetItemForm(): FormGroup {
-    return new FormGroup({
-      name: new FormControl({value: null, disabled: false}, [Validators.required, Validators.minLength(3), Validators.maxLength(16)]),
-      amount: new FormControl({value: 0, disabled: false}, [Validators.required]),
+  emitSave(): void {
+    this.budgetService.addBudgetItem(this.fgBudget.get('name')?.getRawValue(), this.category, this.fgBudgetItem.getRawValue()).subscribe((res) => {
+      (this.fgBudget.get(this.category) as FormArray).push(this.fgBudgetItem)
+      this.fgBudgetItem = this.initBudgetItemFormGroup()
+      this.save.emit();
     });
   }
 
-  saveBudgetItem(): void {
-    this.budgetService.addBudgetItem(this.budget.name, this.category, this.budgetItemForm.getRawValue()).subscribe((res) => {
-      this.budgetItemForm = this.initBudgetItemForm();
-      this.close.emit();
+  initBudgetItemFormGroup(): FormGroup {
+    return new FormGroup({
+      name: new FormControl({value: null, disabled: false}, {validators:[Validators.required, Validators.minLength(3), Validators.maxLength(16)]}),
+      amount: new FormControl({value: null, disabled: false}, {validators:[Validators.required]}),
     });
   }
 }

@@ -1,4 +1,4 @@
-<form [formGroup]="budgetForm" class="grid">
+<form [formGroup]="fgNewBudget" class="grid">
   <div class="col-9">
     <span class="p-float-label">
       <input pInputText formControlName="name" id="name" maxlength="16" minlength="3"/>
@@ -6,6 +6,7 @@
     </span>
   </div>
   <div class="col-3">
-    <button [disabled]="!budgetForm.valid" pButton (click)="saveBudget();" icon="pi pi-save"></button>
+    <button *ngIf="type == 'new'" [disabled]="!fgNewBudget.valid" pButton (click)="saveBudget();" icon="pi pi-save"></button>
+    <button *ngIf="type == 'copy'" [disabled]="!fgNewBudget.valid" pButton (click)="copyBudget();" icon="pi pi-copy"></button>
   </div>
 </form>
