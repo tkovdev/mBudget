@@ -1,28 +1,27 @@
 <p-card id="action-bar">
   <app-budget-action-bar [fgBudget]="fgBudget" [budgets]="budgets"></app-budget-action-bar>
 </p-card>
-<p-card styleClass="mt-3" header="Debt to Income" subheader="{{fgBudget.get('name')?.value}}">
-  <app-budget-income-debt [fgBudget]="fgBudget"></app-budget-income-debt>
-</p-card>
-<ng-container *ngIf="fgBudget.get('name')?.value">
-  <p-card styleClass="mt-3" header="Budget Summary" subheader="{{fgBudget.get('name')?.value}}">
+<p-tabView styleClass="mt-3">
+  <p-tabPanel header="Budget Summary">
     <app-budget-summary [fgBudget]="fgBudget"></app-budget-summary>
-  </p-card>
-  <div class="grid mt-3">
-    <div class="col-12 md:col-4">
-      <p-card header="Need" subheader="{{fgBudget.get('name')?.value}}">
+  </p-tabPanel>
+  <p-tabPanel header="Breakdown" class="p-0">
+    <div class="grid p-0">
+      <div class="col-12 md:col-4 py-4">
+        <h3 class="mt-0">Need</h3>
         <app-budget-categories category="need" [fgBudget]="fgBudget"></app-budget-categories>
-      </p-card>
-    </div>
-    <div class="col-12 md:col-4">
-      <p-card header="Want" subheader="{{fgBudget.get('name')?.value}}">
+      </div>
+      <div class="col-12 md:col-4 py-4">
+        <h3 class="mt-0">Want</h3>
         <app-budget-categories category="want" [fgBudget]="fgBudget"></app-budget-categories>
-      </p-card>
-    </div>
-    <div class="col-12 md:col-4">
-      <p-card header="Extra" subheader="{{fgBudget.get('name')?.value}}">
+      </div>
+      <div class="col-12 md:col-4 py-4">
+        <h3 class="mt-0">Extra</h3>
         <app-budget-categories category="extra" [fgBudget]="fgBudget"></app-budget-categories>
-      </p-card>
+      </div>
     </div>
-  </div>
-</ng-container>
+  </p-tabPanel>
+  <p-tabPanel header="Debt to Income">
+    <app-budget-income-debt [fgBudget]="fgBudget"></app-budget-income-debt>
+  </p-tabPanel>
+</p-tabView>

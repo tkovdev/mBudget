@@ -1,8 +1,8 @@
-<form class="grid" [formGroup]="fgBudget">
+<form class="grid py-4" [formGroup]="fgBudget">
   <div class="col-12" formGroupName="breakdown">
     <div class="grid">
       <div class="col-12 md:col-4 pt-0" formGroupName="need">
-        <p class="mt-0">Need</p>
+        <h3 class="mt-0">Need</h3>
         <span class="p-float-label">
           <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
           <label for="needDesiredPercent">Planned Percent</label>
@@ -21,7 +21,7 @@
         </span>
       </div>
       <div class="col-12 md:col-4 pt-0" formGroupName="want">
-        <p class="mt-0">Want</p>
+        <h3 class="mt-0">Want</h3>
         <span class="p-float-label">
         <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
         <label for="wantDesiredPercent">Planned Percent</label>
@@ -40,7 +40,7 @@
       </span>
       </div>
     <div class="col-12 md:col-4 pt-0" formGroupName="extra">
-      <p class="mt-0">Extra</p>
+      <h3 class="mt-0">Extra</h3>
       <span class="p-float-label">
       <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
       <label for="extraDesiredPercent">Planned Percent</label>
