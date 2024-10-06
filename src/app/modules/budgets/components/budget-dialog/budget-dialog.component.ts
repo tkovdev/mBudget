@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {BudgetsService} from "../../../../services/budgets.service";
 import {Router} from "@angular/router";
@@ -10,7 +10,10 @@ import {Router} from "@angular/router";
 })
 export class BudgetDialogComponent {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
+  @Input() fgBudget!: FormGroup;
+  @Input() type!: 'new' | 'copy';
   fgNewBudget: FormGroup = this.initBudgetForm();
+
 
   constructor(private router: Router, private budgetService: BudgetsService) {
   }
@@ -24,6 +27,14 @@ export class BudgetDialogComponent {
 
   saveBudget(): void {
     this.budgetService.addBudget(this.fgNewBudget.get('name')?.value).subscribe((res) => {
+      this.router.navigate([], {queryParams: {name: this.fgNewBudget.get('name')?.value}})
+      this.fgNewBudget = this.initBudgetForm();
+      this.close.emit();
+    });
+  }
+
+  copyBudget(): void {
+    this.budgetService.copyBudget(this.fgBudget.get('name')?.value, this.fgNewBudget.get('name')?.value).subscribe((res) => {
       this.router.navigate([], {queryParams: {name: this.fgNewBudget.get('name')?.value}})
       this.fgNewBudget = this.initBudgetForm();
       this.close.emit();

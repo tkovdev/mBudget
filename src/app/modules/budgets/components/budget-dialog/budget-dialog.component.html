@@ -6,6 +6,7 @@
     </span>
   </div>
   <div class="col-3">
-    <button [disabled]="!fgNewBudget.valid" pButton (click)="saveBudget();" icon="pi pi-save"></button>
+    <button *ngIf="type == 'new'" [disabled]="!fgNewBudget.valid" pButton (click)="saveBudget();" icon="pi pi-save"></button>
+    <button *ngIf="type == 'copy'" [disabled]="!fgNewBudget.valid" pButton (click)="copyBudget();" icon="pi pi-copy"></button>
   </div>
 </form>

@@ -13,8 +13,6 @@ export class BudgetActionBarComponent implements OnInit{
   @Input('budgets') budgets: string[] = [];
   @Input() fgBudget!: FormGroup;
 
-  budgetDialog: boolean = false;
-
   constructor(private router: Router, private budgetService: BudgetsService) {
   }
 
