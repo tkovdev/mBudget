@@ -18,28 +18,16 @@ export class BudgetsComponent implements OnInit{
 
   budgets: string[] = [];
 
-  selectedBudget!: string;
-
-  budget!: IBudget;
-
   constructor(private router: Router, private route: ActivatedRoute, private budgetService: BudgetsService) {}
 
   ngOnInit(): void {
-    this.loadNames();
     this.fgBudget = this.initBudgetFormGroup();
+    this.loadNames();
 
-    this.route.paramMap.subscribe((params) => {
-      if(params.has('budget')){
-        this.selectedBudget = params.get('budget')!;
+    this.route.queryParamMap.subscribe((params) => {
+      if(params.has('name')){
+        this.fgBudget.controls['name'].patchValue(params.get('name'))
         this.loadBudget();
-      }
-    });
-    this.budgetService.getBudget(this.selectedBudget).subscribe((res) => {
-      if(res) {
-        this.fgBudget.controls['need'] = this.initBudgetItemFormArray(res.need.length)
-        this.fgBudget.controls['want'] = this.initBudgetItemFormArray(res.want.length)
-        this.fgBudget.controls['extra'] = this.initBudgetItemFormArray(res.extra.length)
-        this.fgBudget.patchValue(res);
       }
     });
   }
@@ -93,23 +81,19 @@ export class BudgetsComponent implements OnInit{
   loadNames(): void {
     this.budgetService.getBudgetNames().subscribe((res) => {
       this.budgets = res;
-      if(this.selectedBudget == undefined) this.selectedBudget = this.budgets[0];
+      if(res && res[0]) this.router.navigate([], {queryParams: {name: res[0]}})
     });
   }
 
   loadBudget(): void {
-    this.budgetService.getBudget(this.selectedBudget).subscribe((res) => {
-      if(res != undefined) this.budget = res;
+    this.budgetService.getBudget(this.fgBudget.get('name')?.value).subscribe((res) => {
+      if(res) {
+        this.fgBudget.controls['need'] = this.initBudgetItemFormArray(res.need.length)
+        this.fgBudget.controls['want'] = this.initBudgetItemFormArray(res.want.length)
+        this.fgBudget.controls['extra'] = this.initBudgetItemFormArray(res.extra.length)
+        this.fgBudget.patchValue(res, {emitEvent: false});
+      }
     });
-  }
-
-  budgetSelected(budget: string | undefined): void {
-    this.router.navigate(['', 'budgets', budget]);
-  }
-
-  budgetChanged(): void {
-    this.loadNames();
-    this.loadBudget();
   }
 
   budgetDeleted(name: string): void {

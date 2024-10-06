@@ -10,20 +10,34 @@ import {FormArray, FormGroup} from "@angular/forms";
 })
 export class BudgetSummaryComponent implements OnInit{
   @Input() fgBudget!: FormGroup;
-  pendingSave: boolean = false;
-
   constructor(private budgetService: BudgetsService) {
   }
 
   ngOnInit(): void {
-    this.fgBudget.controls['breakdown'].valueChanges.subscribe(() => {
-      if(!this.pendingSave) this.pendingSave = true;
-        setTimeout(() => {
-          if(this.pendingSave) {
-            this.save()
-          }
-        }, 1500)
-    })
+    this.need.get('planned')?.valueChanges.subscribe(() => {
+      this.save();
+    });
+    this.want.get('planned')?.valueChanges.subscribe(() => {
+      this.save();
+    });
+    this.extra.get('planned')?.valueChanges.subscribe(() => {
+      this.save();
+    });
+
+    this.fgBudget.get('need')?.valueChanges.subscribe(() => {
+      let needTotal = (this.fgBudget.get('need') as FormArray).controls.map((x) => x.get('amount')?.value).reduce((total, currentValue) => total + currentValue, 0);
+      this.need.get('monthlyTotal')?.patchValue(needTotal)
+    });
+
+    this.fgBudget.get('want')?.valueChanges.subscribe(() => {
+      let total = (this.fgBudget.get('want') as FormArray).controls.map((x) => x.get('amount')?.value).reduce((total, currentValue) => total + currentValue, 0);
+      this.want.get('monthlyTotal')?.patchValue(total)
+    });
+
+    this.fgBudget.get('extra')?.valueChanges.subscribe(() => {
+      let total = (this.fgBudget.get('extra') as FormArray).controls.map((x) => x.get('amount')?.value).reduce((total, currentValue) => total + currentValue, 0);
+      this.extra.get('monthlyTotal')?.patchValue(total)
+    });
   }
 
   get budgetRemaining(): number {
@@ -32,11 +46,10 @@ export class BudgetSummaryComponent implements OnInit{
   }
 
   save(): void {
-    this.pendingSave = false;
     this.budgetService.saveBreakdown(this.fgBudget.getRawValue()).subscribe((res) => {
       this.fgBudget.markAsPristine()
       this.fgBudget.markAsUntouched()
-    })
+    });
   }
 
   get breakdown(): FormGroup {

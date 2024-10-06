@@ -1,27 +1,28 @@
-<!--<p-card id="action-bar">-->
-<!--  <app-budget-action-bar [budget]="budget" [budgets]="budgets" [selectedBudget]="selectedBudget" (budgetSelectionChanged)="budgetSelected($event)" (budgetChanged)="budgetChanged()" (budgetDeleted)="budgetDeleted($event)"></app-budget-action-bar>-->
-<!--</p-card>-->
+<p-card id="action-bar">
+  <app-budget-action-bar [fgBudget]="fgBudget" [budgets]="budgets"></app-budget-action-bar>
+</p-card>
 <!--<p-card styleClass="mt-3" header="Debt to Income" subheader="{{selectedBudget}}">-->
 <!--  <app-budget-income-debt [budget]="budget" (budgetChanged)="budgetChanged()"></app-budget-income-debt>-->
 <!--</p-card>-->
-<p-card styleClass="mt-3" header="Budget Summary" subheader="{{selectedBudget}}">
-  <app-budget-summary [fgBudget]="fgBudget"></app-budget-summary>
-</p-card>
-
-<div class="grid mt-3">
-  <div class="col-12 md:col-4">
-    <p-card header="Need" subheader="{{selectedBudget}}">
-      <app-budget-categories category="need" [fgBudget]="fgBudget"></app-budget-categories>
-    </p-card>
+<ng-container *ngIf="fgBudget.get('name')?.value">
+  <p-card styleClass="mt-3" header="Budget Summary" subheader="{{fgBudget.get('name')?.value}}">
+    <app-budget-summary [fgBudget]="fgBudget"></app-budget-summary>
+  </p-card>
+  <div class="grid mt-3">
+    <div class="col-12 md:col-4">
+      <p-card header="Need" subheader="{{fgBudget.get('name')?.value}}">
+        <app-budget-categories category="need" [fgBudget]="fgBudget"></app-budget-categories>
+      </p-card>
+    </div>
+    <div class="col-12 md:col-4">
+      <p-card header="Want" subheader="{{fgBudget.get('name')?.value}}">
+        <app-budget-categories category="want" [fgBudget]="fgBudget"></app-budget-categories>
+      </p-card>
+    </div>
+    <div class="col-12 md:col-4">
+      <p-card header="Extra" subheader="{{fgBudget.get('name')?.value}}">
+        <app-budget-categories category="extra" [fgBudget]="fgBudget"></app-budget-categories>
+      </p-card>
+    </div>
   </div>
-  <div class="col-12 md:col-4">
-    <p-card header="Want" subheader="{{selectedBudget}}">
-      <app-budget-categories category="want" [fgBudget]="fgBudget"></app-budget-categories>
-    </p-card>
-  </div>
-  <div class="col-12 md:col-4">
-    <p-card header="Extra" subheader="{{selectedBudget}}">
-      <app-budget-categories category="extra" [fgBudget]="fgBudget"></app-budget-categories>
-    </p-card>
-  </div>
-</div>
+</ng-container>

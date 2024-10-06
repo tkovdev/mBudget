@@ -1,40 +1,55 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IBudget} from "../../../../models/budget.model";
+import {FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-budget-action-bar',
   templateUrl: './budget-action-bar.component.html',
   styleUrls: ['./budget-action-bar.component.scss']
 })
-export class BudgetActionBarComponent {
+export class BudgetActionBarComponent implements OnInit{
   @Input('budgets') budgets: string[] = [];
-  @Input('selectedBudget') selectedBudget!: string;
-  @Input('budget') budget!: IBudget;
-  @Output() budgetChanged: EventEmitter<void> = new EventEmitter<void>();
-  @Output() budgetDeleted: EventEmitter<string> = new EventEmitter<string>();
-  @Output() budgetSelectionChanged: EventEmitter<string> = new EventEmitter<string>();
+  @Input() fgBudget!: FormGroup;
 
   budgetDialog: boolean = false;
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
-  budgetChangedEvent(): void {
-    this.budgetChanged.emit();
+  ngOnInit(): void {
+    this.fgBudget.get('name')?.valueChanges.subscribe(() => {
+      if(this.fgBudget.get('name')?.dirty) this.router.navigate([], {queryParams: {name: this.fgBudget.get('name')?.value}})
+    });
   }
 
-  budgetSelectedEvent(selectedBudget: string): void {
-    this.budgetSelectionChanged.emit(selectedBudget);
-  }
-
-  deleteBudget(name: string): void {
-    this.budgetDeleted.emit(name);
+  deleteBudget(): void {
+    // this.budgetDeleted.emit(name);
   }
 
   get remaining(): number {
-    let need = this.budget.breakdown.need.monthlyTotal!;
-    let want = this.budget.breakdown.want.monthlyTotal!;
-    let extra = this.budget.breakdown.extra.monthlyTotal!;
-    return (this.budget.income.net - (need + want + extra));
+    let need = this.need.get('monthlyTotal')?.value
+    let want = this.want.get('monthlyTotal')?.value
+    let extra = this.extra.get('monthlyTotal')?.value
+    let net = this.income.get('net')?.value
+    return (net - (need + want + extra));
+  }
+
+  get breakdown(): FormGroup {
+    return this.fgBudget.get('breakdown') as FormGroup;
+  }
+
+  get need(): FormGroup {
+    return this.breakdown.get('need') as FormGroup;
+  }
+  get want(): FormGroup {
+    return this.breakdown.get('want') as FormGroup;
+  }
+  get extra(): FormGroup {
+    return this.breakdown.get('extra') as FormGroup;
+  }
+
+  get income(): FormGroup {
+    return this.fgBudget.get('income') as FormGroup
   }
 }
