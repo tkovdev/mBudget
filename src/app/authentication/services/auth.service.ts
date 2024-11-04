@@ -12,10 +12,8 @@ import {jwtDecode} from "jwt-decode";
 export class AuthService {
 
   constructor(
-    private router: Router,
-    private http: HttpClient
-  ) {
-  }
+    private router: Router
+  ) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.isLoggedIn.pipe(map(loggedIn => {
@@ -31,7 +29,10 @@ export class AuthService {
   get isLoggedIn(): Observable<boolean> {
     return new Observable<boolean>((subscriber) => {
       if(!this.tokens) subscriber.next(false);
-      else subscriber.next(true)
+      else {
+        if(this.tokens.exp <= new Date()) subscriber.next(false);
+        else subscriber.next(true)
+      }
     });
   }
 
@@ -50,24 +51,24 @@ export class AuthService {
   // Sign out
   SignOut(): Promise<void> {
     return new Promise((resolve, reject) => {
-      sessionStorage.removeItem('tokens');
-      sessionStorage.removeItem('nonce');
-      sessionStorage.removeItem('user');
+      localStorage.removeItem('tokens');
+      localStorage.removeItem('nonce');
+      localStorage.removeItem('user');
       sessionStorage.removeItem(DriveConfig.BILL_FILE_NAME);
       resolve();
     })
   }
 
   set nonce(nonce: string | null) {
-    if(nonce == null) sessionStorage.removeItem('nonce');
-    else sessionStorage.setItem('nonce', nonce);
+    if(nonce == null) localStorage.removeItem('nonce');
+    else localStorage.setItem('nonce', nonce);
   }
 
   get nonce(): string | null{
-    let nonce = sessionStorage.getItem('nonce');
+    let nonce = localStorage.getItem('nonce');
     if(nonce == null) {
       nonce = this.generateNonce();
-      sessionStorage.setItem('nonce', nonce);
+      localStorage.setItem('nonce', nonce);
     }
     try{
       return nonce;
@@ -81,7 +82,7 @@ export class AuthService {
   }
 
   get tokens(): Token | null {
-    let tokenString = sessionStorage.getItem('tokens');
+    let tokenString = localStorage.getItem('tokens');
     if(tokenString == null) return null;
     try{
       return JSON.parse(tokenString) as Token;
@@ -140,7 +141,7 @@ export class Token {
   }
 
   static validate(parsedToken: any): boolean {
-    let nonce = sessionStorage.getItem('nonce');
+    let nonce = localStorage.getItem('nonce');
     if(nonce == null) return false;
 
     if(parsedToken == null) return false;
