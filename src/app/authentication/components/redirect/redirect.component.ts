@@ -14,8 +14,8 @@ export class RedirectComponent {
     let idToken = Token.parse(token.idToken)
     if(!Token.validate(idToken)) return;
     if (token) {
-      sessionStorage.setItem('tokens', JSON.stringify(token));
-      sessionStorage.setItem('user', JSON.stringify(idToken));
+      localStorage.setItem('tokens', JSON.stringify(token));
+      localStorage.setItem('user', JSON.stringify(idToken));
       window.location.href = '/';
     }
   }
