@@ -5,22 +5,20 @@
     </ng-container>
     <ng-container [formArrayName]="category">
       <ng-container *ngFor="let budgetItem of categoryFormArray.controls; let i = index" [formGroupName]="i">
-        <div class="col-9">
+        <div [ngClass]="{'col-9': editing, 'col-12': !editing}">
           <span class="p-float-label">
-            <p-inputNumber mode="currency" currency="USD" id="{{budgetItem.get('name')?.getRawValue()}}" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
+            <p-inputNumber mode="currency" currency="USD" id="{{budgetItem.get('name')?.getRawValue()}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
             <label for="{{budgetItem.get('name')?.getRawValue()}}">{{budgetItem.get('name')?.getRawValue()}}</label>
           </span>
         </div>
-        <div class="col-3">
+        <div *ngIf="editing" class="col-3 flex">
+          <button pButton class="p-button-text" icon="pi pi-save" (click)="saveItem(i)"></button>
           <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
         </div>
       </ng-container>
     </ng-container>
-    <div class="col-3">
-      <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="budgetItemPanel.show($event)"></button>
-    </div>
   </div>
 </form>
-<p-overlayPanel #budgetItemPanel (onShow)="budgetItemDialog = true" (onHide)="budgetItemDialog = false">
-  <app-budget-category-item *ngIf="budgetItemDialog" [fgBudget]="fgBudget" [category]="category" (save)="budgetItemPanel.hide()"></app-budget-category-item>
+<p-overlayPanel #budgetItemPanel>
+  <app-budget-category-item [fgBudget]="fgBudget" [category]="category" (save)="budgetItemPanel.hide()"></app-budget-category-item>
 </p-overlayPanel>

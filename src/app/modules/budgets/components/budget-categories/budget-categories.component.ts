@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {IBudget, IBudgetItem} from "../../../../models/budget.model";
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BudgetsService} from "../../../../services/budgets.service";
-import {AbstractControl, FormArray, FormControl, FormGroup} from "@angular/forms";
+import { FormArray, FormGroup} from "@angular/forms";
+import {OverlayPanel} from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-budget-categories',
@@ -12,18 +12,14 @@ export class BudgetCategoriesComponent implements OnInit{
   @Input() category!: 'need' | 'want' | 'extra'
   @Input() fgBudget!: FormGroup;
 
-  budgetItemDialog: boolean = false;
+  editing: boolean = false;
+
+  @ViewChild('budgetItemPanel') budgetItemPanel!: OverlayPanel;
 
   constructor(private budgetService: BudgetsService) {
   }
 
   ngOnInit(): void {
-    this.fgBudget.controls[this.category].valueChanges.subscribe(() => {
-      for(let i =0; i < (this.fgBudget.controls[this.category] as FormArray).controls.length; i++){
-        let item = (this.fgBudget.controls[this.category] as FormArray).controls.at(i)
-        if(item && item.dirty) this.saveItem(i)
-      }
-    })
   }
 
   deleteItem(index: number): void {
@@ -39,6 +35,10 @@ export class BudgetCategoriesComponent implements OnInit{
       this.fgBudget.markAsPristine()
       this.fgBudget.markAsUntouched()
     })
+  }
+
+  edit(): void {
+    this.editing = !this.editing;
   }
 
   get categoryFormArray(): FormArray {

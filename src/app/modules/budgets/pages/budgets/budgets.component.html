@@ -7,17 +7,35 @@
   </p-tabPanel>
   <p-tabPanel header="Breakdown" class="p-0">
     <div class="grid p-0">
-      <div class="col-12 md:col-4 py-4">
-        <h3 class="mt-0">Need</h3>
-        <app-budget-categories category="need" [fgBudget]="fgBudget"></app-budget-categories>
+      <div class="col-12 md:col-4">
+        <div class="flex justify-content-between align-items-center mb-4">
+          <h3 class="m-0">Need</h3>
+          <div>
+            <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="needCategory.budgetItemPanel.show($event)"></button>
+            <button pButton class="p-button-text p-button-info" icon="pi pi-pencil" (click)="needCategory.edit()" ></button>
+          </div>
+        </div>
+        <app-budget-categories #needCategory category="need" [fgBudget]="fgBudget"></app-budget-categories>
       </div>
-      <div class="col-12 md:col-4 py-4">
-        <h3 class="mt-0">Want</h3>
-        <app-budget-categories category="want" [fgBudget]="fgBudget"></app-budget-categories>
+      <div class="col-12 md:col-4">
+        <div class="flex justify-content-between align-items-center mb-4">
+          <h3 class="m-0">Want</h3>
+          <div>
+            <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="wantCategory.budgetItemPanel.show($event)"></button>
+            <button pButton class="p-button-text p-button-info" icon="pi pi-pencil" (click)="wantCategory.edit()" ></button>
+          </div>
+        </div>
+        <app-budget-categories #wantCategory category="want" [fgBudget]="fgBudget"></app-budget-categories>
       </div>
-      <div class="col-12 md:col-4 py-4">
-        <h3 class="mt-0">Extra</h3>
-        <app-budget-categories category="extra" [fgBudget]="fgBudget"></app-budget-categories>
+      <div class="col-12 md:col-4">
+        <div class="flex justify-content-between align-items-center mb-4">
+          <h3 class="m-0">Extra</h3>
+          <div>
+            <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="extraCategory.budgetItemPanel.show($event)"></button>
+            <button pButton class="p-button-text p-button-info" icon="pi pi-pencil" (click)="extraCategory.edit()" ></button>
+          </div>
+        </div>
+        <app-budget-categories #extraCategory category="extra" [fgBudget]="fgBudget"></app-budget-categories>
       </div>
     </div>
   </p-tabPanel>
