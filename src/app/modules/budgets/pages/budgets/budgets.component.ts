@@ -40,8 +40,8 @@ export class BudgetsComponent implements OnInit{
       income: new FormGroup({
         net: new FormControl({value: null, disabled: false}),
         gross: new FormControl({value: null, disabled: false}),
-      }, {updateOn: 'blur'}),
-      debt: new FormControl({value: null, disabled: false}, {updateOn: 'blur'}),
+      }),
+      debt: new FormControl({value: null, disabled: false}),
       need: this.initBudgetItemFormArray(),
       want: this.initBudgetItemFormArray(),
       extra: this.initBudgetItemFormArray()
@@ -53,7 +53,7 @@ export class BudgetsComponent implements OnInit{
       need: this.initBudgetBreakdownItemFormGroup(),
       want: this.initBudgetBreakdownItemFormGroup(),
       extra: this.initBudgetBreakdownItemFormGroup()
-    }, {updateOn:'blur'})
+    })
   }
 
   initBudgetBreakdownItemFormGroup(): FormGroup {
@@ -75,7 +75,7 @@ export class BudgetsComponent implements OnInit{
     return new FormGroup({
       name: new FormControl({value: null, disabled: false},{validators: [Validators.required, Validators.minLength(3), Validators.maxLength(16)]}),
       amount: new FormControl({value: null, disabled: false},{ validators: [Validators.required]}),
-    }, {updateOn: 'blur'});
+    });
   }
 
 

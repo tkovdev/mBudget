@@ -11,7 +11,8 @@
             <label for="{{budgetItem.get('name')?.getRawValue()}}">{{budgetItem.get('name')?.getRawValue()}}</label>
           </span>
         </div>
-        <div *ngIf="editing" class="col-3">
+        <div *ngIf="editing" class="col-3 flex">
+          <button pButton class="p-button-text" icon="pi pi-save" (click)="saveItem(i)"></button>
           <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
         </div>
       </ng-container>
