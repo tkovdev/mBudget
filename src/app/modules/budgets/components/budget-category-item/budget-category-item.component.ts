@@ -11,7 +11,7 @@ import {IBudget} from "../../../../models/budget.model";
 export class BudgetCategoryItemComponent implements OnInit{
   @Output() save: EventEmitter<void> = new EventEmitter<void>();
   @Input() fgBudget!: FormGroup;
-  @Input() category!: 'need' | 'want' | 'extra';
+  @Input() category!: string;
 
   fgBudgetItem!: FormGroup;
 

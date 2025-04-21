@@ -52,8 +52,9 @@ export class BudgetsComponent implements OnInit{
     return new FormGroup({
       need: this.initBudgetBreakdownItemFormGroup(),
       want: this.initBudgetBreakdownItemFormGroup(),
-      extra: this.initBudgetBreakdownItemFormGroup()
-    })
+      extra: this.initBudgetBreakdownItemFormGroup(),
+      remaining: new FormControl( {value: null, disabled: false})
+    });
   }
 
   initBudgetBreakdownItemFormGroup(): FormGroup {

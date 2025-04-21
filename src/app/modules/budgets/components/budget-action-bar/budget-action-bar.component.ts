@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IBudget} from "../../../../models/budget.model";
-import {FormGroup} from "@angular/forms";
+import {FormGroup, FormGroupDirective} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BudgetsService} from "../../../../services/budgets.service";
 
@@ -11,14 +11,24 @@ import {BudgetsService} from "../../../../services/budgets.service";
 })
 export class BudgetActionBarComponent implements OnInit{
   @Input('budgets') budgets: string[] = [];
-  @Input() fgBudget!: FormGroup;
+  fgBudget!: FormGroup;
 
-  constructor(private router: Router, private budgetService: BudgetsService) {
+  constructor(private router: Router, private budgetService: BudgetsService, private fg: FormGroupDirective) {
   }
 
   ngOnInit(): void {
+    this.fgBudget = this.fg.form;
     this.fgBudget.get('name')?.valueChanges.subscribe(() => {
       if(this.fgBudget.get('name')?.dirty) this.router.navigate([], {queryParams: {name: this.fgBudget.get('name')?.value}})
+    });
+    this.need.valueChanges.subscribe(() => {
+      this.fgBudget.get('breakdown')?.patchValue({remaining: this.remaining})
+    });
+    this.want.valueChanges.subscribe(() => {
+      this.fgBudget.get('breakdown')?.patchValue({remaining: this.remaining})
+    });
+    this.extra.valueChanges.subscribe(() => {
+      this.fgBudget.get('breakdown')?.patchValue({remaining: this.remaining})
     });
   }
 

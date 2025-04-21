@@ -204,7 +204,7 @@ export class BudgetsService {
     });
   }
 
-  public addBudgetItem(budgetName: string, category: 'need' | 'want' | 'extra', budgetItem: IBudgetItem): Observable<boolean>{
+  public addBudgetItem(budgetName: string, category: string, budgetItem: IBudgetItem): Observable<boolean>{
     return new Observable<boolean>((subscriber) => {
       this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
         if (budgetFile) {
@@ -213,7 +213,7 @@ export class BudgetsService {
             subscriber.next(false);
             return;
           }
-          let budgetItemIdx = budgetFile.budgets[budgetIdx][category].findIndex(x => x.name == budgetItem.name)
+          let budgetItemIdx = budgetFile.budgets[budgetIdx][category].findIndex((x: IBudgetItem) => x.name == budgetItem.name)
           if(budgetItemIdx > -1) {
             subscriber.next(false);
             return;
@@ -228,7 +228,7 @@ export class BudgetsService {
     });
   }
 
-  public removeBudgetItem(budgetName: string, category: 'need' | 'want' | 'extra', name: string): Observable<boolean>{
+  public removeBudgetItem(budgetName: string, category: string, index: number): Observable<boolean>{
     return new Observable<boolean>((subscriber) => {
       this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
         if (budgetFile) {
@@ -237,7 +237,7 @@ export class BudgetsService {
             subscriber.next(false);
             return;
           }
-          budgetFile.budgets[budgetIdx][category] = budgetFile.budgets[budgetIdx][category].filter(x => x.name != name);
+          (budgetFile.budgets[budgetIdx][category] as []).splice(index, 1)
 
           this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
             subscriber.next(true);
@@ -247,7 +247,7 @@ export class BudgetsService {
     });
   }
 
-  public updateBudgetItem(budgetName: string, category: 'need' | 'want' | 'extra', budgetItem: IBudgetItem): Observable<boolean>{
+  public updateBudgetItem(budgetName: string, category: string, budgetItem: IBudgetItem): Observable<boolean>{
     return new Observable<boolean>((subscriber) => {
       this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
         if (budgetFile) {
@@ -256,7 +256,7 @@ export class BudgetsService {
             subscriber.next(false);
             return;
           }
-          let budgetItemIdx = budgetFile.budgets[budgetIdx][category].findIndex(x => x.name == budgetItem.name)
+          let budgetItemIdx = budgetFile.budgets[budgetIdx][category].findIndex((x: IBudgetItem) => x.name == budgetItem.name)
           if(budgetItemIdx <= -1) {
             subscriber.next(false);
             return;
@@ -268,6 +268,42 @@ export class BudgetsService {
               subscriber.next(true);
             })
           }
+        }
+      });
+    });
+  }
+
+  public updateBudgetItems(budgetName: string, category: string, budgetItems: IBudgetItem[]): Observable<boolean>{
+    return new Observable<boolean>((subscriber) => {
+      this.filesService.retrieveFile<IBudgetSchema>(this.budgetFileId).subscribe((budgetFile) => {
+        if (budgetFile) {
+          let budgetIdx = budgetFile.budgets.findIndex(x => x.name == budgetName);
+
+          if(budgetIdx <= -1) {
+            subscriber.next(false);
+            return;
+          }
+
+          let save = true;
+          for(let budgetItem of budgetItems){
+            let budgetItemIdx = budgetFile.budgets[budgetIdx][category].findIndex((x: IBudgetItem) => x.name == budgetItem.name)
+            if(budgetItemIdx <= -1) {
+              save = false;
+              break;
+            }
+            if(budgetItem.amount !== budgetFile.budgets[budgetIdx][category][budgetItemIdx].amount){
+              budgetFile.budgets[budgetIdx][category][budgetItemIdx] = budgetItem
+            }
+          }
+
+          if(save) {
+            this.filesService.updateFile(this.budgetFileId, budgetFile).subscribe((res) => {
+              subscriber.next(true);
+            })
+          }else {
+            subscriber.next(false);
+          }
+
         }
       });
     });

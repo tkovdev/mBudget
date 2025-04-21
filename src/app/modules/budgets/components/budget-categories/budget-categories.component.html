@@ -1,24 +1,23 @@
-<form [formGroup]="fgBudget">
-  <div class="grid">
-    <ng-container *ngIf="categoryFormArray.length <= 0">
-      <div class="col-12"><span>No budget items!</span></div>
+<form [formGroup]="fgParent" class="grid">
+  <ng-container *ngIf="fgCategory.length <= 0">
+    <div class="col-12"><span>No budget items!</span></div>
+  </ng-container>
+  <ng-container [formArrayName]="formArrayName">
+      <ng-container *ngFor="let budgetItem of categoryFormGroups; let i = index">
+        <ng-container [formGroup]="budgetItem">
+          <div class="col-10">
+            <span class="p-float-label">
+              <p-inputNumber mode="currency" currency="USD" id="{{budgetItem.get('name')?.getRawValue()}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
+              <label for="{{budgetItem.get('name')?.getRawValue()}}">{{budgetItem.get('name')?.getRawValue()}}</label>
+            </span>
+          </div>
+          <div class="col-2 flex">
+            <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
+          </div>
+        </ng-container>
     </ng-container>
-    <ng-container [formArrayName]="category">
-      <ng-container *ngFor="let budgetItem of categoryFormArray.controls; let i = index" [formGroupName]="i">
-        <div [ngClass]="{'col-9': editing, 'col-12': !editing}">
-          <span class="p-float-label">
-            <p-inputNumber mode="currency" currency="USD" id="{{budgetItem.get('name')?.getRawValue()}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
-            <label for="{{budgetItem.get('name')?.getRawValue()}}">{{budgetItem.get('name')?.getRawValue()}}</label>
-          </span>
-        </div>
-        <div *ngIf="editing" class="col-3 flex">
-          <button pButton class="p-button-text" icon="pi pi-save" (click)="saveItem(i)"></button>
-          <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
-        </div>
-      </ng-container>
-    </ng-container>
-  </div>
+  </ng-container>
 </form>
 <p-overlayPanel #budgetItemPanel>
-  <app-budget-category-item [fgBudget]="fgBudget" [category]="category" (save)="budgetItemPanel.hide()"></app-budget-category-item>
+  <app-budget-category-item [fgBudget]="fgParent" [category]="formArrayName" (save)="budgetItemPanel.hide()"></app-budget-category-item>
 </p-overlayPanel>

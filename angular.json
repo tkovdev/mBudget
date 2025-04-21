@@ -99,7 +99,10 @@
               "buildTarget": "mBudget-app:build:development"
             },
             "local": {
-              "buildTarget": "mBudget-app:build:local"
+              "buildTarget": "mBudget-app:build:local",
+              "ssl": true,
+              "sslCert": "localhost.crt",
+              "sslKey": "localhost.key"
             }
           },
           "defaultConfiguration": "local"

@@ -1,45 +1,47 @@
-<p-card id="action-bar">
-  <app-budget-action-bar [fgBudget]="fgBudget" [budgets]="budgets"></app-budget-action-bar>
-</p-card>
-<p-tabView styleClass="mt-3">
-  <p-tabPanel header="Budget Summary">
-    <app-budget-summary [fgBudget]="fgBudget"></app-budget-summary>
-  </p-tabPanel>
-  <p-tabPanel header="Breakdown" class="p-0">
-    <div class="grid p-0">
-      <div class="col-12 md:col-4">
-        <div class="flex justify-content-between align-items-center mb-4">
-          <h3 class="m-0">Need</h3>
-          <div>
-            <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="needCategory.budgetItemPanel.show($event)"></button>
-            <button pButton class="p-button-text p-button-info" icon="pi pi-pencil" (click)="needCategory.edit()" ></button>
+<form [formGroup]="fgBudget">
+  <p-card id="action-bar">
+    <app-budget-action-bar [budgets]="budgets"></app-budget-action-bar>
+  </p-card>
+  <p-tabView styleClass="mt-3">
+    <p-tabPanel header="Budget Summary">
+      <app-budget-summary></app-budget-summary>
+    </p-tabPanel>
+    <p-tabPanel header="Breakdown" class="p-0">
+      <div class="grid p-0">
+        <div class="col-12 md:col-4">
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">Need</h3>
+            <div>
+              <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="needCategory.budgetItemPanel.show($event)"></button>
+              <button pButton class="p-button-text p-button-info" icon="pi pi-save" (click)="needCategory.save()" ></button>
+            </div>
           </div>
+          <app-budget-categories #needCategory formArrayName="need"></app-budget-categories>
         </div>
-        <app-budget-categories #needCategory category="need" [fgBudget]="fgBudget"></app-budget-categories>
-      </div>
-      <div class="col-12 md:col-4">
-        <div class="flex justify-content-between align-items-center mb-4">
-          <h3 class="m-0">Want</h3>
-          <div>
-            <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="wantCategory.budgetItemPanel.show($event)"></button>
-            <button pButton class="p-button-text p-button-info" icon="pi pi-pencil" (click)="wantCategory.edit()" ></button>
+        <div class="col-12 md:col-4">
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0">Want</h3>
+            <div>
+              <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="wantCategory.budgetItemPanel.show($event)"></button>
+              <button pButton class="p-button-text p-button-info" icon="pi pi-save" (click)="wantCategory.save()" ></button>
+            </div>
           </div>
+          <app-budget-categories #wantCategory formArrayName="want"></app-budget-categories>
         </div>
-        <app-budget-categories #wantCategory category="want" [fgBudget]="fgBudget"></app-budget-categories>
-      </div>
-      <div class="col-12 md:col-4">
-        <div class="flex justify-content-between align-items-center mb-4">
-          <h3 class="m-0">Extra</h3>
-          <div>
-            <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="extraCategory.budgetItemPanel.show($event)"></button>
-            <button pButton class="p-button-text p-button-info" icon="pi pi-pencil" (click)="extraCategory.edit()" ></button>
+        <div class="col-12 md:col-4">
+          <div class="flex justify-content-between align-items-center mb-4">
+            <h3 class="m-0 col">Extra</h3>
+            <div>
+              <button pButton class="p-button-text" icon="pi pi-plus" pTooltip="Add Item" (click)="extraCategory.budgetItemPanel.show($event)"></button>
+              <button pButton class="p-button-text p-button-info" icon="pi pi-save" (click)="extraCategory.save()" ></button>
+            </div>
           </div>
+          <app-budget-categories #extraCategory formArrayName="extra"></app-budget-categories>
         </div>
-        <app-budget-categories #extraCategory category="extra" [fgBudget]="fgBudget"></app-budget-categories>
       </div>
-    </div>
-  </p-tabPanel>
-  <p-tabPanel header="Debt to Income">
-    <app-budget-income-debt [fgBudget]="fgBudget"></app-budget-income-debt>
-  </p-tabPanel>
-</p-tabView>
+    </p-tabPanel>
+    <p-tabPanel header="Debt to Income">
+      <app-budget-income-debt></app-budget-income-debt>
+    </p-tabPanel>
+  </p-tabView>
+</form>

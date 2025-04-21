@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BudgetsService} from "../../../../services/budgets.service";
-import { FormArray, FormGroup} from "@angular/forms";
+import {ControlContainer, FormArray, FormArrayName, FormGroup, FormGroupDirective} from "@angular/forms";
 import {OverlayPanel} from "primeng/overlaypanel";
 
 @Component({
@@ -9,39 +9,38 @@ import {OverlayPanel} from "primeng/overlaypanel";
   styleUrls: ['./budget-categories.component.scss']
 })
 export class BudgetCategoriesComponent implements OnInit{
-  @Input() category!: 'need' | 'want' | 'extra'
-  @Input() fgBudget!: FormGroup;
-
-  editing: boolean = false;
+  fgCategory!: FormArray;
+  formArrayName!: string;
 
   @ViewChild('budgetItemPanel') budgetItemPanel!: OverlayPanel;
 
-  constructor(private budgetService: BudgetsService) {
+  constructor(private budgetService: BudgetsService, private fg: FormArrayName, private fgDir: FormGroupDirective) {
   }
 
   ngOnInit(): void {
+    this.fgCategory = this.fg.control
+    this.fgCategory.setParent(this.fgDir.form)
+    this.formArrayName = this.fg.name as string;
   }
 
   deleteItem(index: number): void {
-    let budgetItem = (this.fgBudget.controls[this.category] as FormArray).at(index);
-    this.budgetService.removeBudgetItem(this.fgBudget.get('name')?.getRawValue(), this.category, budgetItem.get('name')?.getRawValue()).subscribe((res) => {
-      (this.fgBudget.controls[this.category] as FormArray).removeAt(index);
+    this.budgetService.removeBudgetItem(this.fgParent.get('name')?.getRawValue(), this.formArrayName, index).subscribe((res) => {
+      this.fgCategory.removeAt(index);
     });
   }
 
-  saveItem(index: number): void {
-    let budgetItem = (this.fgBudget.controls[this.category] as FormArray).at(index);
-    this.budgetService.updateBudgetItem(this.fgBudget.get('name')?.getRawValue(), this.category, budgetItem.getRawValue()).subscribe((res) => {
-      this.fgBudget.markAsPristine()
-      this.fgBudget.markAsUntouched()
-    })
+  save(): void {
+    this.budgetService.updateBudgetItems(this.fgParent.get('name')?.getRawValue(), this.formArrayName, this.fgCategory.getRawValue()).subscribe((res) => {
+      this.fgCategory.markAsPristine()
+      this.fgCategory.markAsUntouched()
+    });
   }
 
-  edit(): void {
-    this.editing = !this.editing;
+  get fgParent(): FormGroup {
+    return this.fgDir.form as FormGroup;
   }
 
-  get categoryFormArray(): FormArray {
-    return this.fgBudget.get(this.category) as FormArray
+  get categoryFormGroups(): FormGroup[] {
+    return this.fgCategory.controls as FormGroup[]
   }
 }

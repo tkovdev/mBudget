@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {IBudget, IBudgetBreakdown} from "../../../../models/budget.model";
 import {BudgetsService} from "../../../../services/budgets.service";
-import {FormArray, FormGroup} from "@angular/forms";
+import {FormArray, FormGroup, FormGroupDirective} from "@angular/forms";
 
 @Component({
   selector: 'app-budget-summary',
@@ -9,11 +9,12 @@ import {FormArray, FormGroup} from "@angular/forms";
   styleUrls: ['./budget-summary.component.scss']
 })
 export class BudgetSummaryComponent implements OnInit{
-  @Input() fgBudget!: FormGroup;
-  constructor(private budgetService: BudgetsService) {
+  fgBudget!: FormGroup;
+  constructor(private budgetService: BudgetsService, private fg: FormGroupDirective) {
   }
 
   ngOnInit(): void {
+    this.fgBudget = this.fg.form
     this.need.get('planned')?.valueChanges.subscribe(() => {
       this.save();
     });
