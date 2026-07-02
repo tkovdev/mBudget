@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {AuthService} from "../authentication/services/auth.service";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import {IBillSchema, IBudgetSchema, IFileSearch, IFileSearchDetails} from "../models/driveSchema.model";
-import FileResource = gapi.client.drive.FileResource;
+import FileResource = gapi.client.drive.File;
 import {combineLatest, map, Observable} from "rxjs";
 import {ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot} from "@angular/router";
 import {ConfirmationService, ConfirmEventType} from "primeng/api";

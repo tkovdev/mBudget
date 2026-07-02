@@ -57,4 +57,8 @@ export class ProfileComponent implements OnInit{
       })
     })
   }
+
+  getSize(size: string): number {
+    return parseInt(size);
+  }
 }

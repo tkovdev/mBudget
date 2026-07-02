@@ -6,10 +6,10 @@ import {CardModule} from "primeng/card";
 import { ProfileComponent } from './pages/profile/profile.component';
 import {ButtonModule} from "primeng/button";
 import { DialogModule } from 'primeng/dialog';
-import { InputTextareaModule } from 'primeng/inputtextarea';
+import { TextareaModule } from 'primeng/textarea';
 import {FormsModule} from "@angular/forms";
 import { ProfileAdvancedOptionsComponent } from './components/profile-advanced-options/profile-advanced-options.component';
-import {DialogService, DynamicDialogModule} from "primeng/dynamicdialog";
+import {DialogService, DynamicDialog} from "primeng/dynamicdialog";
 
 
 @NgModule({
@@ -26,8 +26,8 @@ import {DialogService, DynamicDialogModule} from "primeng/dynamicdialog";
     CardModule,
     ButtonModule,
     DialogModule,
-    InputTextareaModule,
-    DynamicDialogModule
+    TextareaModule,
+    DynamicDialog
   ],
   providers: [DialogService]
 })

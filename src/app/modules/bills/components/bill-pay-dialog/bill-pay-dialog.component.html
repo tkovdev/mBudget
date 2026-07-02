@@ -1,43 +1,41 @@
-<form [formGroup]="billForm" [ngClass]="{'grid': true}" style="max-height: 60vh; padding-top: 1rem;" class="overflow-y-auto">
-  <ng-container *ngFor="let bill of bills">
-    <ng-container *ngIf="!payeeHidden(bill.payee)">
-      <div class="col-12 flex">
-        <div class="w-full" formGroupName="bills">
-          <span class="p-float-label">
-            <p-inputNumber mode="currency" currency="USD" locale="en-US" inputId="{{bill.payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="{{bill.payee.name}}"></p-inputNumber>
+<form [formGroup]="billForm">
+  <div class="flex flex-column gap-4 pt-4" style="overflow-y: scroll;">
+    <ng-container *ngFor="let bill of bills; index as i">
+      <ng-container *ngIf="!payeeHidden(bill.payee)">
+        <div class="flex" formGroupName="bills">
+          <p-float-label class="w-full">
+            <p-inputNumber tabindex="1" mode="currency" currency="USD" locale="en-US" inputId="{{bill.payee.name}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="{{bill.payee.name}}"></p-inputNumber>
             <label for="{{bill.payee.name}}">{{bill.payee.name}}</label>
-          </span>
+          </p-float-label>
+          <button tabindex="-1" pButton (click)="useLastMonth(bill.payee)" class="p-button-text p-button-info" icon="pi pi-history" pTooltip="Use Last Month"></button>
+          <button tabindex="-1" pButton (click)="hidePayee(bill.payee)" class="p-button-text p-button-danger" icon="pi pi-times" pTooltip="Remove"></button>
         </div>
-        <div class="flex">
-          <button pButton (click)="useLastMonth(bill.payee)" class="p-button-text p-button-info" icon="pi pi-history" pTooltip="Use Last Month"></button>
-          <button pButton (click)="hidePayee(bill.payee)" class="p-button-text p-button-danger" icon="pi pi-times" pTooltip="Remove"></button>
-        </div>
-      </div>
+      </ng-container>
     </ng-container>
-  </ng-container>
+  </div>
 </form>
 <div class="flex justify-content-between mt-1">
   <div class="w-full">
-    <button [disabled]="!billForm.valid || currentBills.length <= 0" pButton (click)="saveBill()" label="Save"></button>
+    <button tabindex="2" [disabled]="!billForm.valid || currentBills.length <= 0" pButton (click)="saveBill()" label="Save"></button>
   </div>
   <ng-container *ngIf="payees">
     <div *ngIf="missingPayees(payees, bills).length > 0" class="w-full text-right">
-      <button pButton class="p-button-text" (click)="morePayeesPanel.show($event)" label="More Payees"></button>
-      <p-overlayPanel #morePayeesPanel>
+      <button pButton tabindex="2" class="p-button-text" (click)="morePayeesPanel.show($event)" label="More Payees"></button>
+      <p-popover #morePayeesPanel>
         <ng-container *ngIf="missingPayees(payees, bills) as missingPayees">
-          <div style="max-height: 40vh; padding-top: 1rem;" class="overflow-y-auto">
+          <div style="max-height: 40vh;" class="overflow-y-auto">
             <ng-container *ngFor="let payee of missingPayees">
               <div class="flex justify-content-between">
                 <p class="mr-1">{{payee.name}}</p>
-                <button pButton class="p-button-text ml-1" label="Add" (click)="showPayee(payee)"></button>
+                <button tabindex="3" pButton class="p-button-text ml-1" label="Add" (click)="showPayee(payee)"></button>
               </div>
             </ng-container>
           </div>
           <div *ngIf="missingPayees.length == payees.length" class="flex justify-content-end">
-            <button pButton class="p-button-text" label="Add All" (click)="showAllPayees(payees)"></button>
+            <button tabindex="4" pButton class="p-button-text" label="Add All" (click)="showAllPayees(payees)"></button>
           </div>
         </ng-container>
-      </p-overlayPanel>
+      </p-popover>
     </div>
   </ng-container>
 </div>

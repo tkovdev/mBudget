@@ -1,71 +1,61 @@
-<form class="grid py-4" [formGroup]="fgBudget">
-  <div class="col-12" formGroupName="breakdown">
-    <div class="grid">
-      <div class="col-12 md:col-4 pt-0" formGroupName="need">
+<form class="flex py-4" [formGroup]="fgBudget">
+  <div class="w-full flex justify-content-between" formGroupName="breakdown">
+      <div class="flex flex-column gap-4" formGroupName="need">
         <h3 class="mt-0">Need</h3>
-        <span class="p-float-label">
+        <p-floatlabel class="w-full">
           <p-inputNumber suffix="%" id="needDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
           <label for="needDesiredPercent">Planned Percent</label>
-        </span>
-        <span class="p-float-label mt-3">
+        </p-floatlabel>
+        <p-floatlabel class="w-full">
           <p-inputNumber suffix="%" id="needActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
           <label for="needActualPercent">Actual Percent</label>
-        </span>
-        <span class="p-float-label mt-3">
+        </p-floatlabel>
+        <p-floatlabel class="w-full">
           <p-inputNumber mode="currency" currency="USD" id="needSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
           <label for="needSalaryUsed">Used Salary</label>
-        </span>
-        <span class="p-float-label mt-3">
+        </p-floatlabel>
+        <p-floatlabel class="w-full">
           <p-inputNumber mode="currency" currency="USD" id="needMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
           <label for="needMonthlyUsed">Used Monthly</label>
-        </span>
+        </p-floatlabel>
       </div>
-      <div class="col-12 md:col-4 pt-0" formGroupName="want">
+      <div class="flex flex-column gap-4" formGroupName="want">
         <h3 class="mt-0">Want</h3>
-        <span class="p-float-label">
-        <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
-        <label for="wantDesiredPercent">Planned Percent</label>
-      </span>
-        <span class="p-float-label mt-3">
-        <p-inputNumber suffix="%" id="wantActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
-        <label for="wantActualPercent">Actual Percent</label>
-      </span>
-        <span class="p-float-label mt-3">
-        <p-inputNumber mode="currency" currency="USD" id="wantSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
-        <label for="wantSalaryUsed">Used Salary</label>
-      </span>
-        <span class="p-float-label mt-3">
-        <p-inputNumber mode="currency" currency="USD" id="wantMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
-        <label for="wantMonthlyUsed">Used Monthly</label>
-      </span>
+        <p-floatlabel class="w-full">
+          <p-inputNumber suffix="%" id="wantDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
+          <label for="wantDesiredPercent">Planned Percent</label>
+        </p-floatlabel>
+        <p-floatlabel class="w-full">
+          <p-inputNumber suffix="%" id="wantActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
+          <label for="wantActualPercent">Actual Percent</label>
+        </p-floatlabel>
+        <p-floatlabel class="w-full">
+          <p-inputNumber mode="currency" currency="USD" id="wantSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
+          <label for="wantSalaryUsed">Used Salary</label>
+        </p-floatlabel>
+        <p-floatlabel class="w-full">
+          <p-inputNumber mode="currency" currency="USD" id="wantMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
+          <label for="wantMonthlyUsed">Used Monthly</label>
+        </p-floatlabel>
       </div>
-    <div class="col-12 md:col-4 pt-0" formGroupName="extra">
+    <div class="flex flex-column gap-4" formGroupName="extra">
       <h3 class="mt-0">Extra</h3>
-      <span class="p-float-label">
-      <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
-      <label for="extraDesiredPercent">Planned Percent</label>
-    </span>
-      <span class="p-float-label mt-3">
-      <p-inputNumber suffix="%" id="extraActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
-      <label for="extraActualPercent">Actual Percent</label>
-    </span>
-      <span class="p-float-label mt-3">
-      <p-inputNumber mode="currency" currency="USD" id="extraSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
-      <label for="extraSalaryUsed">Used Salary</label>
-    </span>
-      <span class="p-float-label mt-3">
-      <p-inputNumber mode="currency" currency="USD" id="extraMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
-      <label for="extraMonthlyUsed">Used Monthly</label>
-    </span>
-    </div>
+      <p-floatlabel class="w-full">
+        <p-inputNumber suffix="%" id="extraDesiredPercent" styleClass="w-full" class="w-full" formControlName="planned" [min]="0" [max]="100"></p-inputNumber>
+        <label for="extraDesiredPercent">Planned Percent</label>
+      </p-floatlabel>
+      <p-floatlabel class="w-full">
+        <p-inputNumber suffix="%" id="extraActualPercent" styleClass="w-full" class="w-full" formControlName="actual" ></p-inputNumber>
+        <label for="extraActualPercent">Actual Percent</label>
+      </p-floatlabel>
+      <p-floatlabel class="w-full">
+        <p-inputNumber mode="currency" currency="USD" id="extraSalaryUsed" styleClass="w-full" class="w-full" formControlName="salaryTotal" ></p-inputNumber>
+        <label for="extraSalaryUsed">Used Salary</label>
+      </p-floatlabel>
+      <p-floatlabel class="w-full">
+        <p-inputNumber mode="currency" currency="USD" id="extraMonthlyUsed" styleClass="w-full" class="w-full" formControlName="monthlyTotal" ></p-inputNumber>
+        <label for="extraMonthlyUsed">Used Monthly</label>
+      </p-floatlabel>
     </div>
   </div>
-  <div class="col-12">
-    <p-message *ngIf="budgetRemaining == 0" severity="success" text="{{100 - budgetRemaining}}% allocated"></p-message>
-    <p-message *ngIf="budgetRemaining > 0" severity="info" text="{{budgetRemaining}}% under allocate"></p-message>
-    <p-message *ngIf="budgetRemaining < 0" severity="error" text="{{(-1 * budgetRemaining)}}% over allocated"></p-message>
-  </div>
-<!--  <div class="col-12">-->
-<!--    <button [disabled]="budgetRemaining > 0" (click)="save()" label="Save" pButton></button>-->
-<!--  </div>-->
 </form>

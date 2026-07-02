@@ -5,11 +5,9 @@ import { BudgetsRoutingModule } from './budgets-routing.module';
 import { BudgetsComponent } from './pages/budgets/budgets.component';
 import { BudgetActionBarComponent } from './components/budget-action-bar/budget-action-bar.component';
 import {ButtonModule} from "primeng/button";
-import {OverlayPanelModule} from "primeng/overlaypanel";
 import {TooltipModule} from "primeng/tooltip";
 import {CardModule} from "primeng/card";
 import {InputTextModule} from "primeng/inputtext";
-import {DropdownModule} from "primeng/dropdown";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { BudgetDialogComponent } from './components/budget-dialog/budget-dialog.component';
 import { BudgetSummaryComponent } from './components/budget-summary/budget-summary.component';
@@ -20,6 +18,9 @@ import { BudgetCategoriesComponent } from './components/budget-categories/budget
 import {AccordionModule} from "primeng/accordion";
 import { BudgetCategoryItemComponent } from './components/budget-category-item/budget-category-item.component';
 import {TabViewModule} from "primeng/tabview";
+import { PopoverModule } from 'primeng/popover';
+import { SelectModule } from 'primeng/select';
+import { FloatLabelModule } from 'primeng/floatlabel';
 
 @NgModule({
   declarations: [
@@ -38,15 +39,16 @@ import {TabViewModule} from "primeng/tabview";
     BudgetsRoutingModule,
     CardModule,
     ButtonModule,
-    OverlayPanelModule,
+    PopoverModule,
     InputTextModule,
     TooltipModule,
-    DropdownModule,
+    SelectModule,
     ReactiveFormsModule,
     InputNumberModule,
     MessageModule,
     AccordionModule,
-    TabViewModule
+    TabViewModule,
+    FloatLabelModule
   ]
 })
 export class BudgetsModule { }

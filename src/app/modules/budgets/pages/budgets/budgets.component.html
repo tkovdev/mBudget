@@ -1,7 +1,5 @@
 <form [formGroup]="fgBudget">
-  <p-card id="action-bar">
-    <app-budget-action-bar [budgets]="budgets"></app-budget-action-bar>
-  </p-card>
+  <app-budget-action-bar [budgets]="budgets"></app-budget-action-bar>
   <p-tabView styleClass="mt-3">
     <p-tabPanel header="Budget Summary">
       <app-budget-summary></app-budget-summary>

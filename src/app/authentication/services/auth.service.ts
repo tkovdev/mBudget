@@ -3,7 +3,7 @@ import {ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot} from
 import {map, Observable} from "rxjs";
 import {DriveConfig} from "../../services/files.service";
 import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {jwtDecode} from "jwt-decode";
 
 @Injectable({
