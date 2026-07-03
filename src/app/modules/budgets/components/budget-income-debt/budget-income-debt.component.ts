@@ -4,9 +4,10 @@ import {BudgetsService} from "../../../../services/budgets.service";
 import {FormArray, FormArrayName, FormControl, FormGroup, FormGroupDirective, FormGroupName} from "@angular/forms";
 
 @Component({
-  selector: 'app-budget-income-debt',
-  templateUrl: './budget-income-debt.component.html',
-  styleUrls: ['./budget-income-debt.component.scss']
+    selector: 'app-budget-income-debt',
+    templateUrl: './budget-income-debt.component.html',
+    styleUrls: ['./budget-income-debt.component.scss'],
+    standalone: false
 })
 export class BudgetIncomeDebtComponent implements OnInit{
   fgIncome!: FormGroup;

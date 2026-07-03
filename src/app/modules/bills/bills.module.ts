@@ -10,7 +10,7 @@ import { BillActionBarComponent } from './components/bill-action-bar/bill-action
 import {BillPayDialogComponent} from "./components/bill-pay-dialog/bill-pay-dialog.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ButtonModule} from "primeng/button";
-import {DialogService, DynamicDialog} from "primeng/dynamicdialog";
+import {DialogService, DynamicDialogModule} from "primeng/dynamicdialog";
 import {TooltipModule} from "primeng/tooltip";
 import {InputTextModule} from "primeng/inputtext";
 import {InputNumberModule} from "primeng/inputnumber";
@@ -48,7 +48,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     CardModule,
     SelectModule,
     ButtonModule,
-    DynamicDialog,
+    DynamicDialogModule,
     PopoverModule,
     DialogModule,
     InputTextModule,

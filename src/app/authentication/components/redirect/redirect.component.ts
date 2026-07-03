@@ -2,9 +2,10 @@ import { Component } from '@angular/core';
 import { Token} from "../../services/auth.service";
 
 @Component({
-  selector: 'app-redirect',
-  templateUrl: './redirect.component.html',
-  styleUrls: ['./redirect.component.scss']
+    selector: 'app-redirect',
+    templateUrl: './redirect.component.html',
+    styleUrls: ['./redirect.component.scss'],
+    standalone: false
 })
 export class RedirectComponent {
 

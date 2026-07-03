@@ -3,9 +3,10 @@ import {Observable} from "rxjs";
 import {IPayee} from "../../../../models/bill.model";
 
 @Component({
-  selector: 'app-payee-list',
-  templateUrl: './payee-list.component.html',
-  styleUrls: ['./payee-list.component.scss']
+    selector: 'app-payee-list',
+    templateUrl: './payee-list.component.html',
+    styleUrls: ['./payee-list.component.scss'],
+    standalone: false
 })
 export class PayeeListComponent {
   @Input('payees') payees: IPayee[] = [];

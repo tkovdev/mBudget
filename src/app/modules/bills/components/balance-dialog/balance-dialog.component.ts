@@ -6,9 +6,10 @@ import {Month} from "../../../../models/shared.model";
 import {Observable} from "rxjs";
 
 @Component({
-  selector: 'app-balance-dialog',
-  templateUrl: './balance-dialog.component.html',
-  styleUrls: ['./balance-dialog.component.scss']
+    selector: 'app-balance-dialog',
+    templateUrl: './balance-dialog.component.html',
+    styleUrls: ['./balance-dialog.component.scss'],
+    standalone: false
 })
 export class BalanceDialogComponent implements OnInit{
   @Output() close: EventEmitter<void> = new EventEmitter<void>();

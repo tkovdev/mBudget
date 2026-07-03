@@ -4,9 +4,10 @@ import {ControlContainer, FormArray, FormArrayName, FormGroup, FormGroupDirectiv
 import { Popover } from 'primeng/popover';
 
 @Component({
-  selector: 'app-budget-categories',
-  templateUrl: './budget-categories.component.html',
-  styleUrls: ['./budget-categories.component.scss']
+    selector: 'app-budget-categories',
+    templateUrl: './budget-categories.component.html',
+    styleUrls: ['./budget-categories.component.scss'],
+    standalone: false
 })
 export class BudgetCategoriesComponent implements OnInit{
   fgCategory!: FormArray;

@@ -4,9 +4,10 @@ import {BudgetsService} from "../../../../services/budgets.service";
 import {IBudget} from "../../../../models/budget.model";
 
 @Component({
-  selector: 'app-budget-category-item',
-  templateUrl: './budget-category-item.component.html',
-  styleUrls: ['./budget-category-item.component.scss']
+    selector: 'app-budget-category-item',
+    templateUrl: './budget-category-item.component.html',
+    styleUrls: ['./budget-category-item.component.scss'],
+    standalone: false
 })
 export class BudgetCategoryItemComponent implements OnInit{
   @Output() save: EventEmitter<void> = new EventEmitter<void>();

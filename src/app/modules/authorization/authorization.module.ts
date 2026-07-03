@@ -9,7 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { TextareaModule } from 'primeng/textarea';
 import {FormsModule} from "@angular/forms";
 import { ProfileAdvancedOptionsComponent } from './components/profile-advanced-options/profile-advanced-options.component';
-import {DialogService, DynamicDialog} from "primeng/dynamicdialog";
+import {DialogService, DynamicDialogModule} from "primeng/dynamicdialog";
 
 
 @NgModule({
@@ -27,7 +27,7 @@ import {DialogService, DynamicDialog} from "primeng/dynamicdialog";
     ButtonModule,
     DialogModule,
     TextareaModule,
-    DynamicDialog
+    DynamicDialogModule
   ],
   providers: [DialogService]
 })

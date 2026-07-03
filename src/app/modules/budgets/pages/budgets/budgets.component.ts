@@ -9,9 +9,10 @@ import {BudgetsService} from "../../../../services/budgets.service";
 import {FormArray, FormControl, FormControlName, FormGroup, Validators} from "@angular/forms";
 
 @Component({
-  selector: 'app-budgets',
-  templateUrl: './budgets.component.html',
-  styleUrls: ['./budgets.component.scss']
+    selector: 'app-budgets',
+    templateUrl: './budgets.component.html',
+    styleUrls: ['./budgets.component.scss'],
+    standalone: false
 })
 export class BudgetsComponent implements OnInit{
   fgBudget!: FormGroup;

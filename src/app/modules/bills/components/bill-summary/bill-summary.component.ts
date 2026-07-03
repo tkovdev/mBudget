@@ -3,9 +3,10 @@ import {Observable, Subject} from "rxjs";
 import {IBill} from "../../../../models/bill.model";
 
 @Component({
-  selector: 'app-bill-summary',
-  templateUrl: './bill-summary.component.html',
-  styleUrls: ['./bill-summary.component.scss']
+    selector: 'app-bill-summary',
+    templateUrl: './bill-summary.component.html',
+    styleUrls: ['./bill-summary.component.scss'],
+    standalone: false
 })
 export class BillSummaryComponent {
   @Output() updateBill: Subject<IBill> = new Subject<IBill>();

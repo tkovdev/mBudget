@@ -9,9 +9,10 @@ import {AnalyticsService, IIncomingOutgoing} from "../../../../services/analytic
 import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
-  selector: 'app-bills',
-  templateUrl: './bills.component.html',
-  styleUrls: ['./bills.component.scss']
+    selector: 'app-bills',
+    templateUrl: './bills.component.html',
+    styleUrls: ['./bills.component.scss'],
+    standalone: false
 })
 export class BillsComponent implements OnInit{
   currentMonthYear: string = this.sharedService.currentMonthYear();
