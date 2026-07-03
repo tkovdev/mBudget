@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/m-budget-app",
+    "public": "dist/m-budget-app/browser",
     "ignore": [
       "firebase.json",
       "**/node_modules/**"
