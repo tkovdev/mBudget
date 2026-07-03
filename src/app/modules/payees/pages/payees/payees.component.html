@@ -1,4 +1,6 @@
-<app-payee-action-bar></app-payee-action-bar>
-<p-card styleClass="mt-3" header="All Payees">
-  <app-payee-list [payees]="payees" (deletePayee)="deletePayee($event)"></app-payee-list>
-</p-card>
+<div class="flex flex-column gap-2">
+  <app-payee-action-bar></app-payee-action-bar>
+  <p-card header="All Payees">
+    <app-payee-list [payees]="payees" (deletePayee)="deletePayee($event)"></app-payee-list>
+  </p-card>
+</div>

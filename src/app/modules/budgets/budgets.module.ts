@@ -17,7 +17,7 @@ import {MessageModule} from "primeng/message";
 import { BudgetCategoriesComponent } from './components/budget-categories/budget-categories.component';
 import {AccordionModule} from "primeng/accordion";
 import { BudgetCategoryItemComponent } from './components/budget-category-item/budget-category-item.component';
-import {TabViewModule} from "primeng/tabview";
+import {TabsModule} from "primeng/tabs";
 import { PopoverModule } from 'primeng/popover';
 import { SelectModule } from 'primeng/select';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -47,7 +47,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     InputNumberModule,
     MessageModule,
     AccordionModule,
-    TabViewModule,
+    TabsModule,
     FloatLabelModule
   ]
 })
