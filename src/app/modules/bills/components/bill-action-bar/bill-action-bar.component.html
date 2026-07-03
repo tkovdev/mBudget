@@ -2,8 +2,8 @@
   <div class="flex flex-wrap justify-content-between">
     <div class="flex flex-wrap gap-2">
       <div class="flex">
-          <p-select styleClass="w-full" [options]="billsMonthYears" [(ngModel)]="selectedMonthYear" (onChange)="monthYearSelectedEvent(selectedMonthYear)"></p-select>
-          <button (click)="monthYearPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Month Year"></button>
+        <p-select styleClass="w-full" [options]="billsMonthYears" [(ngModel)]="selectedMonthYear" (onChange)="monthYearSelectedEvent(selectedMonthYear)"></p-select>
+        <button (click)="monthYearPanel.show($event)" pButton class="p-button-text" icon="pi pi-plus" pTooltip="New Month Year"></button>
       </div>
       <div class="flex justify-content-around gap-3">
         <div class="flex flex-column align-items-center">
@@ -26,9 +26,11 @@
       <button class="p-button-plain p-button-text p-button-rounded" icon="pi pi-building" pButton (click)="payeePanel.show($event)" pTooltip="New Payee"></button>
       <button class="p-button-plain p-button-text p-button-rounded" icon="pi pi-money-bill" pButton (click)="billPayDialog = true;" pTooltip="Pay Bills"></button>
     </div>
-  </div>  
+  </div>
   <p-dialog header="Pay Bills" [(visible)]="billPayDialog" [modal]="true" [contentStyle]="{'overflow-y': 'hidden'}">
-    <app-bill-pay-dialog *ngIf="billPayDialog" (close)="billPayDialog = false; billChangedEvent()" [payees]="payees" [bills]="bills" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
+    @if (billPayDialog) {
+      <app-bill-pay-dialog (close)="billPayDialog = false; billChangedEvent()" [payees]="payees" [bills]="bills" [selectedMonthYear]="selectedMonthYear"></app-bill-pay-dialog>
+    }
   </p-dialog>
 
   <p-popover #payeePanel>
@@ -44,6 +46,8 @@
   </p-popover>
 
   <p-popover #balancePanel (onShow)="balanceDialog = true" (onHide)="balanceDialog = false">
-    <app-balance-dialog *ngIf="balanceDialog" [selectedMonthYear]="selectedMonthYear" [balance]="balance" (close)="balancePanel.hide(); balanceChangedEvent()"></app-balance-dialog>
+    @if (balanceDialog) {
+      <app-balance-dialog [selectedMonthYear]="selectedMonthYear" [balance]="balance" (close)="balancePanel.hide(); balanceChangedEvent()"></app-balance-dialog>
+    }
   </p-popover>
 </p-card>

@@ -1,19 +1,19 @@
 <form [formGroup]="fgParent" class="flex flex-column gap-4">
-  <ng-container *ngIf="fgCategory.length <= 0">
+  @if (fgCategory.length <= 0) {
     <div class="col-12"><span>No budget items!</span></div>
-  </ng-container>
+  }
   <ng-container [formArrayName]="formArrayName">
-      <ng-container *ngFor="let budgetItem of categoryFormGroups; let i = index">
-        <ng-container [formGroup]="budgetItem">
-          <div class="flex justify-content-between">
-            <p-floatlabel class="w-full">
-              <p-inputNumber mode="currency" currency="USD" id="{{budgetItem.get('name')?.getRawValue()}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
-              <label for="{{budgetItem.get('name')?.getRawValue()}}">{{budgetItem.get('name')?.getRawValue()}}</label>
-            </p-floatlabel>
-            <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
-          </div>
-        </ng-container>
-    </ng-container>
+    @for (budgetItem of categoryFormGroups; track budgetItem; let i = $index) {
+      <ng-container [formGroup]="budgetItem">
+        <div class="flex justify-content-between">
+          <p-floatlabel class="w-full">
+            <p-inputNumber mode="currency" currency="USD" id="{{budgetItem.get('name')?.getRawValue()}}" class="w-full" styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
+            <label for="{{budgetItem.get('name')?.getRawValue()}}">{{budgetItem.get('name')?.getRawValue()}}</label>
+          </p-floatlabel>
+          <button pButton class="p-button-text p-button-danger" icon="pi pi-trash" (click)="deleteItem(i)"></button>
+        </div>
+      </ng-container>
+    }
   </ng-container>
 </form>
 <p-popover #budgetItemPanel>
