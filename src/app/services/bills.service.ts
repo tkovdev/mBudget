@@ -92,6 +92,16 @@ export class BillsService {
     );
   }
 
+  public getYearToDateBillNames(year: number = this.sharedService.currentYear()): Observable<string[]> {
+    return this.getYearToDateBills(year).pipe(
+      map((bills) => {
+        let billNames = bills.map((bill: IBill) => bill.payee.name);
+        billNames = [...new Set(billNames)];
+        return billNames.sort((a, b) => a.localeCompare(b));
+      })
+    );
+  }
+
   public getYearToDateBalances(year: number = this.sharedService.currentYear()): Observable<IBalance[]> {
     return this.getBalances().pipe(
       map((balances) => balances.filter(x => x.year == year))

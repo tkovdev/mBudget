@@ -1,0 +1,69 @@
+<div class="yearly-bills-stack">
+  <p-card>
+    <div class="yearly-bills">
+      <div class="yearly-bills__header">
+        <h2>Yearly Bills</h2>
+        <p>Pick a year and choose the payees to include in the report.</p>
+      </div>
+
+      <div class="yearly-bills__year">
+        <label for="year-input">Year</label>
+        <p-select
+          id="year-input"
+          [(ngModel)]="year"
+          [options]="years"
+          [placeholder]="years.length ? 'Select a year' : 'No years available yet'"
+          (onChange)="onYearChanged()"
+        ></p-select>
+      </div>
+
+      <div class="yearly-bills__section-label">Include Bills:</div>
+
+      <div class="yearly-bills__list">
+        @for (bill of billItems; track bill.name) {
+          <label class="yearly-bills__item">
+            <p-checkbox [(ngModel)]="bill.selected" [binary]="true"></p-checkbox>
+            <span>{{ bill.name }}</span>
+          </label>
+        }
+      </div>
+
+      <div class="yearly-bills__actions">
+        <button pButton type="button" label="Run" icon="pi pi-play" (click)="run()"></button>
+      </div>
+    </div>
+  </p-card>
+
+  @if (yearlyBillTotalsEntries.length > 0) {
+    <p-card header="Yearly Report Results">
+      <table class="yearly-bills__results-table">
+        <thead>
+          <tr>
+            <th>Bill Name</th>
+            <th class="yearly-bills__results-table--amount">Yearly Total</th>
+            <th class="yearly-bills__results-table--amount">Average</th>
+            <th class="yearly-bills__results-table--amount">Months</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of yearlyBillTotalsEntries; track entry[0]) {
+            <tr>
+              <td>{{ entry[0] }}</td>
+              <td class="yearly-bills__results-table--amount">{{ entry[1].total | currency:'USD' }}</td>
+              <td class="yearly-bills__results-table--amount">{{ entry[1].average | currency:'USD' }}</td>
+              <td class="yearly-bills__results-table--amount">{{ entry[1].count }}</td>
+            </tr>
+          }
+        </tbody>
+          <tfoot>
+            <tr class="yearly-bills__results-table--total">
+              <td>Total</td>
+              <td class="yearly-bills__results-table--amount">{{ yearlyBillTotalsSum | currency:'USD' }}</td>
+              <td class="yearly-bills__results-table--amount">{{ yearlyBillAverageSum | currency:'USD' }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
+      </table>
+    </p-card>
+  }
+</div>
