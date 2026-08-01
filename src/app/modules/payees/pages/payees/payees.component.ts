@@ -4,9 +4,10 @@ import {IPayee} from "../../../../models/bill.model";
 import {BillsService} from "../../../../services/bills.service";
 
 @Component({
-  selector: 'app-payees',
-  templateUrl: './payees.component.html',
-  styleUrls: ['./payees.component.scss']
+    selector: 'app-payees',
+    templateUrl: './payees.component.html',
+    styleUrls: ['./payees.component.scss'],
+    standalone: false
 })
 export class PayeesComponent implements OnInit{
   payees: IPayee[] = [];

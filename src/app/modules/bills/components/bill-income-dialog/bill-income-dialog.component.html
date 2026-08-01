@@ -1,23 +1,12 @@
-<form [formGroup]="incomeForm" class="grid">
-  <div class="col-12 flex">
-    <div class="w-full">
-      <span class="p-float-label">
-        <p-autoComplete formControlName="payer" id="payer" inputId="payer" [suggestions]="filteredPayers" (completeMethod)="autoComplete($event)" class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-autoComplete>
-        <label for="payer">Payer</label>
-      </span>
-    </div>
-  </div>
-  <div class="col-12 flex">
-    <div class="w-full">
-      <span class="p-float-label">
+<form [formGroup]="incomeForm" class="flex flex-column pt-3 gap-4">
+  <p-float-label>
+    <p-autoComplete formControlName="payer" id="payer" inputId="payer" [suggestions]="filteredPayers" (completeMethod)="autoComplete($event)" class="w-full" styleClass="w-full" inputStyleClass="w-full"></p-autoComplete>
+    <label for="payer">Payer</label>
+  </p-float-label>
+  <p-float-label>
         <p-inputNumber mode="currency" currency="USD" locale="en-US" id="amount" inputId="amount" class="w-full"  styleClass="w-full" inputStyleClass="w-full" formControlName="amount"></p-inputNumber>
         <label for="amount">Amount</label>
-      </span>
-    </div>
-  </div>
+  </p-float-label>
+  <button [disabled]="!incomeForm.valid" pButton (click)="saveIncome()" label="Save"></button>
 </form>
-<div class="flex justify-content-between mt-1">
-  <div class="w-full">
-    <button [disabled]="!incomeForm.valid" pButton (click)="saveIncome()" label="Save"></button>
-  </div>
-</div>
+

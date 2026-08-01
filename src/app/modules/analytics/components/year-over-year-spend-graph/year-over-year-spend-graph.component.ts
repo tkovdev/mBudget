@@ -6,9 +6,10 @@ import {BillsService} from "../../../../services/bills.service";
 import {Observable} from "rxjs";
 
 @Component({
-  selector: 'app-year-over-year-spend-graph',
-  templateUrl: './year-over-year-spend-graph.component.html',
-  styleUrls: ['./year-over-year-spend-graph.component.scss']
+    selector: 'app-year-over-year-spend-graph',
+    templateUrl: './year-over-year-spend-graph.component.html',
+    styleUrls: ['./year-over-year-spend-graph.component.scss'],
+    standalone: false
 })
 export class YearOverYearSpendGraphComponent implements OnInit {
   loading: boolean = false;

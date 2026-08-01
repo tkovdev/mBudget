@@ -3,9 +3,10 @@ import {DynamicDialogConfig, DynamicDialogRef} from "primeng/dynamicdialog";
 import {FilesService} from "../../../../services/files.service";
 
 @Component({
-  selector: 'app-profile-advanced-options',
-  templateUrl: './profile-advanced-options.component.html',
-  styleUrls: ['./profile-advanced-options.component.scss']
+    selector: 'app-profile-advanced-options',
+    templateUrl: './profile-advanced-options.component.html',
+    styleUrls: ['./profile-advanced-options.component.scss'],
+    standalone: false
 })
 export class ProfileAdvancedOptionsComponent {
   fileId: string;

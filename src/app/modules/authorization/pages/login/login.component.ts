@@ -3,9 +3,10 @@ import {AuthService} from "../../../../authentication/services/auth.service";
 import {FilesService} from "../../../../services/files.service";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent implements OnInit {
   constructor(private authService: AuthService, private fileService: FilesService) { }

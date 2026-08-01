@@ -4,9 +4,10 @@ import {BudgetsService} from "../../../../services/budgets.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-budget-dialog',
-  templateUrl: './budget-dialog.component.html',
-  styleUrls: ['./budget-dialog.component.scss']
+    selector: 'app-budget-dialog',
+    templateUrl: './budget-dialog.component.html',
+    styleUrls: ['./budget-dialog.component.scss'],
+    standalone: false
 })
 export class BudgetDialogComponent {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();

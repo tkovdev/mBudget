@@ -1,10 +1,8 @@
-<div class="grid">
-  <div class="col-6">
+<p-card>
+  <div class="flex justify-content-end">
+      <button class="mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-building" pButton (click)="payeePanel.show($event)" pTooltip="New Payee"></button>
   </div>
-  <div class="col-6 flex justify-content-end">
-    <button class="mr-1 p-button-plain p-button-text p-button-rounded" icon="pi pi-building" pButton (click)="payeePanel.show($event)" pTooltip="New Payee"></button>
-  </div>
-</div>
-<p-overlayPanel #payeePanel>
+</p-card>
+<p-popover #payeePanel>
   <app-payee-dialog (close)="payeePanel.hide(); payeeChangedEvent()"></app-payee-dialog>
-</p-overlayPanel>
+</p-popover>

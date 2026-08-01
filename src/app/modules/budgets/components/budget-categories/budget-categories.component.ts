@@ -1,18 +1,19 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {BudgetsService} from "../../../../services/budgets.service";
 import {ControlContainer, FormArray, FormArrayName, FormGroup, FormGroupDirective} from "@angular/forms";
-import {OverlayPanel} from "primeng/overlaypanel";
+import { Popover } from 'primeng/popover';
 
 @Component({
-  selector: 'app-budget-categories',
-  templateUrl: './budget-categories.component.html',
-  styleUrls: ['./budget-categories.component.scss']
+    selector: 'app-budget-categories',
+    templateUrl: './budget-categories.component.html',
+    styleUrls: ['./budget-categories.component.scss'],
+    standalone: false
 })
 export class BudgetCategoriesComponent implements OnInit{
   fgCategory!: FormArray;
   formArrayName!: string;
 
-  @ViewChild('budgetItemPanel') budgetItemPanel!: OverlayPanel;
+  @ViewChild('budgetItemPanel') budgetItemPanel!: Popover;
 
   constructor(private budgetService: BudgetsService, private fg: FormArrayName, private fgDir: FormGroupDirective) {
   }

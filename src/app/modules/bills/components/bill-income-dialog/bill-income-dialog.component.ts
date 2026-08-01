@@ -6,9 +6,10 @@ import {IIncome} from "../../../../models/bill.model";
 import {Month} from "../../../../models/shared.model";
 
 @Component({
-  selector: 'app-bill-income-dialog',
-  templateUrl: './bill-income-dialog.component.html',
-  styleUrls: ['./bill-income-dialog.component.scss']
+    selector: 'app-bill-income-dialog',
+    templateUrl: './bill-income-dialog.component.html',
+    styleUrls: ['./bill-income-dialog.component.scss'],
+    standalone: false
 })
 export class BillIncomeDialogComponent implements OnInit{
   @Output() close: EventEmitter<void> = new EventEmitter<void>();

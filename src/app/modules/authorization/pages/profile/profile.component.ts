@@ -10,9 +10,10 @@ import {
 } from "../../components/profile-advanced-options/profile-advanced-options.component";
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+    selector: 'app-profile',
+    templateUrl: './profile.component.html',
+    styleUrls: ['./profile.component.scss'],
+    standalone: false
 })
 export class ProfileComponent implements OnInit{
   user$: Observable<UserProfile | null> = new Observable<UserProfile | null>();
@@ -56,5 +57,9 @@ export class ProfileComponent implements OnInit{
         data: {fileContent: JSON.stringify(file), fileId: id}
       })
     })
+  }
+
+  getSize(size: string): number {
+    return parseInt(size);
   }
 }

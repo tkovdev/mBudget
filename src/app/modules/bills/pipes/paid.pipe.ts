@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import {IBill} from "../../../models/bill.model";
 
 @Pipe({
-  name: 'paid'
+    name: 'paid',
+    standalone: false
 })
 export class PaidPipe implements PipeTransform {
 

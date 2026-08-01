@@ -3,9 +3,10 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {BillsService} from "../../../../services/bills.service";
 
 @Component({
-  selector: 'app-payee-dialog',
-  templateUrl: './payee-dialog.component.html',
-  styleUrls: ['./payee-dialog.component.scss']
+    selector: 'app-payee-dialog',
+    templateUrl: './payee-dialog.component.html',
+    styleUrls: ['./payee-dialog.component.scss'],
+    standalone: false
 })
 export class PayeeDialogComponent {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();

@@ -1,9 +1,9 @@
-<form [formGroup]="payeeForm" class="grid">
+<form [formGroup]="payeeForm" class="flex pt-3">
   <div class="col-9">
-    <span class="p-float-label">
+    <p-float-label>
       <input pInputText formControlName="name" id="name"/>
       <label for="name">Payee Name</label>
-    </span>
+    </p-float-label>
   </div>
   <div class="col-3">
     <button [disabled]="!payeeForm.valid" pButton (click)="savePayee();" icon="pi pi-save"></button>

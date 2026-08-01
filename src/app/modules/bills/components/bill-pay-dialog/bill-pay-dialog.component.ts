@@ -8,9 +8,10 @@ import {Month} from "../../../../models/shared.model";
 import {SharedService} from "../../../../services/shared.service";
 
 @Component({
-  selector: 'app-bill-pay-dialog',
-  templateUrl: './bill-pay-dialog.component.html',
-  styleUrls: ['./bill-pay-dialog.component.scss']
+    selector: 'app-bill-pay-dialog',
+    templateUrl: './bill-pay-dialog.component.html',
+    styleUrls: ['./bill-pay-dialog.component.scss'],
+    standalone: false
 })
 export class BillPayDialogComponent implements OnInit{
   @Input() selectedMonthYear!: string;

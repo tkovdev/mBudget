@@ -1,5 +1,4 @@
 import {IBalance, IBill, IIncome, IPayee} from "./bill.model";
-import FileResource = gapi.client.drive.FileResource;
 import {IBudget, IBudgetBreakdown} from "./budget.model";
 
 export interface IDriveSchema {
@@ -40,9 +39,10 @@ export interface IFileSearchDetails {
   "files": FileResourceExt[]
 }
 
-export interface FileResourceExt extends FileResource {
+export interface FileResourceExt extends gapi.client.drive.File {
+  id: string;
   name: string;
   modifiedTime: string;
   createdTime: string;
-  size: number;
+  size: string;
 }

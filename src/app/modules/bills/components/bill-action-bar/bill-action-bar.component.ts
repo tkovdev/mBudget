@@ -5,9 +5,10 @@ import {MenuItem} from "primeng/api";
 import {IIncomingOutgoing} from "../../../../services/analytics.service";
 
 @Component({
-  selector: 'app-bill-action-bar',
-  templateUrl: './bill-action-bar.component.html',
-  styleUrls: ['./bill-action-bar.component.scss']
+    selector: 'app-bill-action-bar',
+    templateUrl: './bill-action-bar.component.html',
+    styleUrls: ['./bill-action-bar.component.scss'],
+    standalone: false
 })
 export class BillActionBarComponent{
   @Output() billChanged: EventEmitter<void> = new EventEmitter<void>();

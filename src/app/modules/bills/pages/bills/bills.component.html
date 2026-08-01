@@ -1,23 +1,23 @@
-<p-card id="action-bar">
-    <app-bill-action-bar
-      [incomingOutgoing]="incomingOutgoing"
-      [balance]="balance"
-      [income]="incomes"
-      [bills]="bills"
-      [payees]="payees"
-      [billMonthYears]="billMonthYears"
-      [selectedMonthYear]="currentMonthYear"
-      (incomeChanged)="refreshIncome()"
-      (billChanged)="refreshBills()"
-      (payeeChanged)="refreshPayees()"
-      (monthYearSelected)="monthYearSelected($event)"
-      (monthYearChanged)="refreshMonthYears()"
-      (balanceChanged)="refreshBalance()"
-    ></app-bill-action-bar>
-</p-card>
-<p-card styleClass="mt-3" header="Monthly Bills" subheader="{{currentMonthYear}}">
-  <app-bill-summary [bills]="bills" (updateBill)="updateBill($event)"></app-bill-summary>
-</p-card>
-<p-card styleClass="mt-3" header="Monthly Income" subheader="{{currentMonthYear}}">
-  <app-income-summary [income]="incomes"></app-income-summary>
-</p-card>
+<div class="flex flex-column gap-2">
+  <app-bill-action-bar
+    [incomingOutgoing]="incomingOutgoing"
+    [balance]="balance"
+    [income]="incomes"
+    [bills]="bills"
+    [payees]="payees"
+    [billMonthYears]="billMonthYears"
+    [selectedMonthYear]="currentMonthYear"
+    (incomeChanged)="refreshIncome()"
+    (billChanged)="refreshBills()"
+    (payeeChanged)="refreshPayees()"
+    (monthYearSelected)="monthYearSelected($event)"
+    (monthYearChanged)="refreshMonthYears()"
+    (balanceChanged)="refreshBalance()"
+  ></app-bill-action-bar>
+  <p-card header="Monthly Bills" subheader="{{currentMonthYear}}">
+    <app-bill-summary [bills]="bills" (updateBill)="updateBill($event)"></app-bill-summary>
+  </p-card>
+  <p-card header="Monthly Income" subheader="{{currentMonthYear}}">
+    <app-income-summary [income]="incomes"></app-income-summary>
+  </p-card>
+</div>

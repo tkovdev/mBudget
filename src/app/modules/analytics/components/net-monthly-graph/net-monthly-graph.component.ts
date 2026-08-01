@@ -6,9 +6,10 @@ import {SharedService} from "../../../../services/shared.service";
 import {AnalyticsService, IMonthlyIncomeExpenses} from "../../../../services/analytics.service";
 
 @Component({
-  selector: 'app-net-monthly-graph',
-  templateUrl: './net-monthly-graph.component.html',
-  styleUrls: ['./net-monthly-graph.component.scss']
+    selector: 'app-net-monthly-graph',
+    templateUrl: './net-monthly-graph.component.html',
+    styleUrls: ['./net-monthly-graph.component.scss'],
+    standalone: false
 })
 export class NetMonthlyGraphComponent implements OnInit{
   loading: boolean = false;

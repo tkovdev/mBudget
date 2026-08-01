@@ -5,9 +5,10 @@ import {Router} from "@angular/router";
 import {BudgetsService} from "../../../../services/budgets.service";
 
 @Component({
-  selector: 'app-budget-action-bar',
-  templateUrl: './budget-action-bar.component.html',
-  styleUrls: ['./budget-action-bar.component.scss']
+    selector: 'app-budget-action-bar',
+    templateUrl: './budget-action-bar.component.html',
+    styleUrls: ['./budget-action-bar.component.scss'],
+    standalone: false
 })
 export class BudgetActionBarComponent implements OnInit{
   @Input('budgets') budgets: string[] = [];

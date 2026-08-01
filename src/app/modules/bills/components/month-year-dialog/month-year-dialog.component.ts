@@ -7,9 +7,10 @@ import {IBill, IPayee} from "../../../../models/bill.model";
 import {map} from "rxjs";
 
 @Component({
-  selector: 'app-month-year-dialog',
-  templateUrl: './month-year-dialog.component.html',
-  styleUrls: ['./month-year-dialog.component.scss']
+    selector: 'app-month-year-dialog',
+    templateUrl: './month-year-dialog.component.html',
+    styleUrls: ['./month-year-dialog.component.scss'],
+    standalone: false
 })
 export class MonthYearDialogComponent {
   @Output() close: EventEmitter<void> = new EventEmitter<void>();

@@ -4,9 +4,10 @@ import {Observable} from "rxjs";
 import {MenuItem} from "primeng/api";
 
 @Component({
-  selector: 'app-payee-action-bar',
-  templateUrl: './payee-action-bar.component.html',
-  styleUrls: ['./payee-action-bar.component.scss']
+    selector: 'app-payee-action-bar',
+    templateUrl: './payee-action-bar.component.html',
+    styleUrls: ['./payee-action-bar.component.scss'],
+    standalone: false
 })
 export class PayeeActionBarComponent {
   @Output() payeeChanged: EventEmitter<void> = new EventEmitter<void>();

@@ -8,11 +8,9 @@ import { CardModule } from 'primeng/card';
 import { PaidPipe } from './pipes/paid.pipe';
 import { BillActionBarComponent } from './components/bill-action-bar/bill-action-bar.component';
 import {BillPayDialogComponent} from "./components/bill-pay-dialog/bill-pay-dialog.component";
-import {DropdownModule} from "primeng/dropdown";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ButtonModule} from "primeng/button";
 import {DialogService, DynamicDialogModule} from "primeng/dynamicdialog";
-import {OverlayPanelModule} from "primeng/overlaypanel";
 import {TooltipModule} from "primeng/tooltip";
 import {InputTextModule} from "primeng/inputtext";
 import {InputNumberModule} from "primeng/inputnumber";
@@ -24,6 +22,10 @@ import { IncomeSummaryComponent } from './components/income-summary/income-summa
 import { BalanceDialogComponent } from './components/balance-dialog/balance-dialog.component';
 import {AutoCompleteModule} from "primeng/autocomplete";
 import {DialogModule} from "primeng/dialog";
+import { PopoverModule } from 'primeng/popover';
+import { SelectModule } from 'primeng/select';
+import { FloatLabelModule } from 'primeng/floatlabel';
+
 
 @NgModule({
   declarations: [
@@ -44,16 +46,17 @@ import {DialogModule} from "primeng/dialog";
     ReactiveFormsModule,
     BillsRoutingModule,
     CardModule,
-    DropdownModule,
+    SelectModule,
     ButtonModule,
     DynamicDialogModule,
-    OverlayPanelModule,
+    PopoverModule,
     DialogModule,
     InputTextModule,
     TooltipModule,
     InputNumberModule,
     SplitButtonModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    FloatLabelModule
   ],
   providers: [DialogService]
 })
