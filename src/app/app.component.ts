@@ -19,7 +19,7 @@ export class AppComponent implements OnInit{
   profileImage: string = 'assets/default-account-icon.svg';
   loading$: Observable<boolean> = this.sharedService.isLoadingEmit;
 
-  constructor(private authService: AuthService, private fileService: FilesService, private sharedService: SharedService, private confirmationService: ConfirmationService) {
+  constructor(private authService: AuthService, private sharedService: SharedService, private confirmationService: ConfirmationService) {
     this.authService.isLoggedIn.subscribe((loggedIn) => {
       if(loggedIn){
         this.authService.userProfile.subscribe((res) => {
@@ -31,6 +31,7 @@ export class AppComponent implements OnInit{
       {label: 'Budgets', routerLink: ['', 'budgets']},
       {label: 'Bills', routerLink: ['', 'bills']},
       {label: 'Payees', routerLink: ['', 'payees']},
+      {label: 'Reports', routerLink: ['', 'reports']}
     ]
   }
   ngOnInit(): void {

@@ -1,0 +1,9 @@
+<div class="flex flex-column gap-3">
+	<app-report-call-to-action></app-report-call-to-action>
+	<app-yearly-bills
+	  [year]="selectedYear"
+	  [years]="availableYears"
+	  [billNames]="availableBillNames"
+	  (yearChange)="onYearSelected($event)"
+	></app-yearly-bills>
+</div>
