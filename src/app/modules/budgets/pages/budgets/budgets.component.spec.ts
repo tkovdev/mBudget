@@ -24,6 +24,7 @@ describe('BudgetsComponent', () => {
   });
 
   it('should create the budget form', () => {
+    expect(component).toBeTruthy();
     expect(component.fgBudget).toBeTruthy();
   });
 
