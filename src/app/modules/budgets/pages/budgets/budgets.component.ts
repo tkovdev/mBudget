@@ -105,4 +105,9 @@ export class BudgetsComponent implements OnInit{
       this.router.navigate(['', 'budgets']);
     })
   }
+
+  getCategorySubtotal(category: 'need' | 'want' | 'extra'): number {
+    return ((this.fgBudget.get(category) as FormArray | null)?.controls ?? [])
+      .reduce((total, item) => total + Number(item.get('amount')?.value ?? 0), 0);
+  }
 }
