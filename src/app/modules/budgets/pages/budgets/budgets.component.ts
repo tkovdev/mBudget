@@ -1,12 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {AnalyticsService} from "../../../../services/analytics.service";
-import {BillsService} from "../../../../services/bills.service";
-import {FilesService} from "../../../../services/files.service";
-import {SharedService} from "../../../../services/shared.service";
-import {IBudget, IBudgetBreakdown, IBudgetBreakdownItem, IBudgetItem} from "../../../../models/budget.model";
 import {BudgetsService} from "../../../../services/budgets.service";
-import {FormArray, FormControl, FormControlName, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: 'app-budgets',
@@ -104,5 +99,10 @@ export class BudgetsComponent implements OnInit{
       this.loadNames();
       this.router.navigate(['', 'budgets']);
     })
+  }
+
+  getCategorySubtotal(category: 'need' | 'want' | 'extra'): number {
+    return ((this.fgBudget.get(category) as FormArray | null)?.controls ?? [])
+      .reduce((total, item) => total + Number(item.get('amount')?.value ?? 0), 0);
   }
 }
