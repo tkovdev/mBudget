@@ -20,7 +20,7 @@ describe('BudgetsComponent', () => {
       } as any
     );
 
-    component.fgBudget = component.initBudgetFormGroup();
+    component.ngOnInit();
   });
 
   it('should create the budget form', () => {
@@ -47,5 +47,16 @@ describe('BudgetsComponent', () => {
     want.at(1).patchValue({ name: 'Streaming', amount: 25 });
 
     expect(component.getCategorySubtotal('want')).toBe(25);
+  });
+
+  it('should total the extra category amounts', () => {
+    const extra = component.fgBudget.get('extra') as FormArray<FormGroup>;
+
+    extra.push(component.initBudgetItemFormGroup());
+    extra.push(component.initBudgetItemFormGroup());
+    extra.at(0).patchValue({ name: 'Savings', amount: '300' });
+    extra.at(1).patchValue({ name: 'Investments', amount: 50 });
+
+    expect(component.getCategorySubtotal('extra')).toBe(350);
   });
 });
